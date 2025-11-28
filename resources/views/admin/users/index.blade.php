@@ -4,7 +4,7 @@
     app()->setLocale($locale);
 @endphp
 @section('title', __('admin.users.index.Employee Management') . ' - ' . env('COMPANY_NAME', 'Teqin Valley'))
-@section('page-title', __('admin.users.index.Employee Management'))
+@section('page-title', __('admin.users.index.Employee Management')) 
 
 @section('content')
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
