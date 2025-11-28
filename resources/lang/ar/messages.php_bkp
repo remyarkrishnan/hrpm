@@ -1,0 +1,59 @@
+<?php
+
+return [
+    // Page titles
+    'Dashboard' => '[لوحة التحكم]',
+    'Dashboard - :app' => 'لوحة التحكم - :app',
+    
+    // Sidebar header
+    'Construction Management System' => 'نظام إدارة المشاريع الإنشائية',
+    
+    // Navigation sections
+    'HR Management' => 'إدارة الموارد البشرية',
+    'Project Management' => 'إدارة المشاريع',
+    'Reports' => 'التقارير',
+    'Settings' => 'الإعدادات',
+    'Esurface' => 'إيسرفيس',
+    
+    // Navigation items - Dashboard
+    'Overview' => 'نظرة عامة',
+    
+    // Navigation items - HR Management
+    'Employee Management' => 'إدارة الموظفين',
+    'Attendance Management' => 'إدارة الحضور',
+    'Leave Management' => 'إدارة الإجازات',
+    'Overtime Management' => 'إدارة العمل الإضافي',
+    'Shift Management' => 'إدارة الورديات',
+    'Approvals' => 'الموافقات',
+    
+    // Navigation items - Project Management
+    'Projects' => 'المشاريع',
+    'Project Locations' => 'مواقع المشاريع',
+    'Project Planning' => 'تخطيط المشاريع',
+    'Resource Allocation' => 'تخصيص الموارد',
+    
+    // Navigation items - Reports
+    'HR Reports' => 'تقارير الموارد البشرية',
+    'Project Reports' => 'تقارير المشاريع',
+    
+    // Navigation items - Settings
+    'Profile' => 'الملف الشخصي',
+    'System Settings' => 'إعدادات النظام',
+    
+    // Manager specific items
+    'Employee Details' => 'تفاصيل الموظف',
+    'Loan Requests' => 'طلبات القروض',
+    'Leave Requests' => 'طلبات الإجازة',
+    'Training Requests' => 'طلبات التدريب',
+    'Document Request' => 'طلب المستندات',
+    
+    // User info
+    'User' => 'مستخدم',
+    'Logout' => 'تسجيل الخروج',
+    
+    // Language dropdown
+    'English' => 'الإنجليزية',
+    'EN' => 'EN',
+    'Arabic' => 'العربية',
+    'العربية' => 'العربية',
+];
