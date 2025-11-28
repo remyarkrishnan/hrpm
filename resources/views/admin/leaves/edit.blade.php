@@ -1,22 +1,26 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Edit Leave Request - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Leave Request')
+@section('title', __('leave.edit.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('leave.edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.leaves.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Leaves
+            {{ __('leave.edit.back') }}
         </a>
         <a href="{{ route('admin.leaves.show', $leave->id ?? 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('leave.edit.view_details') }}
         </a>
     </div>
-    <h2>Edit Leave Request</h2>
-    <p>Update leave request</p>
+    <h2>{{ __('leave.edit.header') }}</h2>
+    <p>{{ __('leave.edit.update_note') }}</p>
 </div>
 
 <div class="form-container">
@@ -59,21 +63,21 @@
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="type">Leave Type *</label>
+                    <label for="type">{{ __('leave.fields.leave_type') }} *</label>
                     <select id="type" name="type" required>
-                        <option value="sick_leave" {{ ($leave->type ?? 'sick_leave') === 'sick_leave' ? 'selected' : '' }}>Sick Leave</option>
-                        <option value="casual_leave" {{ ($leave->type ?? '') === 'casual_leave' ? 'selected' : '' }}>Casual Leave</option>
-                        <option value="annual_leave" {{ ($leave->type ?? '') === 'annual_leave' ? 'selected' : '' }}>Annual Leave</option>
-                        <option value="maternity_leave" {{ ($leave->type ?? '') === 'maternity_leave' ? 'selected' : '' }}>Maternity Leave</option>
-                        <option value="emergency_leave" {{ ($leave->type ?? '') === 'emergency_leave' ? 'selected' : '' }}>Emergency Leave</option>
-                    </select>
+                        <option value="sick_leave" {{ ($leave->type ?? 'sick_leave') === 'sick_leave' ? 'selected' : '' }}>{{ __('leave.types.sick_leave') }}</option>
+                        <option value="casual_leave" {{ ($leave->type ?? '') === 'casual_leave' ? 'selected' : '' }}>{{ __('leave.types.casual_leave') }}</option>
+                        <option value="annual_leave" {{ ($leave->type ?? '') === 'annual_leave' ? 'selected' : '' }}>{{ __('leave.types.annual_leave') }}</option>
+                        <option value="maternity_leave" {{ ($leave->type ?? '') === 'maternity_leave' ? 'selected' : '' }}>{{ __('leave.types.maternity_leave') }}</option>
+                        <option value="emergency_leave" {{ ($leave->type ?? '') === 'emergency_leave' ? 'selected' : '' }}>{{ __('leave.types.emergency_leave') }}</option>
+                     </select>
                     @error('type')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="start_date">Start Date *</label>
+                    <label for="start_date">{{ __('leave.fields.start_date') }} *</label>
                     <input type="date" id="start_date" name="start_date" value="{{ old('start_date', $leave->start_date ?? '2025-10-10') }}" required>
                     @error('start_date')
                         <span class="error">{{ $message }}</span>
@@ -81,7 +85,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">End Date *</label>
+                    <label for="end_date">{{ __('leave.fields.end_date') }} *</label>
                     <input type="date" id="end_date" name="end_date" value="{{ old('end_date', $leave->end_date ?? '2025-10-12') }}" required>
                     @error('end_date')
                         <span class="error">{{ $message }}</span>
@@ -213,14 +217,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Leave Request
+                {{ __('leave.edit.update_button') }}
             </button>
             <a href="{{ route('admin.leaves.show', $leave->id ?? 1) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('leave.edit.cancel') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteLeave()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('leave.show.delete_request') }}
             </button>
         </div>
     </form>
@@ -537,8 +541,8 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const startDateInput = document.getElementById('from_date');
-    const endDateInput = document.getElementById('to_date');
+    const startDateInput = document.getElementById('start_date');
+    const endDateInput = document.getElementById('end_date');
     const calculatedDaysInput = document.getElementById('calculated_days');
 
     function calculateDays() {
@@ -564,35 +568,35 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function removeDocument(documentName) {
-    if (confirm(`Are you sure you want to remove "${documentName}"?`)) {
-        // TODO: Implement document removal via AJAX
-        alert('Document removal functionality to be implemented');
-    }
+    if (confirm(@json(__('leave.edit.remove_document_confirm', ['name' => '${documentName}'])))) {
+         // TODO: Implement document removal via AJAX
+        alert(@json(__('leave.edit.remove_document_alert')));
+     }
 }
 
 function deleteLeave() {
-    if (confirm('Are you sure you want to delete this leave request?\n\nThis action cannot be undone.')) {
-        fetch(`/admin/leaves/{{ $leave->id ?? 1 }}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Leave request deleted successfully');
-                window.location.href = '/admin/leaves';
-            } else {
-                alert('Error deleting leave request');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting leave request');
-        });
-    }
+    if (confirm(@json(__('leave.show.delete_confirm')))) {
+         fetch(`/admin/leaves/{{ $leave->id ?? 1 }}`, {
+             method: 'DELETE',
+             headers: {
+                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                 'Content-Type': 'application/json'
+             }
+         })
+         .then(response => response.json())
+         .then(data => {
+             if (data.success) {
+                alert(@json(__('leave.show.delete_success')));
+                 window.location.href = '/admin/leaves';
+             } else {
+                alert(@json(__('leave.show.delete_error')));
+             }
+         })
+         .catch(error => {
+             console.error('Error:', error);
+            alert(@json(__('leave.show.delete_error')));
+         });
+     }
 }
 
 // Form submission with loading state

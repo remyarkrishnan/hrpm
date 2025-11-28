@@ -1,21 +1,25 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Edit Shift - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Shift')
+@section('title', __('shift.edit.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('shift.edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.shifts.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Shifts
+            {{ __('shift.edit.back_to_shifts') }}
         </a>
         <a href="{{ route('admin.shifts.show', $shift->id ?? 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('shift.edit.view_details') }}
         </a>
     </div>
-    <p>Update shift configuration for {{ $shift->name ?? 'Morning Shift' }}</p>
+    <p>{{ __('shift.edit.update_note', ['name' => $shift->name ?? __('shift.show.default_name')]) }}</p>
 </div>
 
 <div class="form-container">
@@ -44,12 +48,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">edit</i>
-                Update Shift Information
+                {{ __('shift.edit.update_shift_information') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="name">Shift Name *</label>
+                    <label for="name">{{ __('shift.create.shift_name') }} *</label>
                     <input type="text" id="name" name="name" 
                            value="{{ old('name', $shift->name ?? 'Morning Shift') }}" required>
                     @error('name')
@@ -58,12 +62,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="type">Shift Type *</label>
+                    <label for="type">{{ __('shift.create.shift_type') }} *</label>
                     <select id="type" name="type" required>
-                        <option value="morning" {{ ($shift->type ?? 'morning') === 'morning' ? 'selected' : '' }}>Morning Shift</option>
-                        <option value="evening" {{ ($shift->type ?? '') === 'evening' ? 'selected' : '' }}>Evening Shift</option>
-                        <option value="night" {{ ($shift->type ?? '') === 'night' ? 'selected' : '' }}>Night Shift</option>
-                        <option value="flexible" {{ ($shift->type ?? '') === 'flexible' ? 'selected' : '' }}>Flexible Shift</option>
+                        <option value="morning" {{ ($shift->type ?? 'morning') === 'morning' ? 'selected' : '' }}>{{ __('shift.create.type_morning') }}</option>
+                        <option value="evening" {{ ($shift->type ?? '') === 'evening' ? 'selected' : '' }}>{{ __('shift.create.type_evening') }}</option>
+                        <option value="night" {{ ($shift->type ?? '') === 'night' ? 'selected' : '' }}>{{ __('shift.create.type_night') }}</option>
+                        <option value="flexible" {{ ($shift->type ?? '') === 'flexible' ? 'selected' : '' }}>{{ __('shift.create.type_flexible') }}</option>
                     </select>
                     @error('type')
                         <span class="error">{{ $message }}</span>
@@ -75,12 +79,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">access_time</i>
-                Update Shift Timing
+                {{ __('shift.edit.update_shift_timing') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="start_time">Start Time *</label>
+                    <label for="start_time">{{ __('shift.create.start_time') }} *</label>
                     <input type="time" id="start_time" name="start_time" 
                            value="{{ old('start_time', $shift->start_time ?? '07:00') }}" required>
                     @error('start_time')
@@ -89,7 +93,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_time">End Time *</label>
+                    <label for="end_time">{{ __('shift.create.end_time') }} *</label>
                     <input type="time" id="end_time" name="end_time" 
                            value="{{ old('end_time', $shift->end_time ?? '15:00') }}" required>
                     @error('end_time')
@@ -98,14 +102,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="break_duration">Break Duration (minutes)</label>
+                    <label for="break_duration">{{ __('shift.create.break_duration') }}</label>
                     <input type="number" id="break_duration" name="break_duration" 
                            value="{{ old('break_duration', $shift->break_duration ?? 60) }}" 
                            min="0" max="120">
                 </div>
 
                 <div class="form-group">
-                    <label for="total_hours">Total Working Hours</label>
+                    <label for="total_hours">{{ __('shift.create.total_working_hours') }}</label>
                     <input type="text" id="total_hours" readonly class="calculated-field" value="8.0 hours">
                 </div>
             </div>
@@ -114,7 +118,7 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">location_on</i>
-                Location & Assignment Updates
+                {{ __('shift.edit.location_assignment_updates') }}
             </h3>
 
             <div class="form-grid">
@@ -130,7 +134,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="max_employees">Maximum Employees</label>
+                    <label for="max_employees">{{ __('shift.create.max_employees') }}</label>
                     <input type="number" id="max_employees" name="max_employees" 
                            value="{{ old('max_employees', $shift->max_employees ?? 25) }}" min="1" max="100">
                 </div>
@@ -161,7 +165,7 @@
         <div class="assignments-section">
             <h3 class="section-title">
                 <i class="material-icons">groups</i>
-                Current Employee Assignments
+                {{ __('shift.edit.current_employee_assignments') }}
             </h3>
 
             <div class="assignments-summary">
@@ -199,11 +203,11 @@
             <div class="assignment-actions">
                 <button type="button" class="btn-secondary" onclick="manageAssignments()">
                     <i class="material-icons">manage_accounts</i>
-                    Manage Assignments
+                    {{ __('shift.edit.manage_assignments') }}
                 </button>
                 <button type="button" class="btn-success" onclick="addEmployees()">
                     <i class="material-icons">person_add</i>
-                    Add Employees
+                    {{ __('shift.edit.add_employees') }}
                 </button>
             </div>
         </div>
@@ -277,7 +281,7 @@
         <div class="audit-section">
             <h3 class="section-title">
                 <i class="material-icons">history</i>
-                Recent Changes
+                {{ __('shift.edit.audit_recent_changes') }}
             </h3>
 
             <div class="audit-trail">
@@ -304,14 +308,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Shift
+                {{ __('shift.edit.update_shift') }}
             </button>
             <a href="{{ route('admin.shifts.show', $shift->id ?? 1) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('shift.edit.cancel_changes') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteShift()">
                 <i class="material-icons">delete</i>
-                Delete Shift
+                {{ __('shift.show.delete') }}
             </button>
         </div>
     </form>
@@ -687,28 +691,28 @@ function addEmployees() {
 }
 
 function deleteShift() {
-    if (confirm('Are you sure you want to delete this shift?\n\nThis will remove all employee assignments and cannot be undone.')) {
-        fetch(`/admin/shifts/{{ $shift->id ?? 1 }}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Shift deleted successfully');
-                window.location.href = '/admin/shifts';
-            } else {
-                alert('Error deleting shift');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting shift');
-        });
-    }
+    if (confirm(@json(__('shift.edit.delete_shift_confirm')))) {
+         fetch(`/admin/shifts/{{ $shift->id ?? 1 }}`, {
+             method: 'DELETE',
+             headers: {
+                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                 'Content-Type': 'application/json'
+             }
+         })
+         .then(response => response.json())
+         .then(data => {
+             if (data.success) {
+                alert(@json(__('shift.edit.delete_success')));
+                 window.location.href = '/admin/shifts';
+             } else {
+                alert(@json(__('shift.edit.delete_error')));
+             }
+         })
+         .catch(error => {
+             console.error('Error:', error);
+            alert(@json(__('shift.edit.delete_error')));
+         });
+     }
 }
 
 // Form submission with loading state

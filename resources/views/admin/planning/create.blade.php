@@ -1,18 +1,22 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Create Project Plan - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Create Project Plan')
+@section('title', __('planning.create.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('planning.create.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.planning.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Planning
+            {{ __('planning.create.back') }}
         </a>
     </div>
    
-    <p>Set up planning phases and milestones for construction project</p>
+    <p>{{ __('planning.create.description') }}</p>
 </div>
 
 <div class="form-container">
@@ -22,14 +26,14 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">engineering</i>
-                Project Information
+                {{ __('planning.create.project_information') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="project_id">Select Project *</label>
+                    <label for="project_id">{{ __('planning.fields.select_project') }} *</label>
                     <select id="project_id" name="project_id" required>
-                        <option value="">Choose Project</option>
+                        <option value="">{{ __('planning.create.choose_project') }}</option>
                         <option value="1">Residential Complex - Phase 2</option>
                         <option value="2">Commercial Mall Construction</option>
                         <option value="3">Highway Bridge Project</option>
@@ -40,16 +44,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="plan_name">Plan Name *</label>
+                    <label for="plan_name">{{ __('planning.fields.plan_name') }} *</label>
                     <input type="text" id="plan_name" name="plan_name" value="{{ old('plan_name') }}" required 
-                           placeholder="e.g. Foundation Phase Plan">
+                           placeholder="{{ __('planning.create.plan_name_placeholder') }}">
                     @error('plan_name')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="start_date">Project Start Date *</label>
+                    <label for="start_date">{{ __('planning.fields.start_date') }} *</label>
                     <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
                     @error('start_date')
                         <span class="error">{{ $message }}</span>
@@ -57,7 +61,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">Expected End Date *</label>
+                    <label for="end_date">{{ __('planning.fields.end_date') }} *</label>
                     <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
                     @error('end_date')
                         <span class="error">{{ $message }}</span>
@@ -69,70 +73,70 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">timeline</i>
-                Construction Phases
+                {{ __('planning.create.construction_phases') }}
             </h3>
 
             <div class="phases-container">
                 <div class="phase-item">
                     <div class="phase-header">
-                        <h4>Phase 1: Foundation</h4>
+                        <h4>{{ __('planning.phases.foundation.title') }}</h4>
                         <input type="checkbox" name="phases[]" value="foundation" checked>
                     </div>
                     <div class="phase-content">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Duration (days)</label>
+                                <label>{{ __('planning.fields.duration') }}</label>
                                 <input type="number" name="foundation_duration" value="45" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Budget Allocation (%)</label>
+                                <label>{{ __('planning.fields.budget_allocation') }}</label>
                                 <input type="number" name="foundation_budget" value="30" min="1" max="100">
                             </div>
                         </div>
                         <textarea name="foundation_description" rows="2" 
-                                  placeholder="Site preparation, excavation, foundation laying">Site preparation, excavation, foundation laying</textarea>
+                                  placeholder="{{ __('planning.phases.foundation.placeholder') }}">{{ __('planning.phases.foundation.default_description') }}</textarea>
                     </div>
                 </div>
 
                 <div class="phase-item">
                     <div class="phase-header">
-                        <h4>Phase 2: Structure</h4>
+                        <h4>{{ __('planning.phases.structure.title') }}</h4>
                         <input type="checkbox" name="phases[]" value="structure" checked>
                     </div>
                     <div class="phase-content">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Duration (days)</label>
+                                <label>{{ __('planning.fields.duration') }}</label>
                                 <input type="number" name="structure_duration" value="90" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Budget Allocation (%)</label>
+                                <label>{{ __('planning.fields.budget_allocation') }}</label>
                                 <input type="number" name="structure_budget" value="45" min="1" max="100">
                             </div>
                         </div>
                         <textarea name="structure_description" rows="2" 
-                                  placeholder="Framework, walls, structural elements">Framework, walls, structural elements</textarea>
+                                  placeholder="{{ __('planning.phases.structure.placeholder') }}">{{ __('planning.phases.structure.default_description') }}</textarea>
                     </div>
                 </div>
 
                 <div class="phase-item">
                     <div class="phase-header">
-                        <h4>Phase 3: Finishing</h4>
+                        <h4>{{ __('planning.phases.finishing.title') }}</h4>
                         <input type="checkbox" name="phases[]" value="finishing" checked>
                     </div>
                     <div class="phase-content">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Duration (days)</label>
+                                <label>{{ __('planning.fields.duration') }}</label>
                                 <input type="number" name="finishing_duration" value="60" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Budget Allocation (%)</label>
+                                <label>{{ __('planning.fields.budget_allocation') }}</label>
                                 <input type="number" name="finishing_budget" value="25" min="1" max="100">
                             </div>
                         </div>
                         <textarea name="finishing_description" rows="2" 
-                                  placeholder="Interior work, painting, final touches">Interior work, painting, final touches</textarea>
+                                  placeholder="{{ __('planning.phases.finishing.placeholder') }}">{{ __('planning.phases.finishing.default_description') }}</textarea>
                     </div>
                 </div>
             </div>
@@ -141,7 +145,7 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">flag</i>
-                Key Milestones
+                {{ __('planning.create.key_milestones') }}
             </h3>
 
             <div class="milestones-container">
@@ -211,19 +215,19 @@
 
             <button type="button" class="btn-secondary" onclick="addMilestone()">
                 <i class="material-icons">add</i>
-                Add Another Milestone
+                {{ __('planning.create.add_milestone') }}
             </button>
         </div>
 
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">groups</i>
-                Resource Planning
+                {{ __('planning.create.resource_planning') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="project_manager">Project Manager</label>
+                    <label for="project_manager">{{ __('planning.fields.project_manager') }}</label>
                     <select id="project_manager" name="project_manager">
                         <option value="">Select Manager</option>
                         <option value="1">Rajesh Kumar - Senior PM</option>
@@ -233,17 +237,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="team_size">Estimated Team Size</label>
+                    <label for="team_size">{{ __('planning.fields.team_size') }}</label>
                     <input type="number" id="team_size" name="team_size" value="25" min="1" max="200">
                 </div>
 
                 <div class="form-group">
-                    <label for="budget">Total Budget (₹)</label>
+                    <label for="budget">{{ __('planning.fields.budget') }}</label>
                     <input type="number" id="budget" name="budget" value="5000000" min="0" step="10000">
                 </div>
 
                 <div class="form-group">
-                    <label for="priority">Project Priority</label>
+                    <label for="priority">{{ __('planning.fields.priority') }}</label>
                     <select id="priority" name="priority">
                         <option value="low">Low</option>
                         <option value="medium" selected>Medium</option>
@@ -257,24 +261,24 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Additional Details
+                {{ __('planning.create.additional_details') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="description">Project Description</label>
+                    <label for="description">{{ __('planning.fields.description') }}</label>
                     <textarea id="description" name="description" rows="4" 
                               placeholder="Detailed description of the construction project">{{ old('description') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="risks">Key Risks</label>
+                    <label for="risks">{{ __('planning.fields.risks') }}</label>
                     <textarea id="risks" name="risks" rows="3" 
                               placeholder="Identify potential risks and challenges">{{ old('risks') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="success_criteria">Success Criteria</label>
+                    <label for="success_criteria">{{ __('planning.fields.success_criteria') }}</label>
                     <textarea id="success_criteria" name="success_criteria" rows="3" 
                               placeholder="Define what success looks like">{{ old('success_criteria') }}</textarea>
                 </div>
@@ -284,10 +288,10 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Create Project Plan
+                {{ __('planning.create.create_plan') }}
             </button>
             <a href="{{ route('admin.planning.index') }}" class="btn-cancel">
-                Cancel
+                {{ __('planning.create.cancel') }}
             </a>
         </div>
     </form>

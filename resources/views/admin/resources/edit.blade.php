@@ -1,43 +1,48 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Edit Shift - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Shift')
+@section('title', __('resources.edit.title', ['resource' => $resource->name ?? 'Resource', 'company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('resources.edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
-        <a href="{{ route('admin.shifts.index') }}" class="btn-back">
+        <a href="{{ route('admin.resources.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Shifts
+            {{ __('resources.edit.back_to_resources') }}
         </a>
-        <a href="{{ route('admin.shifts.show', $shift->id ?? 1) }}" class="btn-secondary">
+        <a href="{{ route('admin.resources.show', $resource->id ?? 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('resources.edit.view_details') }}
         </a>
     </div>
-    <h2>Edit Shift</h2>
-    <p>Update shift configuration for {{ $shift->name ?? 'Morning Shift' }}</p>
+    <h2>{{ __('resources.edit.edit_resource') }}</h2>
+    <p>{{ __('resources.edit.update_description', ['resource' => $resource->name ?? 'Morning Resource']) }}</p>
 </div>
 
 <div class="form-container">
-    <form action="{{ route('admin.shifts.update', $shift->id ?? 1) }}" method="POST" class="shift-form">
+    <form action="{{ route('admin.resources.update', $resource->id ?? 1) }}" method="POST" class="resource-form">
         @csrf
         @method('PUT')
 
         <!-- Current Status Display -->
         <div class="current-status">
             <div class="status-info">
-                <div class="shift-icon">
+                <div class="resource-icon">
                     <i class="material-icons">schedule</i>
                 </div>
                 <div>
-                    <h3>{{ $shift->name ?? 'Morning Shift' }}</h3>
-                    <p>{{ $shift->location ?? 'Site A' }} • {{ $shift->employees_count ?? 15 }} employees assigned</p>
+                    <h3>{{ $resource->name ?? __('resources.edit.morning_resource') }}</h3>
+                    <p>{{ $resource->location ?? config('resources.default_location', 'Site A') }} • {{ $resource->employees_count ?? 15 }} {{ __('resources.edit.employees_assigned') }}</p>
                 </div>
             </div>
             <div class="current-status-badge">
-                <span class="shift-type shift-{{ $shift->type ?? 'morning' }}">
-                    {{ ucfirst($shift->type ?? 'Morning') }} Shift
+                <span class="resource-type resource-{{ $resource->type ?? 'morning' }}">
+                    {{ __('resources.edit.resource_types.' . ($resource->type ?? 'morning')) }}
                 </span>
             </div>
         </div>
@@ -45,26 +50,34 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">edit</i>
-                Update Shift Information
+                {{ __('resources.edit.update_resource_info') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="name">Shift Name *</label>
+                    <label for="name">{{ __('resources.edit.resource_name') }} *</label>
                     <input type="text" id="name" name="name" 
-                           value="{{ old('name', $shift->name ?? 'Morning Shift') }}" required>
+                           value="{{ old('name', $resource->name ?? __('resources.edit.morning_resource')) }}" required>
                     @error('name')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="type">Shift Type *</label>
+                    <label for="type">{{ __('resources.edit.resource_type') }} *</label>
                     <select id="type" name="type" required>
-                        <option value="morning" {{ ($shift->type ?? 'morning') === 'morning' ? 'selected' : '' }}>Morning Shift</option>
-                        <option value="evening" {{ ($shift->type ?? '') === 'evening' ? 'selected' : '' }}>Evening Shift</option>
-                        <option value="night" {{ ($shift->type ?? '') === 'night' ? 'selected' : '' }}>Night Shift</option>
-                        <option value="flexible" {{ ($shift->type ?? '') === 'flexible' ? 'selected' : '' }}>Flexible Shift</option>
+                        <option value="morning" {{ ($resource->type ?? 'morning') === 'morning' ? 'selected' : '' }}>
+                            {{ __('resources.edit.resource_types.morning') }}
+                        </option>
+                        <option value="evening" {{ ($resource->type ?? '') === 'evening' ? 'selected' : '' }}>
+                            {{ __('resources.edit.resource_types.evening') }}
+                        </option>
+                        <option value="night" {{ ($resource->type ?? '') === 'night' ? 'selected' : '' }}>
+                            {{ __('resources.edit.resource_types.night') }}
+                        </option>
+                        <option value="flexible" {{ ($resource->type ?? '') === 'flexible' ? 'selected' : '' }}>
+                            {{ __('resources.edit.resource_types.flexible') }}
+                        </option>
                     </select>
                     @error('type')
                         <span class="error">{{ $message }}</span>
@@ -76,38 +89,38 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">access_time</i>
-                Update Shift Timing
+                {{ __('resources.edit.update_timing') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="start_time">Start Time *</label>
+                    <label for="start_time">{{ __('resources.edit.start_time') }} *</label>
                     <input type="time" id="start_time" name="start_time" 
-                           value="{{ old('start_time', $shift->start_time ?? '07:00') }}" required>
+                           value="{{ old('start_time', $resource->start_time ?? '07:00') }}" required>
                     @error('start_time')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="end_time">End Time *</label>
+                    <label for="end_time">{{ __('resources.edit.end_time') }} *</label>
                     <input type="time" id="end_time" name="end_time" 
-                           value="{{ old('end_time', $shift->end_time ?? '15:00') }}" required>
+                           value="{{ old('end_time', $resource->end_time ?? '15:00') }}" required>
                     @error('end_time')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="break_duration">Break Duration (minutes)</label>
+                    <label for="break_duration">{{ __('resources.edit.break_duration') }} ({{ __('resources.edit.minutes') }})</label>
                     <input type="number" id="break_duration" name="break_duration" 
-                           value="{{ old('break_duration', $shift->break_duration ?? 60) }}" 
+                           value="{{ old('break_duration', $resource->break_duration ?? 60) }}" 
                            min="0" max="120">
                 </div>
 
                 <div class="form-group">
-                    <label for="total_hours">Total Working Hours</label>
-                    <input type="text" id="total_hours" readonly class="calculated-field" value="8.0 hours">
+                    <label for="total_hours">{{ __('resources.edit.total_hours') }}</label>
+                    <input type="text" id="total_hours" readonly class="calculated-field">
                 </div>
             </div>
         </div>
@@ -115,44 +128,49 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">location_on</i>
-                Location & Assignment Updates
+                {{ __('resources.edit.location_updates') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="location">Work Location</label>
+                    <label for="location">{{ __('resources.edit.work_location') }}</label>
                     <select id="location" name="location">
-                        <option value="">Select Location</option>
-                        <option value="Site A - Gurgaon" {{ ($shift->location ?? 'Site A - Gurgaon') === 'Site A - Gurgaon' ? 'selected' : '' }}>Site A - Gurgaon</option>
-                        <option value="Site B - Noida" {{ ($shift->location ?? '') === 'Site B - Noida' ? 'selected' : '' }}>Site B - Noida</option>
-                        <option value="Site C - Faridabad" {{ ($shift->location ?? '') === 'Site C - Faridabad' ? 'selected' : '' }}>Site C - Faridabad</option>
-                        <option value="Office - DLF" {{ ($shift->location ?? '') === 'Office - DLF' ? 'selected' : '' }}>Office - DLF City</option>
+                        <option value="">{{ __('resources.edit.select_location') }}</option>
+                        @foreach(config('resources.locations', []) as $value => $label)
+                            <option value="{{ $value }}" {{ old('location', $resource->location ?? '') == $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="max_employees">Maximum Employees</label>
+                    <label for="max_employees">{{ __('resources.edit.max_employees') }}</label>
                     <input type="number" id="max_employees" name="max_employees" 
-                           value="{{ old('max_employees', $shift->max_employees ?? 25) }}" min="1" max="100">
+                           value="{{ old('max_employees', $resource->max_employees ?? 25) }}" min="1" max="100">
                 </div>
 
                 <div class="form-group">
-                    <label for="supervisor">Shift Supervisor</label>
+                    <label for="supervisor">{{ __('resources.edit.resource_supervisor') }}</label>
                     <select id="supervisor" name="supervisor">
-                        <option value="">Select Supervisor</option>
-                        <option value="1" {{ ($shift->supervisor_id ?? 1) == 1 ? 'selected' : '' }}>Rajesh Kumar - Site Engineer</option>
-                        <option value="2" {{ ($shift->supervisor_id ?? '') == 2 ? 'selected' : '' }}>Priya Singh - Construction Manager</option>
-                        <option value="3" {{ ($shift->supervisor_id ?? '') == 3 ? 'selected' : '' }}>Amit Sharma - Safety Officer</option>
+                        <option value="">{{ __('resources.edit.select_supervisor') }}</option>
+                        @foreach($supervisors ?? [] as $supervisor)
+                            <option value="{{ $supervisor->id }}" {{ old('supervisor', $resource->supervisor_id ?? '') == $supervisor->id ? 'selected' : '' }}>
+                                {{ $supervisor->name }} - {{ $supervisor->role ?? '' }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="project_id">Associated Project</label>
+                    <label for="project_id">{{ __('resources.edit.associated_project') }}</label>
                     <select id="project_id" name="project_id">
-                        <option value="">Select Project (Optional)</option>
-                        <option value="1" {{ ($shift->project_id ?? 1) == 1 ? 'selected' : '' }}>Residential Complex - Phase 2</option>
-                        <option value="2" {{ ($shift->project_id ?? '') == 2 ? 'selected' : '' }}>Commercial Mall Construction</option>
-                        <option value="3" {{ ($shift->project_id ?? '') == 3 ? 'selected' : '' }}>Highway Bridge Project</option>
+                        <option value="">{{ __('resources.edit.select_project_optional') }}</option>
+                        @foreach($projects ?? [] as $project)
+                            <option value="{{ $project->id }}" {{ old('project_id', $resource->project_id ?? '') == $project->id ? 'selected' : '' }}>
+                                {{ $project->name }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -162,7 +180,7 @@
         <div class="assignments-section">
             <h3 class="section-title">
                 <i class="material-icons">groups</i>
-                Current Employee Assignments
+                {{ __('resources.edit.current_assignments') }}
             </h3>
 
             <div class="assignments-summary">
@@ -171,8 +189,8 @@
                         <i class="material-icons">groups</i>
                     </div>
                     <div class="summary-info">
-                        <h4>{{ $shift->employees_count ?? 15 }} / {{ $shift->max_employees ?? 25 }}</h4>
-                        <p>Employees Assigned</p>
+                        <h4>{{ $resource->employees_count ?? 15 }} / {{ $resource->max_employees ?? 25 }}</h4>
+                        <p>{{ __('resources.edit.employees_assigned') }}</p>
                     </div>
                 </div>
 
@@ -181,8 +199,8 @@
                         <i class="material-icons">person</i>
                     </div>
                     <div class="summary-info">
-                        <h4>{{ $shift->supervisor ?? 'Rajesh Kumar' }}</h4>
-                        <p>Shift Supervisor</p>
+                        <h4>{{ $resource->supervisor_name ?? __('resources.edit.default_supervisor') }}</h4>
+                        <p>{{ __('resources.edit.shift_supervisor') }}</p>
                     </div>
                 </div>
 
@@ -191,8 +209,8 @@
                         <i class="material-icons">engineering</i>
                     </div>
                     <div class="summary-info">
-                        <h4>{{ $shift->skill_distribution ?? '8 Skilled, 7 General' }}</h4>
-                        <p>Skill Distribution</p>
+                        <h4>{{ $resource->skill_distribution ?? '8 ' . __('resources.edit.skilled') . ', 7 ' . __('resources.edit.general') }}</h4>
+                        <p>{{ __('resources.edit.skill_distribution') }}</p>
                     </div>
                 </div>
             </div>
@@ -200,11 +218,11 @@
             <div class="assignment-actions">
                 <button type="button" class="btn-secondary" onclick="manageAssignments()">
                     <i class="material-icons">manage_accounts</i>
-                    Manage Assignments
+                    {{ __('resources.edit.manage_assignments') }}
                 </button>
                 <button type="button" class="btn-success" onclick="addEmployees()">
                     <i class="material-icons">person_add</i>
-                    Add Employees
+                    {{ __('resources.edit.add_employees') }}
                 </button>
             </div>
         </div>
@@ -213,63 +231,44 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">settings</i>
-                Shift Configuration Updates
+                {{ __('resources.edit.configuration_updates') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="working_days">Working Days</label>
+                    <label>{{ __('resources.edit.working_days') }}</label>
                     <div class="checkbox-group">
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="monday" checked>
-                            <span>Monday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="tuesday" checked>
-                            <span>Tuesday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="wednesday" checked>
-                            <span>Wednesday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="thursday" checked>
-                            <span>Thursday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="friday" checked>
-                            <span>Friday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="saturday" checked>
-                            <span>Saturday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="sunday">
-                            <span>Sunday</span>
-                        </label>
+                        @foreach(config('resources.days', []) as $day)
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="working_days[]" value="{{ $day['value'] }}" 
+                                       {{ in_array(old('working_days.0', []), [$day['value']]) || (in_array($day['value'], $resource->working_days ?? []) || $day['default']) ? 'checked' : '' }}>
+                                <span>{{ $day['label'] }}</span>
+                            </label>
+                        @endforeach
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="overtime_allowed">Overtime Settings</label>
+                    <label>{{ __('resources.edit.overtime_settings') }}</label>
                     <div class="radio-group">
                         <label class="radio-item">
                             <input type="radio" name="overtime_allowed" value="1" 
-                                   {{ ($shift->overtime_allowed ?? true) ? 'checked' : '' }}>
-                            <span>Overtime Allowed</span>
+                                   {{ old('overtime_allowed', $resource->overtime_allowed ?? 1) ? 'checked' : '' }}>
+                            <span>{{ __('resources.edit.overtime_allowed') }}</span>
                         </label>
                         <label class="radio-item">
                             <input type="radio" name="overtime_allowed" value="0" 
-                                   {{ !($shift->overtime_allowed ?? true) ? 'checked' : '' }}>
-                            <span>No Overtime</span>
+                                   {{ !old('overtime_allowed', $resource->overtime_allowed ?? 1) ? 'checked' : '' }}>
+                            <span>{{ __('resources.edit.no_overtime') }}</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="description">Shift Description</label>
-                    <textarea id="description" name="description" rows="3">{{ old('description', $shift->description ?? 'This shift handles primary construction activities including foundation work, structural assembly, and site preparation. All safety protocols must be followed strictly.') }}</textarea>
+                    <label for="description">{{ __('resources.edit.resource_description') }}</label>
+                    <textarea id="description" name="description" rows="3">
+                        {{ old('description', $resource->description ?? __('resources.edit.default_description')) }}
+                    </textarea>
                 </div>
             </div>
         </div>
@@ -278,25 +277,25 @@
         <div class="audit-section">
             <h3 class="section-title">
                 <i class="material-icons">history</i>
-                Recent Changes
+                {{ __('resources.edit.recent_changes') }}
             </h3>
 
             <div class="audit-trail">
                 <div class="audit-item">
-                    <div class="audit-time">Oct 05, 2025 - 02:30 PM</div>
-                    <div class="audit-action">Shift created</div>
-                    <div class="audit-user">Admin User</div>
+                    <div class="audit-time">{{ __('resources.edit.oct_05_2025') }}</div>
+                    <div class="audit-action">{{ __('resources.edit.resource_created') }}</div>
+                    <div class="audit-user">{{ __('resources.edit.admin_user') }}</div>
                 </div>
 
                 <div class="audit-item">
-                    <div class="audit-time">Oct 06, 2025 - 10:15 AM</div>
-                    <div class="audit-action">15 employees assigned to shift</div>
-                    <div class="audit-user">HR Manager</div>
+                    <div class="audit-time">{{ __('resources.edit.oct_06_2025') }}</div>
+                    <div class="audit-action">{{ __('resources.edit.employees_assigned_audit', ['count' => 15]) }}</div>
+                    <div class="audit-user">{{ __('resources.edit.hr_manager') }}</div>
                 </div>
 
                 <div class="audit-item current">
                     <div class="audit-time">{{ now()->format('M d, Y - h:i A') }}</div>
-                    <div class="audit-action">Shift configuration being modified</div>
+                    <div class="audit-action">{{ __('resources.edit.configuration_modifying') }}</div>
                     <div class="audit-user">{{ auth()->user()->name }}</div>
                 </div>
             </div>
@@ -305,14 +304,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Shift
+                {{ __('resources.edit.update_resource_button') }}
             </button>
-            <a href="{{ route('admin.shifts.show', $shift->id ?? 1) }}" class="btn-cancel">
-                Cancel Changes
+            <a href="{{ route('admin.resources.show', $resource->id ?? 1) }}" class="btn-cancel">
+                {{ __('resources.edit.cancel_changes') }}
             </a>
-            <button type="button" class="btn-danger" onclick="deleteShift()">
+            <button type="button" class="btn-danger" onclick="deleteResource()">
                 <i class="material-icons">delete</i>
-                Delete Shift
+                {{ __('resources.edit.delete_resource') }}
             </button>
         </div>
     </form>
@@ -323,12 +322,14 @@
 <style>
     .page-header { margin-bottom: 32px; }
 
+
     .page-nav {
         margin-bottom: 16px;
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
     }
+
 
     .btn-back, .btn-secondary {
         display: inline-flex;
@@ -342,17 +343,21 @@
         transition: background 0.2s;
     }
 
+
     .btn-back:hover, .btn-secondary:hover { background: rgba(103, 80, 164, 0.08); }
+
 
     .form-container {
         max-width: 1000px;
     }
+
 
     .shift-form {
         display: flex;
         flex-direction: column;
         gap: 32px;
     }
+
 
     .current-status {
         display: flex;
@@ -364,11 +369,13 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
+
     .status-info {
         display: flex;
         align-items: center;
         gap: 20px;
     }
+
 
     .shift-icon {
         width: 56px;
@@ -382,16 +389,19 @@
         font-size: 24px;
     }
 
+
     .status-info h3 {
         margin: 0 0 4px 0;
         font-size: 20px;
         font-weight: 500;
     }
 
+
     .status-info p {
         margin: 0;
         color: #666;
     }
+
 
     .shift-type {
         padding: 8px 16px;
@@ -401,10 +411,12 @@
         text-transform: uppercase;
     }
 
+
     .shift-morning { background: #fff3e0; color: #f57c00; }
     .shift-evening { background: #f3e5f5; color: #7b1fa2; }
     .shift-night { background: #e8eaf6; color: #3949ab; }
     .shift-flexible { background: #e0f2f1; color: #00695c; }
+
 
     .form-section, .assignments-section, .audit-section {
         background: white;
@@ -412,6 +424,7 @@
         border-radius: 16px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
+
 
     .section-title {
         display: flex;
@@ -423,7 +436,9 @@
         color: #1C1B1F;
     }
 
+
     .section-title i { color: #6750A4; }
+
 
     .form-grid {
         display: grid;
@@ -431,18 +446,22 @@
         gap: 20px;
     }
 
+
     .form-group {
         display: flex;
         flex-direction: column;
     }
 
+
     .form-group.full-width { grid-column: 1 / -1; }
+
 
     .form-group label {
         font-weight: 500;
         color: #333;
         margin-bottom: 8px;
     }
+
 
     .form-group input,
     .form-group select,
@@ -455,6 +474,7 @@
         background: white;
     }
 
+
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
@@ -462,10 +482,12 @@
         border-color: #6750A4;
     }
 
+
     .calculated-field {
         background: #f5f5f5 !important;
         color: #666;
     }
+
 
     .error {
         color: #d32f2f;
@@ -473,12 +495,14 @@
         margin-top: 4px;
     }
 
+
     .checkbox-group, .radio-group {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
         gap: 12px;
         margin-top: 8px;
     }
+
 
     .checkbox-item, .radio-item {
         display: flex;
@@ -491,9 +515,11 @@
         transition: background 0.2s;
     }
 
+
     .checkbox-item:hover, .radio-item:hover {
         background: #e3f2fd;
     }
+
 
     .assignments-summary {
         display: grid;
@@ -501,6 +527,7 @@
         gap: 20px;
         margin-bottom: 20px;
     }
+
 
     .summary-card {
         display: flex;
@@ -511,6 +538,7 @@
         border-radius: 12px;
         border: 1px solid #e0e0e0;
     }
+
 
     .summary-icon {
         width: 48px;
@@ -524,6 +552,7 @@
         font-size: 24px;
     }
 
+
     .summary-info h4 {
         margin: 0 0 4px 0;
         font-size: 16px;
@@ -531,11 +560,13 @@
         color: #333;
     }
 
+
     .summary-info p {
         margin: 0;
         color: #666;
         font-size: 12px;
     }
+
 
     .assignment-actions {
         display: flex;
@@ -543,11 +574,13 @@
         justify-content: center;
     }
 
+
     .audit-trail {
         display: flex;
         flex-direction: column;
         gap: 16px;
     }
+
 
     .audit-item {
         padding: 16px;
@@ -556,10 +589,12 @@
         border-left: 3px solid #6750A4;
     }
 
+
     .audit-item.current {
         background: #e3f2fd;
         border-left-color: #2196F3;
     }
+
 
     .audit-time {
         font-size: 12px;
@@ -567,16 +602,19 @@
         margin-bottom: 4px;
     }
 
+
     .audit-action {
         font-weight: 500;
         color: #333;
         margin-bottom: 4px;
     }
 
+
     .audit-user {
         font-size: 12px;
         color: #6750A4;
     }
+
 
     .form-actions {
         display: flex;
@@ -586,6 +624,7 @@
         border-top: 1px solid #e0e0e0;
         flex-wrap: wrap;
     }
+
 
     .btn-primary, .btn-cancel, .btn-danger, .btn-success {
         display: flex;
@@ -600,12 +639,15 @@
         transition: all 0.2s;
     }
 
+
     .btn-primary {
         background: #6750A4;
         color: white;
     }
 
+
     .btn-primary:hover { background: #5A4A94; }
+
 
     .btn-cancel {
         border: 2px solid #e0e0e0;
@@ -613,24 +655,30 @@
         background: white;
     }
 
+
     .btn-cancel:hover {
         border-color: #666;
         color: #333;
     }
+
 
     .btn-danger {
         background: #d32f2f;
         color: white;
     }
 
+
     .btn-danger:hover { background: #b71c1c; }
+
 
     .btn-success {
         background: #4CAF50;
         color: white;
     }
 
+
     .btn-success:hover { background: #45a049; }
+
 
     @media (max-width: 768px) {
         .form-grid, .checkbox-group, .radio-group, .assignments-summary { grid-template-columns: 1fr; }
@@ -657,7 +705,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let diffMs = end - start;
             if (diffMs < 0) {
-                // Handle overnight shifts
                 diffMs += 24 * 60 * 60 * 1000;
             }
 
@@ -665,7 +712,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const breakHours = (parseInt(breakInput.value) || 0) / 60;
             const workingHours = Math.max(0, diffHours - breakHours);
 
-            totalHoursInput.value = workingHours.toFixed(1) + ' hours';
+            totalHoursInput.value = workingHours.toFixed(1) + ' {{ __("resources.edit.hours") }}';
         }
     }
 
@@ -673,23 +720,20 @@ document.addEventListener('DOMContentLoaded', function() {
     endTimeInput.addEventListener('change', calculateHours);
     breakInput.addEventListener('input', calculateHours);
 
-    // Initial calculation
     calculateHours();
 });
 
 function manageAssignments() {
-    // TODO: Open assignment management modal
-    alert('Assignment management functionality will be implemented');
+    alert('{{ __("resources.edit.assignment_management_todo") }}');
 }
 
 function addEmployees() {
-    // TODO: Open employee selection modal
-    alert('Employee addition functionality will be implemented');
+    alert('{{ __("resources.edit.employee_addition_todo") }}');
 }
 
-function deleteShift() {
-    if (confirm('Are you sure you want to delete this shift?\n\nThis will remove all employee assignments and cannot be undone.')) {
-        fetch(`/admin/shifts/{{ $shift->id ?? 1 }}`, {
+function deleteResource() {
+    if (confirm('{{ __("resources.edit.delete_confirm") }}')) {
+        fetch(`/admin/resources/{{ $resource->id ?? 1 }}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -699,23 +743,22 @@ function deleteShift() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Shift deleted successfully');
-                window.location.href = '/admin/shifts';
+                alert('{{ __("resources.edit.delete_success") }}');
+                window.location.href = '/admin/resources';
             } else {
-                alert('Error deleting shift');
+                alert('{{ __("resources.edit.delete_error") }}');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error deleting shift');
+            alert('{{ __("resources.edit.delete_error") }}');
         });
     }
 }
 
-// Form submission with loading state
-document.querySelector('.shift-form').addEventListener('submit', function(e) {
+document.querySelector('.resource-form').addEventListener('submit', function(e) {
     const submitButton = this.querySelector('button[type="submit"]');
-    submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> Updating...';
+    submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> {{ __("resources.edit.updating") }}...';
     submitButton.disabled = true;
 });
 </script>

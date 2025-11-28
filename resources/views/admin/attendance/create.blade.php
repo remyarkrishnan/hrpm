@@ -1,18 +1,22 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Manual Attendance Entry - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Manual Attendance Entry')
+@section('title', __('attendance.create.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('attendance.create.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.attendance.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Attendance
+            {{ __('attendance.create.back') }}
         </a>
     </div>
    
-    <p>Add attendance record for employees manually</p>
+    <p>{{ __('attendance.create.description') }}</p>
 </div>
 
 <div class="form-container">
@@ -26,8 +30,8 @@
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="employee">Select Employee *</label>
-                    <select id="user_id" name="user_id" required>
+                    <label for="employee">{{ __('attendance.create.select_employee') }} *</label>
+                     <select id="user_id" name="user_id" required>
                         <option value="">Choose Employee</option>
                          @foreach($employees as $emp)
                          <option value="{{ $emp->id }}" {{ old('user_id') === $emp->name ? 'selected' : '' }}>
@@ -38,7 +42,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="date">Attendance Date *</label>
+                    <label for="date">{{ __('attendance.fields.date') }} *</label>
                     <input type="date" id="date" name="date" value="{{ date('Y-m-d') }}" required>
                 </div>
             </div>
@@ -52,7 +56,7 @@
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="check_in">Check In Time *</label>
+                    <label for="check_in">{{ __('attendance.fields.check_in') }} *</label>
                     <input type="time" id="check_in" name="check_in" required>
                 </div>
 
@@ -62,13 +66,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="status">Attendance Status *</label>
+                    <label for="status">{{ __('attendance.fields.status') }} *</label>
                     <select id="status" name="status" required>
-                        <option value="present">Present</option>
-                        <option value="absent">Absent</option>
-                        <option value="late">Late</option>
-                        <option value="half_day">Half Day</option>
-                        <option value="work_from_home">Work From Home</option>
+                        <option value="present">{{ __('attendance.status.present') }}</option>
+                        <option value="absent">{{ __('attendance.status.absent') }}</option>
+                        <option value="late">{{ __('attendance.status.late') }}</option>
+                        <option value="half_day">{{ __('attendance.status.half_day') }}</option>
+                        <option value="work_from_home">{{ __('attendance.status.work_from_home') }}</option>
                     </select>
                 </div>
 
@@ -144,10 +148,10 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Save Attendance Record
+                {{ __('attendance.create.save') }}
             </button>
             <a href="{{ route('admin.attendance.index') }}" class="btn-cancel">
-                Cancel
+                {{ __('attendance.create.cancel') }}
             </a>
         </div>
     </form>

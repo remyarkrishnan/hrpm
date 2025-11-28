@@ -1,31 +1,34 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Project: ' . $project->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Project Details')
+@section('title', __('projects.show.title', ['project' => $project->name, 'company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('projects.show.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.projects.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Projects
+            {{ __('projects.show.back_to_projects') }}
         </a>
     </div>
     <div class="project-header">
         <div class="project-info">
             <h2>{{ $project->name }}</h2>
-           
             <div class="project-badges">
-             
                 <span class="priority-badge priority-{{ $project->priority }}">
-                    {{ $project->priority }}
+                    {{ $project->priority_label ?? __('projects.show.priority.' . $project->priority) }}
                 </span>
             </div>
         </div>
         <div class="project-actions">
             <a href="{{ route('admin.projects.edit', $project) }}" class="btn-primary">
                 <i class="material-icons">edit</i>
-                Edit Project
+                {{ __('projects.show.edit_project') }}
             </a>
         </div>
     </div>
@@ -35,46 +38,45 @@
     <!-- Project Overview -->
     <div class="overview-grid">
         <div class="overview-card">
-            <h3>Project Progress</h3>
+            <h3>{{ __('projects.show.progress_section') }}</h3>
             <div class="progress-display">
                 @php
-                            $approvedSteps = $project->steps->where('status', 'approved')->count();
-                            $totalSteps = $project->steps->count();
-                        @endphp
+                    $approvedSteps = $project->steps->where('status', 'approved')->count();
+                    $totalSteps = $project->steps->count();
+                    $progressPercentage = $totalSteps > 0 ? round(($approvedSteps / $totalSteps) * 100) : 0;
+                @endphp
                 <div class="progress-circle">
                     <span class="progress-value">{{ $approvedSteps }}/{{ $totalSteps }}</span>
-                    
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ $approvedSteps }}%"></div>
+                    <div class="progress-fill" style="width: {{ $progressPercentage }}%"></div>
                 </div>
                 <a href="{{ route('admin.projects.progress.show', $project->id) }}" class="btn-primary">
-            <i class="material-icons">timeline</i>
-            View Progress
-        </a>
+                    <i class="material-icons">timeline</i>
+                    {{ __('projects.show.view_progress') }}
+                </a>
             </div>
         </div>
 
         <div class="overview-card">
-            <h3>Project Timeline</h3>
+            <h3>{{ __('projects.show.timeline_section') }}</h3>
             <div class="timeline-info">
                 <div class="timeline-item">
-                    <strong>Start Date:</strong>
-                    <span>{{ $project->start_date ? $project->start_date->format('M d, Y') : 'Not set' }}</span>
+                    <strong>{{ __('projects.show.start_date') }}:</strong>
+                    <span>{{ $project->start_date ? $project->start_date->format('M d, Y') : __('projects.show.not_set') }}</span>
                 </div>
                 <div class="timeline-item">
-                    <strong>End Date:</strong>
-                    <span>{{ $project->end_date ? $project->end_date->format('M d, Y') : 'Not set' }}</span>
+                    <strong>{{ __('projects.show.end_date') }}:</strong>
+                    <span>{{ $project->end_date ? $project->end_date->format('M d, Y') : __('projects.show.not_set') }}</span>
                 </div>
-                
             </div>
         </div>
 
         <div class="overview-card">
-            <h3>Budget Information</h3>
+            <h3>{{ __('projects.show.budget_section') }}</h3>
             <div class="budget-info">
-                <div class="budget-amount">₹{{ number_format($project->budget) }}</div>
-                <div class="budget-label">Total Project Budget</div>
+                <div class="budget-amount">{{ __('projects.show.currency_symbol') }}{{ number_format($project->budget) }}</div>
+                <div class="budget-label">{{ __('projects.show.total_budget') }}</div>
             </div>
         </div>
     </div>
@@ -82,17 +84,17 @@
     <!-- Project Details -->
     <div class="details-grid">
         <div class="details-card">
-            <h3>Project Information</h3>
+            <h3>{{ __('projects.show.project_info_section') }}</h3>
             <div class="detail-item">
-                <strong>Description:</strong>
+                <strong>{{ __('projects.show.description_label') }}:</strong>
                 <p>{{ $project->description }}</p>
             </div>
             <div class="detail-item">
-                <strong>Location:</strong>
+                <strong>{{ __('projects.show.location_label') }}:</strong>
                 <span>{{ $project->location }}</span>
             </div>
             <div class="detail-item">
-                <strong>Client:</strong>
+                <strong>{{ __('projects.show.client_label') }}:</strong>
                 <span>{{ $project->client_name }}</span>
                 @if($project->client_contact)
                     <small>({{ $project->client_contact }})</small>
@@ -101,73 +103,66 @@
         </div>
 
         <div class="details-card">
-            <h3>Team Information</h3>
+            <h3>{{ __('projects.show.team_info_section') }}</h3>
             <div class="detail-item">
-                <strong>Project Manager:</strong>
-                <span>{{ $project->manager?->name ?? 'Not assigned' }}</span>
+                <strong>{{ __('projects.show.project_manager') }}:</strong>
+                <span>{{ $project->manager?->name ?? __('projects.show.not_assigned') }}</span>
             </div>
             <div class="detail-item">
-                <strong>Created By:</strong>
-                <span>{{ $project->creator?->name ?? 'Unknown' }}</span>
+                <strong>{{ __('projects.show.created_by') }}:</strong>
+                <span>{{ $project->creator?->name ?? __('projects.show.unknown') }}</span>
             </div>
             <div class="detail-item">
-                <strong>Created On:</strong>
+                <strong>{{ __('projects.show.created_on') }}:</strong>
                 <span>{{ $project->created_at->format('M d, Y \a\t g:i A') }}</span>
             </div>
-            
         </div>
     </div>
 
     <!-- 12-Step Approval Workflow -->
     <div class="approval-workflow">
-        <h3>12-Step Approval Workflow</h3>
+        <h3>{{ __('projects.show.approval_workflow') }}</h3>
         <div class="workflow-steps">
             @foreach($project->steps as $step)
                 <div class="workflow-step step-{{ $step->status }}">
                     <div class="step-header">
                         <div class="step-number">{{ $loop->iteration }}</div>
                         <div class="step-info">
-                            <h4>{{ $step->step_name }}
-                           </h4>
+                            <h4>{{ $step->step_name }}</h4>
                         </div>
                         <div class="step-status">
                             <span class="status-badge status-{{ $step->status }}">
-                               {{ ucfirst($step->status) }} - {{ $step->progress_percent }}%
+                                {{ ucfirst(__('projects.show.status.' . $step->status)) }} - {{ $step->progress_percent }}%
                             </span>
-
                         </div>
                     </div>
-                 
-                        <div class="d-flex gap-2 mt-2">
-                            <!-- Edit/Update Button -->
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#stepModal{{ $step->id }}" title="Update Step">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
 
-                            <!-- Subplans Button -->
-                            <a href="{{ route('admin.subplans.index', $step->id) }}" class="btn btn-sm btn-outline-success" title="View or Add Subplans">
-                                <i class="bi bi-diagram-3"></i> Subplans
-                            </a>
-                        </div>
+                    <div class="d-flex gap-2 mt-2">
+                        <!-- Edit/Update Button -->
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#stepModal{{ $step->id }}" title="{{ __('projects.show.update_step') }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
 
-                   
+                        <!-- Subplans Button -->
+                        <a href="{{ route('admin.subplans.index', $step->id) }}" class="btn btn-sm btn-outline-success" title="{{ __('projects.show.view_subplans') }}">
+                            <i class="bi bi-diagram-3"></i> {{ __('projects.show.subplans') }}
+                        </a>
+                    </div>
 
                     @if($step->due_date)
                         <div class="step-timeline">
-                            <strong>Due:</strong> {{ $step->due_date->format('M d, Y') }}
+                            <strong>{{ __('projects.show.due_date') }}:</strong> {{ $step->due_date->format('M d, Y') }}
                             @if($step->approved_at)
-                                <br><strong>Approved:</strong> {{ $step->approved_at->format('M d, Y \a\t g:i A') }}
+                                <br><strong>{{ __('projects.show.approved_date') }}:</strong> {{ $step->approved_at->format('M d, Y \a\t g:i A') }}
                             @endif
                         </div>
                     @endif
 
                     @if($step->responsiblePerson)
                         <div class="step-responsible">
-                            <strong>Responsible:</strong> {{ $step->responsiblePerson?->name }}
+                            <strong>{{ __('projects.show.responsible_person') }}:</strong> {{ $step->responsiblePerson?->name }}
                         </div>
                     @endif
-
-                    
                 </div>
                 @include('admin.projects.step-modal', ['step' => $step])
             @endforeach
@@ -175,18 +170,18 @@
     </div>
 
     <!-- Project Documents -->
-    @if($step->documents && count($step->documents) > 0)
+    @if($project->documents && count($project->documents) > 0)
         <div class="documents-section">
-            <h3>Project Documents</h3>
+            <h3>{{ __('projects.show.documents_section') }}</h3>
             <div class="documents-grid">
-                @foreach($step->documents as $document)
+                @foreach($project->documents as $document)
                     <div class="document-item">
                         <div class="document-icon">
                             <i class="material-icons">description</i>
                         </div>
                         <div class="document-info">
                             <strong>{{ $document }}</strong>
-                            <p>Project Document</p>
+                            <p>{{ __('projects.show.project_document') }}</p>
                         </div>
                         <div class="document-actions">
                             <a href="{{ Storage::url('project_steps/' . $document) }}" 
@@ -199,7 +194,6 @@
             </div>
         </div>
     @endif
-     
 </div>
 @endsection
 
@@ -239,12 +233,6 @@
         font-size: 28px;
         font-weight: 500;
         color: #1C1B1F;
-    }
-
-    .project-info p {
-        margin: 0 0 16px 0;
-        color: #666;
-        font-size: 16px;
     }
 
     .project-badges {
@@ -302,7 +290,7 @@
         width: 120px;
         height: 120px;
         border-radius: 50%;
-        background: conic-gradient(#6750A4 0deg, #e0e0e0 0deg);
+        background: conic-gradient(#6750A4 0deg {{ $progressPercentage }}deg, #e0e0e0 {{ $progressPercentage }}deg 360deg);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -580,9 +568,5 @@
         .workflow-steps { grid-template-columns: 1fr; }
         .documents-grid { grid-template-columns: 1fr; }
     }
-
-
-
-    
 </style>
 @endpush

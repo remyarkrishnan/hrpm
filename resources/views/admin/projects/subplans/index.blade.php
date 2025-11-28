@@ -1,81 +1,86 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Sub-Plans for Step: ' . $step->step_name . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Sub-Plans ')
+@section('title', __('projects.superplans.index.title', ['step' => $step->step_name, 'company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('projects.superplans.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <p><h4>Step: <strong>{{ $step->step_name }}</strong></h4></p>
+        <p><h4>{{ __('projects.superplans.index.step_label') }}: <strong>{{ $step->step_name }}</strong></h4></p>
     </div>
     <div class="header-actions">
         <a href="{{ route('admin.subplans.create', $step->id) }}" class="btn-primary">
             <i class="material-icons">add</i>
-           Add Sub-Plan
+            {{ __('projects.superplans.index.add_button') }}
         </a>
     </div>
 </div>
 
-
-
 <!-- Leave Requests Table -->
 <div class="leave-table-card">
-    <h3>Sub-Plans for Step: {{ $step->step_name }}</h3>
+    <h3>{{ __('projects.superplans.index.table_title', ['step' => $step->step_name]) }}</h3>
     <div class="table-responsive">
         <table class="leave-table">
             <thead>
                 <tr>
-                <th>#</th>
-                <th>Activity</th>
-                <th>Duration</th>
-                <th>Progress</th>
-                <th>Description</th>
-                <th>View</th>
-                <th width="130">Actions</th>
+                    <th>{{ __('projects.superplans.index.table.index') }}</th>
+                    <th>{{ __('projects.superplans.index.table.activity') }}</th>
+                    <th>{{ __('projects.superplans.index.table.duration') }}</th>
+                    <th>{{ __('projects.superplans.index.table.progress') }}</th>
+                    <th>{{ __('projects.superplans.index.table.description') }}</th>
+                    <th>{{ __('projects.superplans.index.table.view') }}</th>
+                    <th width="130">{{ __('projects.superplans.index.table.actions') }}</th>
                 </tr>
             </thead>
             @if($step->subplans->count() > 0)
-            @foreach($step->subplans as $key => $subplan)
-            <tr>
-                <td>{{ $key+1 }}</td>
-                <td>{{ $subplan->activity_name }}</td>
-                <td>{{ $subplan->start_date?->format('d M') }} - {{ $subplan->end_date?->format('d M, Y') }}</td>
-                <td>{{ $subplan->progress_percentage }}%</td>
-                <td>{{ Str::limit($subplan->description, 50) }}</td>
-                <td> 
-                   <a href="{{ route('admin.projects.resources.show', $project_id) }}" class="btn btn-primary">
-    <i class="fas fa-users me-1"></i> View Project Resource Overview
-</a>
-                </td>
-                <td>
-                      <div class="action-buttons">
-                                   
-                                    <a href="{{ route('admin.subplans.edit', $subplan->id) }}" class="btn-action edit"><i class="material-icons">edit</i></a>
-                                    
-                                    <a href="{{ route('admin.subplans.resources.index', $subplan->id) }}" title="View Resource Allocation"><button class="btn-action btn-assign"><i class="material-icons">group_add</i></button></a>
-                                   
-                                    <form action="{{ route('admin.subplans.destroy', $subplan->id) }}" method="POST" class="d-inline">
-                                    @csrf @method('DELETE')
-                                    <button class="btn-action delete"  onclick="return confirm('Are you sure you want to delete this subplan? This action cannot be undone.');">
-                                        <i class="material-icons">delete</i>
-                                    </button>
-                                    </form>
-                                </div>
-                    
-                </td>
-            </tr>
-            @endforeach
+                @foreach($step->subplans as $key => $subplan)
+                <tr>
+                    <td>{{ $key+1 }}</td>
+                    <td>{{ $subplan->activity_name }}</td>
+                    <td>{{ $subplan->start_date?->format('d M') }} - {{ $subplan->end_date?->format('d M, Y') }}</td>
+                    <td>{{ $subplan->progress_percentage }}%</td>
+                    <td>{{ Str::limit($subplan->description, 50) }}</td>
+                    <td> 
+                        <a href="{{ route('admin.projects.resources.show', $project_id) }}" class="btn btn-primary">
+                            <i class="fas fa-users me-1"></i> {{ __('projects.superplans.index.view_resources') }}
+                        </a>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{{ route('admin.subplans.edit', $subplan->id) }}" class="btn-action edit" title="{{ __('projects.superplans.index.edit_tooltip') }}">
+                                <i class="material-icons">edit</i>
+                            </a>
+                            
+                            <a href="{{ route('admin.subplans.resources.index', $subplan->id) }}" title="{{ __('projects.superplans.index.resources_tooltip') }}">
+                                <button class="btn-action btn-assign">
+                                    <i class="material-icons">group_add</i>
+                                </button>
+                            </a>
+                            
+                            <form action="{{ route('admin.subplans.destroy', $subplan->id) }}" method="POST" class="d-inline">
+                                @csrf @method('DELETE')
+                                <button class="btn-action delete" onclick="return confirm('{{ __("projects.superplans.index.delete_confirm") }}');">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
             @else
-            <tr>
-            <td colspan="6">
-            <h3>No Sub-Plans  Found</h3></td>
-            </tr>
-    @endif 
+                <tr>
+                    <td colspan="7" class="text-center">
+                        <h3>{{ __('projects.superplans.index.no_data') }}</h3>
+                    </td>
+                </tr>
+            @endif 
         </table>
     </div>
-
-   
-
 </div>
 @endsection
 
@@ -238,7 +243,7 @@
     .status-approved { background: #e8f5e8; color: #2e7d32; }
     .status-rejected { background: #ffebee; color: #c62828; }
 
-        .action-buttons {
+    .action-buttons {
         display: flex;
         gap: 4px;
     }
@@ -273,13 +278,13 @@
 
 @push('scripts')
 <script>
-    async function deleteSubplan(locid) {
-        if (!confirm('Are you sure you want to delete this subplan? This action cannot be undone.')) {
+    async function deleteSubplan(id) {
+        if (!confirm('{{ __("projects.superplans.index.delete_confirm_js") }}')) {
             return;
         }
 
         try {
-            const response = await fetch(`/admin/project-locations/${locid}`, {
+            const response = await fetch(`/admin/subplans/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -292,16 +297,12 @@
             if (data.success) {
                 location.reload();
             } else {
-                alert(data.message || 'Failed to delete subplan');
+                alert(data.message || '{{ __("projects.superplans.index.delete_error") }}');
             }
         } catch (error) {
-            alert('Error deleting subplan');
+            alert('{{ __("projects.superplans.index.delete_error") }}');
             console.error(error);
         }
     }
 </script>
 @endpush
-
-
-
-

@@ -1,22 +1,27 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Edit Project - ' . $project->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Project')
+@section('title', __('projects.edit.title', ['project' => $project->name, 'company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('projects.edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.projects.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Projects
+            {{ __('projects.edit.back_button') }}
         </a>
         <a href="{{ route('admin.projects.show', $project) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Project
+            {{ __('projects.edit.view_button') }}
         </a>
     </div>
     <h2>{{ $project->name }}</h2>
-    <p>Update project information and settings</p>
+    <p>{{ __('projects.edit.description') }}</p>
 </div>
 
 <form action="{{ route('admin.projects.update', $project) }}" method="POST" enctype="multipart/form-data" class="project-form">
@@ -27,12 +32,12 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">info</i>
-            Project Information
+            {{ __('projects.edit.sections.project_info') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="name">Project Name *</label>
+                <label for="name">{{ __('projects.edit.form.project_name') }} *</label>
                 <input type="text" id="name" name="name" value="{{ old('name', $project->name) }}" required>
                 @error('name')
                     <span class="error">{{ $message }}</span>
@@ -40,7 +45,7 @@
             </div>
 
             <div class="form-group">
-                <label for="project_code">Project Code *</label>
+                <label for="project_code">{{ __('projects.edit.form.project_code') }} *</label>
                 <input type="text" id="project_code" name="project_code" 
                        value="{{ old('project_code', $project->project_code) }}" required>
                 @error('project_code')
@@ -48,22 +53,26 @@
                 @enderror
             </div>
 
-             <div class="form-group">
-                <label for="priority">Priority *</label>
+            <div class="form-group">
+                <label for="priority">{{ __('projects.edit.form.priority') }} *</label>
                 <select id="priority" name="priority" required>
-                    <option value="low" {{ old('priority', $project->priority) === 'low' ? 'selected' : '' }}>Low</option>
-                    <option value="medium" {{ old('priority', $project->priority) === 'medium' ? 'selected' : '' }}>Medium</option>
-                    <option value="high" {{ old('priority', $project->priority) === 'high' ? 'selected' : '' }}>High</option>
+                    <option value="low" {{ old('priority', $project->priority) === 'low' ? 'selected' : '' }}>
+                        {{ __('projects.edit.form.priority_low') }}
+                    </option>
+                    <option value="medium" {{ old('priority', $project->priority) === 'medium' ? 'selected' : '' }}>
+                        {{ __('projects.edit.form.priority_medium') }}
+                    </option>
+                    <option value="high" {{ old('priority', $project->priority) === 'high' ? 'selected' : '' }}>
+                        {{ __('projects.edit.form.priority_high') }}
+                    </option>
                 </select>
                 @error('priority')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
-           
-
             <div class="form-group full-width">
-                <label for="description">Project Description *</label>
+                <label for="description">{{ __('projects.edit.form.description') }} *</label>
                 <textarea id="description" name="description" rows="4" required>{{ old('description', $project->description) }}</textarea>
                 @error('description')
                     <span class="error">{{ $message }}</span>
@@ -71,7 +80,7 @@
             </div>
 
             <div class="form-group">
-                <label for="location">Location *</label>
+                <label for="location">{{ __('projects.edit.form.location') }} *</label>
                 <input type="text" id="location" name="location" value="{{ old('location', $project->location) }}" required>
                 @error('location')
                     <span class="error">{{ $message }}</span>
@@ -84,12 +93,12 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">business</i>
-            Client Information
+            {{ __('projects.edit.sections.client_info') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="client_name">Client Name *</label>
+                <label for="client_name">{{ __('projects.edit.form.client_name') }} *</label>
                 <input type="text" id="client_name" name="client_name" 
                        value="{{ old('client_name', $project->client_name) }}" required>
                 @error('client_name')
@@ -98,7 +107,7 @@
             </div>
 
             <div class="form-group">
-                <label for="client_contact">Client Contact</label>
+                <label for="client_contact">{{ __('projects.edit.form.client_contact') }}</label>
                 <input type="text" id="client_contact" name="client_contact" 
                        value="{{ old('client_contact', $project->client_contact) }}">
                 @error('client_contact')
@@ -112,12 +121,12 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">schedule</i>
-            Project Planning
+            {{ __('projects.edit.sections.project_planning') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="budget">Project Budget (₹) *</label>
+                <label for="budget">{{ __('projects.edit.form.budget') }} *</label>
                 <input type="number" id="budget" name="budget" value="{{ old('budget', $project->budget) }}" 
                        required min="0" step="0.01">
                 @error('budget')
@@ -126,7 +135,7 @@
             </div>
 
             <div class="form-group">
-                <label for="start_date">Start Date *</label>
+                <label for="start_date">{{ __('projects.edit.form.start_date') }} *</label>
                 <input type="date" id="start_date" name="start_date" 
                        value="{{ old('start_date', $project->start_date?->format('Y-m-d')) }}" required>
                 @error('start_date')
@@ -135,7 +144,7 @@
             </div>
 
             <div class="form-group">
-                <label for="end_date">End Date *</label>
+                <label for="end_date">{{ __('projects.edit.form.end_date') }} *</label>
                 <input type="date" id="end_date" name="end_date" 
                        value="{{ old('end_date', $project->end_date?->format('Y-m-d')) }}" required>
                 @error('end_date')
@@ -143,16 +152,14 @@
                 @enderror
             </div>
 
-            
-
             <div class="form-group">
-                <label for="project_manager_id">Project Manager *</label>
+                <label for="project_manager_id">{{ __('projects.edit.form.project_manager') }} *</label>
                 <select id="manager_id" name="manager_id" required>
-                    <option value="">Select Project Manager</option>
+                    <option value="">{{ __('projects.edit.form.select_manager') }}</option>
                     @foreach($projectManagers as $manager)
                         <option value="{{ $manager->id }}" 
                                 {{ old('manager_id', $project->manager_id) == $manager->id ? 'selected' : '' }}>
-                            {{ $manager->name }} - {{ $manager->designation ?? 'Project Manager' }}
+                            {{ $manager->name }} - {{ $manager->designation ?? __('projects.edit.form.default_manager_title') }}
                         </option>
                     @endforeach
                 </select>
@@ -163,20 +170,18 @@
         </div>
     </div>
 
-
-
     <!-- Submit Buttons -->
     <div class="form-actions">
         <button type="submit" class="btn-primary">
             <i class="material-icons">save</i>
-            Update Project
+            {{ __('projects.edit.form.update_button') }}
         </button>
         <a href="{{ route('admin.projects.show', $project) }}" class="btn-cancel">
-            Cancel
+            {{ __('projects.edit.form.cancel_button') }}
         </a>
         <button type="button" onclick="deleteProject({{ $project->id }})" class="btn-danger">
             <i class="material-icons">delete</i>
-            Delete Project
+            {{ __('projects.edit.form.delete_button') }}
         </button>
     </div>
 </form>
@@ -397,13 +402,13 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const startDateInput = document.getElementById('start_date');
-    const endDateInput = document.getElementById('expected_end_date');
+    const endDateInput = document.getElementById('end_date');
 
     // Set minimum end date based on start date
     startDateInput.addEventListener('change', function() {
         const startDate = new Date(this.value);
         const minEndDate = new Date(startDate);
-        minEndDate.setDate(minEndDate.getDate() + 1);
+        minEndDate.setDate(minEndDate.getDate() + 30); // Minimum 30 days
 
         endDateInput.min = minEndDate.toISOString().split('T')[0];
 
@@ -419,26 +424,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (endDate <= startDate) {
             e.preventDefault();
-            alert('Expected completion date must be after start date');
+            alert('{{ __("projects.edit.validation.end_date_after_start") }}');
             return;
         }
 
         // Show loading state
         const submitButton = this.querySelector('button[type="submit"]');
-        submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> Updating Project...';
+        submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> {{ __("projects.edit.form.updating") }}...';
         submitButton.disabled = true;
     });
 });
 
 // Delete project function
 async function deleteProject(projectId) {
-    if (!confirm('Are you sure you want to delete this project?\n\nThis will permanently remove:\n• Project information and documents\n• All approval steps and progress\n• Resource allocations\n\nType "DELETE" to confirm.')) {
+    if (!confirm('{{ __("projects.edit.delete.confirm1") }}')) {
         return;
     }
 
-    const confirmation = prompt('Type "DELETE" to confirm project deletion:');
+    const confirmation = prompt('{{ __("projects.edit.delete.confirm2") }}');
     if (confirmation !== 'DELETE') {
-        alert('Deletion cancelled. You must type "DELETE" exactly.');
+        alert('{{ __("projects.edit.delete.cancelled") }}');
         return;
     }
 
@@ -454,13 +459,13 @@ async function deleteProject(projectId) {
         const data = await response.json();
 
         if (data.success) {
-            alert('Project deleted successfully');
+            alert('{{ __("projects.edit.delete.success") }}');
             window.location.href = '/admin/projects';
         } else {
-            alert(data.message || 'Failed to delete project');
+            alert(data.message || '{{ __("projects.edit.delete.error") }}');
         }
     } catch (error) {
-        alert('Error deleting project: ' + error.message);
+        alert('{{ __("projects.edit.delete.error") }}: ' + error.message);
         console.error(error);
     }
 }

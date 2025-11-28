@@ -1,38 +1,42 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', $type . ' Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', $type . ' Details')
+@section('title', __('approval.show.title', ['type' => $type, 'company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('approval.show.page_title', ['type' => $type]))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.approvals.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Approvals
+            {{ __('approval.show.back_to_approvals') }}
         </a>
     </div>
     <div class="leave-header">
         <div class="leave-info">
             <h2>{{ $approval->user->name  }}</h2>
             @if($type == 'Leave') 
-            <p>{{ $approval->user->employee_id  }} • {{ ucfirst(str_replace('_', ' ', $approval->leave_type )) }}</p>
+            <p>{{ $approval->user->employee_id  }} • {{ __('approval.show.leave') }}</p>
             <div class="leave-duration">
                 <i class="material-icons">date_range</i>
-                <span>{{ $approval->from_date->format('d-m-Y') ?? '' }} to {{ $approval->to_date->format('d-m-Y') ?? ''  }}</span>
-                <strong>({{ round($approval->total_days) ?? '' }} days)</strong>
+                <span>{{ $approval->from_date->format('d-m-Y') ?? '' }} {{ __('approval.show.to') }} {{ $approval->to_date->format('d-m-Y') ?? ''  }}</span>
+                <strong>({{ round($approval->total_days) ?? '' }} {{ __('approval.show.days') }})</strong>
             </div>
          @elseif($type == 'Loan')  
-          <p>{{ $approval->user->employee_id  }} • Loan</p>
+          <p>{{ $approval->user->employee_id  }} • {{ __('approval.show.loan') }}</p>
             <div class="leave-duration">
                 <i class="material-icons">date_range</i>
-                <span>'₹' {{ number_format($approval->amount, 2) }}  / {{ str_replace('_',' ',$approval->repayment_duration) }}</span>
+                <span>{{ __('approval.show.currency_symbol') }} {{ number_format($approval->amount, 2) }}  / {{ str_replace('_',' ',$approval->repayment_duration) }}</span>
                 <strong>{{ str_replace('_',' ',ucfirst($approval->purpose)) }}</strong>
             </div>
             @elseif($type == 'Document Request')  
-          <p>{{ $approval->user->employee_id  }} • Document Request</p>
+          <p>{{ $approval->user->employee_id  }} • {{ __('approval.show.document_request') }}</p>
             
             @elseif($type == 'Training Request')  
-          <p>{{ $approval->user->employee_id  }} • Training Request</p>
+          <p>{{ $approval->user->employee_id  }} • {{ __('approval.show.training_request') }}</p>
             
          @endif
 
@@ -50,48 +54,48 @@
     <div class="detail-grid">
         @if($type == 'Leave') 
         <div class="detail-card">
-            <h3>Leave Information</h3>
+            <h3>{{ __('approval.show.leave_information') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Leave Type:</strong>
+                    <strong>{{ __('approval.show.labels.leave_type') }}</strong>
                     <span>{{ ucfirst(str_replace('_', ' ', $approval->leave_type ?? '')) }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Applied Date:</strong>
+                    <strong>{{ __('approval.show.labels.applied_date') }}</strong>
                     <span>{{ $approval->created_at->format('d-m-Y') ?? '' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Start Date:</strong>
+                    <strong>{{ __('approval.show.labels.start_date') }}</strong>
                     <span>{{ $approval->from_date->format('d-m-Y') ?? '' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>End Date:</strong>
+                    <strong>{{ __('approval.show.labels.end_date') }}</strong>
                     <span>{{ $approval->to_date->format('d-m-Y') ?? '' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Total Days:</strong>
-                    <span>{{ round($approval->total_days) ?? '' }} days</span>
+                    <strong>{{ __('approval.show.labels.total_days') }}</strong>
+                    <span>{{ round($approval->total_days) ?? '' }} {{ __('approval.show.days') }}</span>
                 </div>
             </div>
         </div>
      @elseif($type == 'Loan') 
 <div class="detail-card">
-            <h3>Loan Information</h3>
+            <h3>{{ __('approval.show.loan_information') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Loan Amount:</strong>
-                    <span>₹{{ $approval->amount ?? ''}}</span>
+                    <strong>{{ __('approval.show.labels.loan_amount') }}:</strong>
+                    <span>{{ __('approval.show.currency_symbol') }}{{ $approval->amount ?? ''}}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Purpose:</strong>
+                    <strong>{{ __('approval.show.labels.purpose') }}:</strong>
                     <span>{{ ucwords(str_replace('_', ' ', $approval->purpose)) }}</span>
                 </div>
                 <div class="info-item">
-                     <strong>Repayment Duration:</strong>
+                     <strong>{{ __('approval.show.labels.repayment_duration') }}:</strong>
                     <span>{{ ucwords(str_replace('_', ' ', $approval->repayment_duration)) }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Applied Date:</strong>
+                    <strong>{{ __('approval.show.labels.applied_date') }}:</strong>
                     <span>{{ $approval->created_at->format('d-m-Y') }}</span>
                 </div>
                 
@@ -99,26 +103,26 @@
         </div>
         @elseif($type == 'Training Request') 
         <div class="detail-card">
-            <h3>Request Information</h3>
+            <h3>{{ __('approval.show.request_information') }}</h3>
             <div class="info-list">
-               <div class="info-item">
-                    <strong>Name:</strong>
+                <div class="info-item">
+                    <strong>{{ __('approval.show.labels.name') }}</strong>
                     <span>{{ $approval->name ?? ''}}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Location:</strong>
+                    <strong>{{ __('approval.show.labels.location') }}</strong>
                     <span>{{ ucwords(str_replace('_', ' ', $approval->location)) }}</span>
                 </div>
                 <div class="info-item">
-                     <strong>Duration:</strong>
+                     <strong>{{ __('approval.show.labels.duration') }}</strong>
                     <span>{{ ucwords(str_replace('_', ' ', $approval->duration)) }}</span>
                 </div>
                 <div class="info-item">
-                     <strong>Benefit:</strong>
+                     <strong>{{ __('approval.show.labels.benefit') }}</strong>
                     <span>{{ ucwords(str_replace('_', ' ', $approval->benefit)) }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Applied Date:</strong>
+                    <strong>{{ __('approval.show.labels.applied_date') }}:</strong>
                     <span>{{ $approval->created_at->format('d-m-Y') }}</span>
                 </div>
                 
@@ -126,15 +130,15 @@
         </div>
        @elseif($type == 'Document Request') 
         <div class="detail-card">
-            <h3>Request Information</h3>
+            <h3>{{ __('approval.show.request_information') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Type:</strong>
+                    <strong>{{ __('approval.show.labels.type') }}</strong>
                     <span>{{ ucwords(str_replace('_', ' ', $approval->type)) }}</span>
                 </div>
              
                 <div class="info-item">
-                    <strong>Applied Date:</strong>
+                    <strong>{{ __('approval.show.labels.applied_date') }}:</strong>
                     <span>{{ $approval->created_at->format('d-m-Y') }}</span>
                 </div>
                 
@@ -142,41 +146,41 @@
         </div>
        @endif
         <div class="detail-card">
-            <h3>Approval Information</h3>
+            <h3>{{ __('approval.show.approval_information') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Current Status:</strong>
+                    <strong>{{ __('approval.show.current_status') }}</strong>
                     <span class="status-badge status-{{ $leave->status ?? 'pending' }}">
                         {{ ucfirst(str_replace('_', ' ', $approval->status)) }}
                     </span>
                 </div>
                 @if($approval->assignedManager)
                 <div class="info-item">
-                    <strong>Manager Assigned</strong>
-                    <span>{{ $approval->assignedManager->name ?? 'N/A' }}</span>
+                    <strong>{{ __('approval.show.manager_assigned') }}</strong>
+                    <span>{{ $approval->assignedManager->name ?? __('approval.show.na') }}</span>
                 </div>
                 @endif
                 @if($approval->manager_remarks)
                 <div class="info-item">
-                    <strong>Manager Remarks</strong>
-                    <span>{{ $approval->manager_remarks ?? 'N/A' }}</span>
+                    <strong>{{ __('approval.show.manager_remarks') }}</strong>
+                    <span>{{ $approval->manager_remarks ?? __('approval.show.na') }}</span>
                 </div>
                 @endif
                @if(isset($approval->approved_by_account_and_hr))
                 <div class="info-item">
-                    <strong>@if($approval->status == 'approved_by_account_and_hr') Approved @else Rejected @endif By:</strong>
+                    <strong>{{ __('approval.show.approved_by_label') }}</strong>
                     <span>{{ $approval->approver->name }}</span>
                 </div>
                 @endif
                 @if(isset($loan->approved_at)&&$loan->status == 'approved_by_account_and_hr')
                 <div class="info-item">
-                    <strong>@if($approval->status == 'approved_by_account_and_hr') Approved @else Rejected @endif Date:</strong>
+                    <strong>{{ __('approval.show.approved_date_label') }}</strong>
                     <span>{{ $approval->approved_at->format('d-m-Y') }}</span>
                 </div>
                 @endif
                 @if(isset($approval->accounts_and_hr_remarks))
                 <div class="info-item">
-                    <strong>Accounts & HR Remarks:</strong>
+                    <strong>{{ __('approval.show.accounts_hr_remarks') }}</strong>
                     <span class="rejection-reason">{{ $approval->accounts_and_hr_remarks }}</span>
                 </div>
                 @endif
@@ -186,7 +190,7 @@
     @if($type == 'Leave' || $type == 'Loan' )
     <!-- Leave Reason -->
     <div class="reason-section">
-        <h3>@if($type == 'Leave') Leave Reason @else Reason for taking  Loan @endif  </h3>
+        <h3>@if($type == 'Leave') {{ __('approval.show.leave_reason') }} @else {{ __('approval.show.loan_reason') }} @endif</h3>
         <div class="reason-content">
             <p>{{ $approval->reason ?? '' }}</p>
         </div>
@@ -198,7 +202,7 @@
     @endphp
     @if(isset($documents) && count($documents) > 0)
     <div class="documents-section">
-        <h3>Supporting Documents</h3>
+        <h3>{{ __('approval.show.supporting_documents') }}</h3>
         <div class="documents-grid">
             @foreach($documents as $document)
             <div class="document-item">
@@ -207,13 +211,13 @@
                 </div>
                 <div class="document-info">
                    
-                    <small>Supporting Document</small>
+                    <small>{{ __('approval.show.supporting_document') }}</small>
                 </div>
                 <div class="document-actions">
-                    <a href="{{ asset('storage/'.$document) }}" class="btn-action" target="_blank">
+                    <a href="{{ asset('storage/'.$document) }}" class="btn-action" target="_blank" title="{{ __('approval.show.open') }}">
                         <i class="material-icons">open_in_new</i>
                     </a>
-                    <a href="{{ asset('storage/'.$document) }}" class="btn-action" download>
+                    <a href="{{ asset('storage/'.$document) }}" class="btn-action" download title="{{ __('approval.show.download') }}">
                         <i class="material-icons">download</i>
                     </a>
                 </div>
@@ -228,20 +232,20 @@
   @if($type == 'Leave') 
     <!-- Leave Balance Impact -->
     <div class="balance-impact" style="display:none">
-        <h3>Leave Balance Impact</h3>
+        <h3>{{ __('approval.show.leave_balance_impact') }}</h3>
         <div class="balance-grid">
             <div class="balance-item">
-                <h4>Before Leave</h4>
-                <div class="balance-value">8 days</div>
-                <small>Available Balance</small>
+                <h4>{{ __('approval.show.before_leave') }}</h4>
+                <div class="balance-value">8 {{ __('approval.show.days') }}</div>
+                <small>{{ __('approval.show.available_balance') }}</small>
             </div>
             <div class="balance-arrow">
                 <i class="material-icons">arrow_forward</i>
             </div>
             <div class="balance-item">
-                <h4>After Leave</h4>
-                <div class="balance-value">5 days</div>
-                <small>Remaining Balance</small>
+                <h4>{{ __('approval.show.after_leave') }}</h4>
+                <div class="balance-value">5 {{ __('approval.show.days') }}</div>
+                <small>{{ __('approval.show.remaining_balance') }}</small>
             </div>
         </div>
     </div>
@@ -539,7 +543,7 @@
 @push('scripts')
 <script>
 function approveLeave() {
-    const remarks = prompt('Add approval remarks (optional):');
+    const remarks = prompt(@json(__('approval.show.approve_prompt')));
 
     fetch(`/admin/leaves/{{ $leave->id ?? 1 }}/approve`, {
         method: 'POST',
@@ -552,22 +556,22 @@ function approveLeave() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Leave request approved successfully');
+            alert(@json(__('approval.show.approve_success')));
             location.reload();
         } else {
-            alert('Error approving leave request');
+            alert(@json(__('approval.show.approve_error')));
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error approving leave request');
+        alert(@json(__('approval.show.approve_error')));
     });
 }
 
 function rejectLeave() {
-    const reason = prompt('Please enter rejection reason:');
+    const reason = prompt(@json(__('approval.show.reject_prompt')));
     if (!reason || reason.trim() === '') {
-        alert('Rejection reason is required');
+        alert(@json(__('approval.show.reject_required')));
         return;
     }
 
@@ -582,20 +586,20 @@ function rejectLeave() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Leave request rejected');
+            alert(@json(__('approval.show.reject_success')));
             location.reload();
         } else {
-            alert('Error rejecting leave request');
+            alert(@json(__('approval.show.reject_error')));
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error rejecting leave request');
+        alert(@json(__('approval.show.reject_error')));
     });
 }
 
 function deleteLeave() {
-    if (confirm('Are you sure you want to delete this leave request?\n\nThis action cannot be undone.')) {
+    if (confirm(@json(__('approval.show.delete_confirm')))) {
         fetch(`/admin/leaves/{{ $leave->id ?? 1 }}`, {
             method: 'DELETE',
             headers: {
@@ -606,15 +610,15 @@ function deleteLeave() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Leave request deleted successfully');
+                alert(@json(__('approval.show.delete_success')));
                 window.location.href = '/admin/leaves';
             } else {
-                alert('Error deleting leave request');
+                alert(@json(__('approval.show.delete_error')));
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error deleting leave request');
+            alert(@json(__('approval.show.delete_error')));
         });
     }
 }

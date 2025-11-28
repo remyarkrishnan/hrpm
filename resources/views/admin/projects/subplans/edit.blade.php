@@ -1,20 +1,21 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Edit Subplan: ' . $subplan->activity_name)
-@section('page-title', 'Edit Subplan: ' . $subplan->activity_name)
-
+@section('title', __('projects.superplans.edit.title', ['activity' => $subplan->activity_name]))
+@section('page-title', __('projects.superplans.edit.page_title', ['activity' => $subplan->activity_name]))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.subplans.index', $subplan->project_step_id) }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Subplans
+            {{ __('projects.superplans.edit.back_button') }}
         </a>
-       
     </div>
-    <h2 style="display:none">Edit Subplan: {{ $subplan->activity_name }}</h2>
-    
 </div>
 
 <form action="{{ route('admin.subplans.update', $subplan->id) }}" method="POST">
@@ -23,55 +24,58 @@
 
     <!-- Basic Project Information -->
     <div class="form-section">
-        
         <div class="form-grid">
             <div class="form-group">
-                <label for="name">Activity Name *</label>
-                <input type="text" id="activity_name" name="activity_name" value="{{ old('activity_name',  $subplan->activity_name) }}" required>
+                <label for="name">{{ __('projects.superplans.edit.form.activity_name') }} *</label>
+                <input type="text" id="activity_name" name="activity_name" value="{{ old('activity_name', $subplan->activity_name) }}" required>
                 @error('activity_name')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="project_code">Description *</label>
-                <textarea name="description" class="form-control">{{ $subplan->description }}</textarea>
+                <label for="project_code">{{ __('projects.superplans.edit.form.description') }}</label>
+                <textarea name="description" class="form-control">{{ old('description', $subplan->description) }}</textarea>
                 @error('description')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="priority">Start Date *</label>
-                 <input type="date" name="start_date" class="form-control" value="{{ $subplan->start_date?->format('Y-m-d') }}">
+                <label for="priority">{{ __('projects.superplans.edit.form.start_date') }} *</label>
+                <input type="date" name="start_date" class="form-control" value="{{ old('start_date', $subplan->start_date?->format('Y-m-d')) }}">
                 @error('start_date')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
+
             <div class="form-group">
-                <label for="priority">End Date *</label>
-                 <input type="date" name="end_date" class="form-control" value="{{ $subplan->end_date?->format('Y-m-d') }}">
+                <label for="priority">{{ __('projects.superplans.edit.form.end_date') }} *</label>
+                <input type="date" name="end_date" class="form-control" value="{{ old('end_date', $subplan->end_date?->format('Y-m-d')) }}">
                 @error('end_date')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
-           
 
             <div class="form-group">
-                <label for="description">Progress %</label>
-                <input type="number" name="progress_percentage" class="form-control" min="0" max="100" value="{{ $subplan->progress_percentage }}">
+                <label for="description">{{ __('projects.superplans.edit.form.progress_percentage') }}</label>
+                <input type="number" name="progress_percentage" class="form-control" min="0" max="100" value="{{ old('progress_percentage', $subplan->progress_percentage) }}">
                 @error('progress_percentage')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
-
-
-    <!-- Submit Buttons -->
-    <div class="form-actions">
-        <button type="submit" class="btn-primary">
-            <i class="material-icons">save</i>Update Subplan</button>
-        <a href="{{ route('admin.subplans.index', $subplan->project_step_id) }}" class="btn btn-secondary">Cancel</a>
+            <!-- Submit Buttons -->
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    <i class="material-icons">save</i>
+                    {{ __('projects.superplans.edit.form.update_button') }}
+                </button>
+                <a href="{{ route('admin.subplans.index', $subplan->project_step_id) }}" class="btn-cancel">
+                    {{ __('projects.superplans.edit.form.cancel_button') }}
+                </a>
+            </div>
+        </div>
     </div>
 </form>
 @endsection
@@ -286,5 +290,3 @@
     }
 </style>
 @endpush
-
-

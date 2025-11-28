@@ -1,7 +1,11 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'My Profile')
-@section('page-title', 'Profile Settings')
+@section('title', __('profile.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('profile.page_title'))
 
 
 @section('content')
@@ -9,7 +13,7 @@
     <div class="page-nav">
        
     </div>
-    <p>Manage your personal details and password securely.</p>
+    <p>{{ __('profile.description') }}</p>
 </div>
 
 
@@ -20,12 +24,12 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">person</i>
-            Basic Information
+            {{ __('profile.basic_info') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="name">Full Name *</label>
+                <label for="name">{{ __('profile.fields.full_name') }} *</label>
                 <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required>
                 @error('name')
                     <span class="error">{{ $message }}</span>
@@ -35,7 +39,7 @@
             </div>
 
             <div class="form-group">
-                <label for="email">Email Address </label>
+                <label for="email">{{ __('profile.fields.email') }}</label>
                 <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required>
                 @error('email')
                     <span class="error">{{ $message }}</span>
@@ -52,7 +56,7 @@
 <!-- Submit Buttons -->
     <div class="form-actions">
         <button type="submit" class="btn-primary">
-            <i class="fa fa-save me-2"></i>Update Profile
+            <i class="fa fa-save me-2"></i>{{ __('profile.update_profile') }}
         </button>
         
     </div>
@@ -67,11 +71,11 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">account_circle</i>
-             Change Password
+             {{ __('profile.change_password') }}
         </h3>
 <div class="form-grid">
  <div class="form-group">
-                <label for="password">Current Password *</label>
+                <label for="password">{{ __('profile.fields.current_password') }} *</label>
                 <input type="password" id="password" name="current_password" required>
                 @error('current_password')
                     <span class="error">{{ $message }}</span>
@@ -79,7 +83,7 @@
             </div>
 
          <div class="form-group">
-                <label for="password">New Password *</label>
+                <label for="password">{{ __('profile.fields.new_password') }} *</label>
                 <input type="password" id="password" name="new_password" required>
                 @error('new_password')
                     <span class="error">{{ $message }}</span>
@@ -87,18 +91,18 @@
             </div>
 
             <div class="form-group">
-                <label for="password_confirmation">Confirm New Password*</label>
+                <label for="password_confirmation">{{ __('profile.fields.confirm_new_password') }}*</label>
                 <input type="password" id="password_confirmation" name="new_password_confirmation" required>
             </div>
-        </div>
-    </div>
+         </div>
+     </div>
 
 
  
 <!-- Submit Buttons -->
     <div class="form-actions">
         <button type="submit" class="btn-primary">
-             <i class="fa fa-sync-alt me-2"></i>Update Password
+             <i class="fa fa-sync-alt me-2"></i>{{ __('profile.update_password') }}
         </button>
          
     </div>
@@ -268,9 +272,9 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="fw-bold mb-1">
-                <i class="fa fa-user-circle text-primary me-2"></i> My Profile
+                <i class="fa fa-user-circle text-primary me-2"></i> {{ __('profile.title_simple') }}
             </h4>
-            <p class="text-muted mb-0">Manage your personal details and password securely.</p>
+            <p class="text-muted mb-0">{{ __('profile.description') }}</p>
         </div>
     </div>
 
@@ -293,7 +297,7 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-gradient-primary text-white py-3">
                     <h6 class="mb-0 fw-semibold">
-                        <i class="fa fa-id-card me-2"></i> Update Profile Details
+                        <i class="fa fa-id-card me-2"></i> {{ __('profile.update_profile') }}
                     </h6>
                 </div>
                 <div class="card-body">
@@ -301,58 +305,58 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">Full Name</label>
-                            <input type="text" name="name" class="form-control rounded-pill"
-                                   value="{{ old('name', $user->name) }}" required>
-                            @error('name') <small class="text-danger">{{ $message }}</small> @enderror
-                        </div>
+                            <label class="form-label fw-semibold">{{ __('profile.fields.full_name') }}</label>
+                             <input type="text" name="name" class="form-control rounded-pill"
+                                    value="{{ old('name', $user->name) }}" required>
+                             @error('name') <small class="text-danger">{{ $message }}</small> @enderror
+                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Email Address</label>
-                            <input type="email" name="email" class="form-control rounded-pill"
-                                   value="{{ old('email', $user->email) }}" required>
-                            @error('email') <small class="text-danger">{{ $message }}</small> @enderror
-                        </div>
+                         <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ __('profile.fields.email') }}</label>
+                             <input type="email" name="email" class="form-control rounded-pill"
+                                    value="{{ old('email', $user->email) }}" required>
+                             @error('email') <small class="text-danger">{{ $message }}</small> @enderror
+                         </div>
 
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary rounded-pill px-4">
-                                <i class="fa fa-save me-2"></i>Update Profile
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+                         <div class="text-end">
+                             <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                <i class="fa fa-save me-2"></i>{{ __('profile.update_profile') }}
+                             </button>
+                         </div>
+                     </form>
+                 </div>
+             </div>
+         </div>
 
-        <!-- Change Password -->
-        <div class="col-xl-6 col-lg-6">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-gradient-warning text-dark py-3">
-                    <h6 class="mb-0 fw-semibold">
-                        <i class="fa fa-key me-2"></i> Change Password
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <form method="POST" action="{{ route('admin.profile.password') }}">
-                        @csrf
+         <!-- Change Password -->
+         <div class="col-xl-6 col-lg-6">
+             <div class="card border-0 shadow-sm h-100">
+                 <div class="card-header bg-gradient-warning text-dark py-3">
+                     <h6 class="mb-0 fw-semibold">
+                        <i class="fa fa-key me-2"></i> {{ __('profile.change_password') }}
+                     </h6>
+                 </div>
+                 <div class="card-body">
+                     <form method="POST" action="{{ route('admin.profile.password') }}">
+                         @csrf
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Current Password</label>
-                            <input type="password" name="current_password" class="form-control rounded-pill" required>
-                            @error('current_password') <small class="text-danger">{{ $message }}</small> @enderror
-                        </div>
+                         <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ __('profile.fields.current_password') }}</label>
+                             <input type="password" name="current_password" class="form-control rounded-pill" required>
+                             @error('current_password') <small class="text-danger">{{ $message }}</small> @enderror
+                         </div>
 
-                       
+                        
 
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-warning rounded-pill px-4 text-dark fw-semibold">
-                                <i class="fa fa-sync-alt me-2"></i>Update Password
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                         <div class="text-end">
+                             <button type="submit" class="btn btn-warning rounded-pill px-4 text-dark fw-semibold">
+                                <i class="fa fa-sync-alt me-2"></i>{{ __('profile.update_password') }}
+                             </button>
+                         </div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
 @endsection

@@ -1,14 +1,19 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Attendance Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Attendance Details')
+@section('title', __('attendance.show.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('attendance.show.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.attendance.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Attendance
+-            Back to Attendance
++            {{ __('attendance.show.back') }}
         </a>
     </div>
     <div class="attendance-header">
@@ -34,11 +39,16 @@
             </div>
         </div>
         <div class="attendance-status">
-            <span class="status-badge status-late" style="display:none">Late Arrival</span>
-            <div class="working-hours" style="display:none">
-                <strong>8h 15m</strong>
-                <small>Working Hours</small>
-            </div>
+-            <span class="status-badge status-late" style="display:none">Late Arrival</span>
+-            <div class="working-hours" style="display:none">
+-                <strong>8h 15m</strong>
+-                <small>Working Hours</small>
+-            </div>
++            <span class="status-badge status-late" style="display:none">{{ __('attendance.show.late_arrival') }}</span>
++            <div class="working-hours" style="display:none">
++                <strong>8h 15m</strong>
++                <small>{{ __('attendance.show.working_hours') }}</small>
++            </div>
         </div>
     </div>
 </div>
@@ -47,14 +57,15 @@
     <!-- Time Tracking -->
     <div class="detail-grid">
         <div class="detail-card">
-            <h3>Time Tracking</h3>
+-            <h3>Time Tracking</h3>
++            <h3>{{ __('attendance.show.time_tracking') }}</h3>
             <div class="time-entries">
                 <div class="time-entry check-in">
                     <div class="time-icon">
                         <i class="material-icons">login</i>
                     </div>
                     <div class="time-info">
-                        <h4>Check In</h4>
+                        <h4>{{ __('attendance.show.check_in') }}</h4>
                         <div class="time-value">{{ optional($attendance->check_in)->format('h:i A') ?? '-' }}</div>
                         <div class="time-status late" style="display:none">15 minutes late</div>
                         <div class="location" style="display:none">
@@ -69,7 +80,7 @@
                         <i class="material-icons">logout</i>
                     </div>
                     <div class="time-info">
-                        <h4>Check Out</h4>
+                        <h4>{{ __('attendance.show.check_out') }}</h4>
                         <div class="time-value">{{ optional($attendance->check_out)->format('h:i A') ?? '-' }}</div>
                         <div class="time-status on-time" style="display:none">On time</div>
                         <div class="location" style="display:none">
@@ -81,14 +92,16 @@
             </div>
 
             <div class="break-info" style="display:none">
-                <h4>Break Duration</h4>
+-                <h4>Break Duration</h4>
++                <h4>{{ __('attendance.show.break_duration') }}</h4>
                 <div class="break-time">45 minutes</div>
-                <small>Lunch break: 12:30 PM - 01:15 PM</small>
+                <small>{{ __('attendance.show.break_note') }}</small>
             </div>
         </div>
 
         <div class="detail-card">
-            <h3>Work Summary</h3>
+-            <h3>Work Summary</h3>
++            <h3>{{ __('attendance.show.work_summary') }}</h3>
             <div class="work-stats">
                 <div class="stat-item">
                     <div class="stat-value"> @if($attendance->work_hours)
@@ -104,24 +117,25 @@
     @else
         -
     @endif</div>
-                    <div class="stat-label">Total Hours</div>
+                    <div class="stat-label">{{ __('attendance.show.total_hours') }}</div>
                 </div>
                 <div class="stat-item" style="display:none">
                     <div class="stat-value">7h 30m</div>
                     <div class="stat-label">Productive Hours</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">{{ $attendance->break_duration ?? '-' }}</div>
-                    <div class="stat-label">Break Time</div>
+                    <div class="stat-value>{{ $attendance->break_duration ?? '-' }}</div>
+                    <div class="stat-label">{{ __('attendance.show.break_time') }}</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">{{ $attendance->overtime_hours ?? '-' }}</div>
-                    <div class="stat-label">Overtime</div>
+                    <div class="stat-value>{{ $attendance->overtime_hours ?? '-' }}</div>
+                    <div class="stat-label">{{ __('attendance.show.overtime') }}</div>
                 </div>
             </div>
 
             <div class="project-assignment">
-                <h4>Project </h4>
+-                <h4>Project </h4>
++                <h4>{{ __('attendance.show.project') }}</h4>
                 <div class="project-info">
                     <strong>{{ $attendance->project->name ?? '-' }}</strong>
                     <small>{{ $attendance->projectLocation->location_name ?? '-' }}</small>
@@ -132,14 +146,15 @@
 
     <!-- Location Tracking -->
     <div class="location-card" style="">
-        <h3>Location Tracking</h3>
+-        <h3>Location Tracking</h3>
++        <h3>{{ __('attendance.show.location_tracking') }}</h3>
         <div class="location-details">
             <div class="location-item">
                 <div class="location-point check-in-point">
                     <i class="material-icons">location_on</i>
                 </div>
                 <div class="location-info">
-                    <h4>Check-in Location</h4>
+                    <h4>{{ __('attendance.show.check_in_location') }}</h4>
                     <p>{{ $attendance->projectLocation->location_name ?? '-' }}</p>
                     <div class="coordinates"></div>
                     <div class="accuracy">
@@ -154,7 +169,7 @@
                     <i class="material-icons">location_on</i>
                 </div>
                 <div class="location-info">
-                    <h4>Check-out Location</h4>
+                    <h4>{{ __('attendance.show.check_out_location') }}</h4>
                     <p>{{ $attendance->projectLocation->location_name ?? '-' }}</p>
                     <div class="coordinates"></div>
                     <div class="accuracy">
@@ -166,12 +181,12 @@
         </div>
 
         <div class="map-placeholder">
-            <div class="map-icon">
-                <i class="material-icons">map</i>
-            </div>
-            <p>Interactive map showing check-in/out locations</p>
-            <small>Google Maps integration will be implemented here</small>
-        </div>
++            <div class="map-icon">
++                <i class="material-icons">map</i>
++            </div>
++            <p>{{ __('attendance.show.map_placeholder') }}</p>
++            <small>{{ __('attendance.show.map_note') }}</small>
++        </div>
     </div>
 
     <!-- Additional Information -->
@@ -209,20 +224,23 @@
 
     <!-- Action Buttons -->
     <div class="action-section">
-        <a href="{{ route('admin.attendance.edit', $attendance->id) }}" class="btn-primary">
-            <i class="material-icons">edit</i>
-            Edit Attendance
-        </a>
+-        <a href="{{ route('admin.attendance.edit', $attendance->id) }}" class="btn-primary">
++        <a href="{{ route('admin.attendance.edit', $attendance->id) }}" class="btn-primary">
+             <i class="material-icons">edit</i>
+-            Edit Attendance
++            {{ __('attendance.show.edit') }}
+         </a>
         <button class="btn-secondary" onclick="generateReport()" style="display:none">
             <i class="material-icons">print</i>
             Generate Report
         </button>
         <button class="btn-danger" onclick="deleteAttendance()">
             <i class="material-icons">delete</i>
-            Delete Record
-        </button>
-    </div>
-</div>
+-            Delete Record
++            {{ __('attendance.show.delete_record') }}
+         </button>
+     </div>
+ </div>
 @endsection
 
 @push('styles')
@@ -659,6 +677,13 @@ function initAttendanceMaps() {
     const checkInCoords = "{{ $attendance->check_in_location ?? '' }}";
     const checkOutCoords = "{{ $attendance->check_out_location ?? '' }}";
 
++    // Translated titles for JS
++    const t = {
++        checkInTitle: @json(__('attendance.show.check_in_location')),
++        checkOutTitle: @json(__('attendance.show.check_out_location')),
++        noLocation: @json(__('attendance.show.no_location_data'))
++    };
++
     // Reference the existing map container
     const mapContainer = document.querySelector('.map-placeholder');
     mapContainer.innerHTML = ''; // Clear placeholder text but keep styling
@@ -712,28 +737,51 @@ function initAttendanceMaps() {
                 }
             });
         } else {
-            mapDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#666;">No location data</p>';
+-            mapDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#666;">No location data</p>';
++            mapDiv.innerHTML = `<p style="padding:20px;text-align:center;color:#666;">${t.noLocation}</p>`;
         }
     };
 
     // 🧭 Decide what to show
     if (checkInCoords && checkOutCoords) {
         // ✅ Both maps
-        createMapBox('Check-In Location', checkInCoords, '#4CAF50');
-        createMapBox('Check-Out Location', checkOutCoords, '#f44336');
+-        createMapBox('Check-In Location', checkInCoords, '#4CAF50');
+-        createMapBox('Check-Out Location', checkOutCoords, '#f44336');
++        createMapBox(t.checkInTitle, checkInCoords, '#4CAF50');
++        createMapBox(t.checkOutTitle, checkOutCoords, '#f44336');
     } else if (checkInCoords) {
         // ✅ Only Check-In
-        createMapBox('Check-In Location', checkInCoords, '#4CAF50');
+-        createMapBox('Check-In Location', checkInCoords, '#4CAF50');
++        createMapBox(t.checkInTitle, checkInCoords, '#4CAF50');
     } else if (checkOutCoords) {
         // ✅ Only Check-Out
-        createMapBox('Check-Out Location', checkOutCoords, '#f44336');
+-        createMapBox('Check-Out Location', checkOutCoords, '#f44336');
++        createMapBox(t.checkOutTitle, checkOutCoords, '#f44336');
     } else {
         // ❌ No data
-        mapContainer.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">No location data available</p>';
+-        mapContainer.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">No location data available</p>';
++        mapContainer.innerHTML = `<p style="padding:20px;text-align:center;color:#999;">${t.noLocation}</p>`;
         return;
     }
 
     mapContainer.appendChild(wrapper);
+}
+</script>
+@endpush
+
+@push('scripts')
+<script>
+function deleteAttendance() {
+-    if (confirm('Are you sure you want to delete this attendance record?\n\nThis action cannot be undone.')) {
+-        fetch...
++    if (confirm(@json(__('attendance.show.delete_confirm')))) {
++        // existing delete fetch logic unchanged...
+         // Delete attendance logic here
+-        alert('Attendance record deleted successfully');
+-        window.location.href = '/admin/attendance';
++        alert(@json(__('attendance.show.delete_success')));
++        window.location.href = '/admin/attendance';
+     }
 }
 </script>
 @endpush

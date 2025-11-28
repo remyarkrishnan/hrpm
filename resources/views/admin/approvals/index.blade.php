@@ -1,21 +1,25 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Approvals - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Approvals')
+@section('title', __('approval.index.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('approval.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
       
-        <p class="text-muted">Manage and track  approval requests</p>
+        <p class="text-muted">{{ __('approval.index.description') }}</p>
     </div>
     <div class="header-actions" style="display:none">
         <div class="filter-dropdown">
             <select class="filter-select">
-                <option value="">All Projects</option>
-                <option value="residential">Residential</option>
-                <option value="commercial">Commercial</option>
-                <option value="infrastructure">Infrastructure</option>
+                <option value="">{{ __('approval.index.filter_all_projects') }}</option>
+                <option value="residential">{{ __('approval.index.projects.residential') }}</option>
+                <option value="commercial">{{ __('approval.index.projects.commercial') }}</option>
+                <option value="infrastructure">{{ __('approval.index.projects.infrastructure') }}</option>
             </select>
         </div>
     </div>
@@ -29,7 +33,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $approvals->where('status', 'pending')->count() }}</h3>
-            <p>Pending Approvals</p>
+            <p>{{ __('approval.index.stats_pending') }}</p>
            
         </div>
     </div>
@@ -40,7 +44,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $approvals->where('status', 'approved_by_account_and_hr')->count() }}</h3>
-            <p>Approved </p>
+            <p>{{ __('approval.index.stats_approved') }}</p>
            
         </div>
     </div>
@@ -52,25 +56,25 @@
         </div>
         <div class="stat-info">
             <h3>{{ $approvals->where('status', 'rejected_by_account_and_hr')->count() }}</h3>
-            <p>Rejected</p>
+            <p>{{ __('approval.index.stats_rejected') }}</p>
         </div>
     </div>
 </div>
 
 <!-- Current Approvals Table -->
 <div class="approvals-table-card">
-    <h3>Current Approval Requests</h3>
+    <h3>{{ __('approval.index.current_requests') }}</h3>
     <div class="table-responsive">
         <table class="approvals-table">
             <thead>
                 <tr>
-                    <th>Employee</th>
-                    <th>Type</th>
-                    <th>Applied On</th>
-                    <th>Details</th>
-                    <th>Manager Assigned</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('approval.index.table.employee') }}</th>
+                    <th>{{ __('approval.index.table.type') }}</th>
+                    <th>{{ __('approval.index.table.applied_on') }}</th>
+                    <th>{{ __('approval.index.table.details') }}</th>
+                    <th>{{ __('approval.index.table.manager_assigned') }}</th>
+                    <th>{{ __('approval.index.table.status') }}</th>
+                    <th>{{ __('approval.index.table.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -95,15 +99,15 @@
                     <td> {{ $approval->details }}</td>
                     <td>
                     @if($approval->manager)
-                        <span class="badge bg-success">{{ $approval->manager ?? 'N/A' }}</span>
+                        <span class="badge bg-success">{{ $approval->manager ?? __('approval.index.na') }}</span>
                     @elseif($approval->status === 'pending')
                         <select class="form-select form-select-sm manager-select" data-approval-id="{{ $approval->id }}">
-                            <option value="">Select Manager</option>
+                            <option value="">{{ __('approval.index.select_manager') }}</option>
                             @foreach($projectManagers as $manager)
                                 <option value="{{ $manager->id }}">{{ $manager->name }}</option>
                             @endforeach
                         </select>
-                        <button class="btn-action btn-assign" title="Assign Manager" onclick="assignManager('{{ $approval->type }}',{{ $approval->id }})"><i class="material-icons">person_add</i></button>
+                        <button class="btn-action btn-assign" title="{{ __('approval.index.assign_manager') }}" onclick="assignManager('{{ $approval->type }}',{{ $approval->id }})"><i class="material-icons">person_add</i></button>
                     @endif
                     </td>
                      <td>
@@ -129,7 +133,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center">No approval requests found</td>
+                    <td colspan="7" class="text-center">{{ __('approval.index.no_requests') }}</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -404,10 +408,10 @@
 @push('scripts')
 <script>
 function approveStep(type,approvalId) {
-    if (!confirm('Are you sure you want to approve this request?\n\nThis action cannot be undone.')) {
+    if (!confirm(@json(__('approval.index.approve_confirm')))) {
         return; // Exit if user cancels
     }
-    const reason = prompt('Enter remarks if any(optional):');
+    const reason = prompt(@json(__('approval.index.approve_prompt')));
     fetch(`/admin/approvals/${approvalId}/approve`, {
         method: 'POST',
         headers: {
@@ -417,20 +421,20 @@ function approveStep(type,approvalId) {
         body: JSON.stringify({ remarks: reason,type: type })
     })
     .then(res => res.json())
-    .then(data => {
+    .then data => {
         alert(data.message);
         if (data.success) location.reload();
     })
     .catch(err => {
         console.error('Error approving request:', err);
-        alert('An error occurred while approving the request.');
+        alert(@json(__('approval.index.approve_error')));
     });
 }
 
 
 function rejectStep(type,approvalId) {
-    const reason = prompt('Enter rejection reason:');
-    if (!reason) { alert('Rejection reason is required'); return; }
+    const reason = prompt(@json(__('approval.index.reject_prompt')));
+    if (!reason) { alert(@json(__('approval.index.reject_required'))); return; }
 
     fetch(`/admin/approvals/${approvalId}/reject`, {
         method: 'POST',
@@ -457,7 +461,7 @@ function viewApproval(type, id) {
     }else if(type === 'Document Request') {
         window.location.href = '/admin/approvals/document/' + id;
     } else {
-        alert('Unknown approval type');
+        alert(@json(__('approval.index.unknown_type')));
     }
 }
 
@@ -466,11 +470,11 @@ function assignManager(type,approvalId) {
     const managerId = select.value;
    
     if (!managerId) {
-        alert('Please select a manager before assigning.');
+        alert(@json(__('approval.index.select_manager_required')));
         return;
     }
 
-    if (!confirm('Are you sure you want to assign this manager?')) {
+    if (!confirm(@json(__('approval.index.assign_manager_confirm')))) {
         return;
     }
      fetch(`/admin/approvals/${approvalId}/approve`, {
@@ -484,13 +488,13 @@ function assignManager(type,approvalId) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            alert('Manager assigned successfully!');
-            location.reload();
-        } else {
-            alert('Error: ' + data.message);
-        }
-    })
-    .catch(() => alert('An error occurred while assigning the manager.'));
+            alert(@json(__('approval.index.manager_assigned_success')));
+             location.reload();
+         } else {
+            alert(data.message);
+         }
+     })
+     .catch(() => alert(@json(__('approval.index.assign_error'))));
 }
 
 // Employee filter

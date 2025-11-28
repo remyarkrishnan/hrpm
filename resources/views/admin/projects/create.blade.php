@@ -1,18 +1,23 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Create Project - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Create New Project')
+@section('title', __('projects.create.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('projects.create.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.projects.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Projects
+            {{ __('projects.create.back_button') }}
         </a>
     </div>
    
-    <p>Add a new project with 12-step approval workflow for {{ env('COMPANY_NAME', 'Teqin Vally') }}</p>
+    <p>{{ __('projects.create.description', ['company' => env('COMPANY_NAME', 'Teqin Vally')]) }}</p>
 </div>
 
 <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data" class="project-form">
@@ -22,37 +27,35 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">info</i>
-            Project Information
+            {{ __('projects.create.sections.project_info') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="name">Project Name *</label>
+                <label for="name">{{ __('projects.create.form.project_name') }} *</label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" required 
-                       placeholder="e.g. Residential Complex Phase 2">
+                       placeholder="{{ __('projects.create.form.project_name_placeholder') }}">
                 @error('name')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="project_code">Project Code *</label>
+                <label for="project_code">{{ __('projects.create.form.project_code') }} *</label>
                 <input type="text" id="project_code" name="project_code" value="{{ old('project_code') }}" required
-                       placeholder="e.g. PROJ-RES-2024-001">
+                       placeholder="{{ __('projects.create.form.project_code_placeholder') }}">
                 @error('project_code')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
-            
-
             <div class="form-group">
-                <label for="priority">Priority *</label>
+                <label for="priority">{{ __('projects.create.form.priority') }} *</label>
                 <select id="priority" name="priority" required>
-                    <option value="">Select Priority</option>
-                    <option value="low" {{ old('priority') === 'low' ? 'selected' : '' }}>Low</option>
-                    <option value="medium" {{ old('priority') === 'medium' ? 'selected' : '' }}>Medium</option>
-                    <option value="high" {{ old('priority') === 'high' ? 'selected' : '' }}>High</option>
+                    <option value="">{{ __('projects.create.form.select_priority') }}</option>
+                    <option value="low" {{ old('priority') === 'low' ? 'selected' : '' }}>{{ __('projects.create.form.priority_low') }}</option>
+                    <option value="medium" {{ old('priority') === 'medium' ? 'selected' : '' }}>{{ __('projects.create.form.priority_medium') }}</option>
+                    <option value="high" {{ old('priority') === 'high' ? 'selected' : '' }}>{{ __('projects.create.form.priority_high') }}</option>
                 </select>
                 @error('priority')
                     <span class="error">{{ $message }}</span>
@@ -60,18 +63,18 @@
             </div>
 
             <div class="form-group full-width">
-                <label for="description">Project Description *</label>
+                <label for="description">{{ __('projects.create.form.description') }} *</label>
                 <textarea id="description" name="description" rows="4" required 
-                          placeholder="Detailed project description, scope, and objectives">{{ old('description') }}</textarea>
+                          placeholder="{{ __('projects.create.form.description_placeholder') }}">{{ old('description') }}</textarea>
                 @error('description')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="location">Location *</label>
+                <label for="location">{{ __('projects.create.form.location') }} *</label>
                 <input type="text" id="location" name="location" value="{{ old('location') }}" required
-                       placeholder="e.g. Sector 15, Gurgaon">
+                       placeholder="{{ __('projects.create.form.location_placeholder') }}">
                 @error('location')
                     <span class="error">{{ $message }}</span>
                 @enderror
@@ -83,23 +86,23 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">business</i>
-            Client Information
+            {{ __('projects.create.sections.client_info') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="client_name">Client Name *</label>
+                <label for="client_name">{{ __('projects.create.form.client_name') }} *</label>
                 <input type="text" id="client_name" name="client_name" value="{{ old('client_name') }}" required
-                       placeholder="e.g. ABC Developers Pvt Ltd">
+                       placeholder="{{ __('projects.create.form.client_name_placeholder') }}">
                 @error('client_name')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="client_contact">Client Contact</label>
+                <label for="client_contact">{{ __('projects.create.form.client_contact') }}</label>
                 <input type="text" id="client_contact" name="client_contact" value="{{ old('client_contact') }}"
-                       placeholder="Phone/Email/Contact Person">
+                       placeholder="{{ __('projects.create.form.client_contact_placeholder') }}">
                 @error('client_contact')
                     <span class="error">{{ $message }}</span>
                 @enderror
@@ -111,21 +114,21 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">schedule</i>
-            Project Planning
+            {{ __('projects.create.sections.project_planning') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="budget">Project Budget (₹) *</label>
+                <label for="budget">{{ __('projects.create.form.budget') }} *</label>
                 <input type="number" id="budget" name="budget" value="{{ old('budget') }}" required
-                       min="0" step="0.01" placeholder="e.g. 5000000">
+                       min="0" step="0.01" placeholder="{{ __('projects.create.form.budget_placeholder') }}">
                 @error('budget')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="start_date">Start Date *</label>
+                <label for="start_date">{{ __('projects.create.form.start_date') }} *</label>
                 <input type="date" id="start_date" name="start_date" 
                        value="{{ old('start_date', date('Y-m-d')) }}" required>
                 @error('start_date')
@@ -134,7 +137,7 @@
             </div>
 
             <div class="form-group">
-                <label for="end_date">End Date *</label>
+                <label for="end_date">{{ __('projects.create.form.end_date') }} *</label>
                 <input type="date" id="end_date" name="end_date" 
                        value="{{ old('end_date') }}" required>
                 @error('end_date')
@@ -143,12 +146,12 @@
             </div>
 
             <div class="form-group">
-                <label for="project_manager_id">Project Manager *</label>
+                <label for="project_manager_id">{{ __('projects.create.form.project_manager') }} *</label>
                 <select id="manager_id" name="manager_id" required>
-                    <option value="">Select Project Manager</option>
+                    <option value="">{{ __('projects.create.form.select_manager') }}</option>
                     @foreach($projectManagers as $manager)
                         <option value="{{ $manager->id }}" {{ old('manager_id') == $manager->id ? 'selected' : '' }}>
-                            {{ $manager->name }} - {{ $manager->designation ?? 'Project Manager' }}
+                            {{ $manager->name }} - {{ $manager->designation ?? __('projects.create.form.default_manager_title') }}
                         </option>
                     @endforeach
                 </select>
@@ -159,37 +162,32 @@
         </div>
     </div>
 
-
-
     <!-- 12-Step Approval Workflow Info -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">approval</i>
-            Approval Workflow
+            {{ __('projects.create.sections.approval_workflow') }}
         </h3>
 
         <div class="workflow-info">
             <p class="workflow-description">
-                <strong>12-Step Approval Process:</strong> This project will automatically generate a 12-step approval workflow 
-                with the following consultancy stages:
+                <strong>{{ __('projects.create.workflow.process_title') }}:</strong> {{ __('projects.create.workflow.description') }}
             </p>
 
             <div class="workflow-steps">
                 <div class="workflow-grid">
-                    <div class="workflow-step">1. Design Consultancy</div>
-                    <div class="workflow-step">2. Environment Consultancy</div>
-                    <div class="workflow-step">3. Construction Management</div>
-                    <div class="workflow-step">4. Safety Consultancy</div>
-                    <div class="workflow-step">5. Testing & Commissioning</div>
-                    <div class="workflow-step">6. Finance Approval</div>
-                    <div class="workflow-step">7. Procurement</div>
-                    <div class="workflow-step">8. Quality Control</div>
-                    <div class="workflow-step">9. Inspection</div>
-                    <div class="workflow-step">10. Final Approval</div>
-                    <div class="workflow-step">11. Documentation</div>
-                    <div class="workflow-step">12. Completion</div>
-
-
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.1') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.2') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.3') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.4') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.5') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.6') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.7') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.8') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.9') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.10') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.11') }}</div>
+                    <div class="workflow-step">{{ __('projects.create.workflow.steps.12') }}</div>
                 </div>
             </div>
         </div>
@@ -199,10 +197,10 @@
     <div class="form-actions">
         <button type="submit" class="btn-primary">
             <i class="material-icons">save</i>
-            Create Project
+            {{ __('projects.create.form.create_button') }}
         </button>
         <a href="{{ route('admin.projects.index') }}" class="btn-cancel">
-            Cancel
+            {{ __('projects.create.form.cancel_button') }}
         </a>
     </div>
 </form>
@@ -401,27 +399,23 @@
 document.addEventListener('DOMContentLoaded', function() {
     const nameInput = document.getElementById('name');
     const projectCodeInput = document.getElementById('project_code');
-    const typeSelect = document.getElementById('type');
+    const prioritySelect = document.getElementById('priority');
     const startDateInput = document.getElementById('start_date');
-    const endDateInput = document.getElementById('expected_end_date');
+    const endDateInput = document.getElementById('end_date');
 
-    // Auto-generate project code based on name and type
+    // Auto-generate project code based on name
     function generateProjectCode() {
         const name = nameInput.value;
-        const type = typeSelect.value;
         const year = new Date().getFullYear();
 
-        if (name && type) {
-            const nameCode = name.substring(0, 3).toUpperCase();
-            const typeCode = type.substring(0, 3).toUpperCase();
+        if (name) {
+            const nameCode = name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
             const randomNum = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-
-            projectCodeInput.value = `${typeCode}-${nameCode}-${year}-${randomNum}`;
+            projectCodeInput.value = `PROJ-${nameCode}-${year}-${randomNum}`;
         }
     }
 
     nameInput.addEventListener('blur', generateProjectCode);
-    typeSelect.addEventListener('change', generateProjectCode);
 
     // Set minimum end date based on start date
     startDateInput.addEventListener('change', function() {
@@ -443,13 +437,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (endDate <= startDate) {
             e.preventDefault();
-            alert('Expected completion date must be after start date');
+            alert('{{ __("projects.create.validation.end_date_after_start") }}');
             return;
         }
 
         // Show loading state
         const submitButton = this.querySelector('button[type="submit"]');
-        submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> Creating Project...';
+        submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> {{ __("projects.create.form.creating") }}...';
         submitButton.disabled = true;
     });
 });

@@ -1,18 +1,22 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Apply for Leave - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Apply for Leave')
+@section('title', __('leave.create.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('leave.create.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.leaves.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Leaves
+            {{ __('leave.create.back') }}
         </a>
     </div>
 
-    <p>Submit a leave request for approval</p>
+    <p>{{ __('leave.create.description') }}</p>
 </div>
 
 <div class="form-container">
@@ -27,9 +31,9 @@
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="employee_id">Select Employee *</label>
+                    <label for="employee_id">{{ __('leave.create.select_employee') }} *</label>
                     <select id="user_id" name="user_id" required>
-                    <option value="">Select Employee</option>
+                    <option value="">{{ __('leave.create.select_employee_placeholder') }}</option>
                        @foreach($employees as $emp)
                          <option value="{{ $emp->id }}" {{ old('user_id') === $emp->name ? 'selected' : '' }}>
                             {{ ucwords(str_replace('-', ' ', $emp->name)) }}
@@ -42,14 +46,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="leave_type">Leave Type *</label>
+                    <label for="leave_type">{{ __('leave.create.leave_type') }} *</label>
                     <select id="leave_type" name="leave_type" required>
-                        <option value="">Select Leave Type</option>
-                        <option value="sick_leave">Sick Leave</option>
-                        <option value="casual_leave">Casual Leave</option>
-                        <option value="annual_leave">Annual Leave</option>
-                        <option value="maternity_leave">Maternity Leave</option>
-                        <option value="emergency_leave">Emergency Leave</option>
+                        <option value="">{{ __('leave.create.select_leave_type') }}</option>
+                        <option value="sick_leave">{{ __('leave.types.sick_leave') }}</option>
+                        <option value="casual_leave">{{ __('leave.types.casual_leave') }}</option>
+                        <option value="annual_leave">{{ __('leave.types.annual_leave') }}</option>
+                        <option value="maternity_leave">{{ __('leave.types.maternity_leave') }}</option>
+                        <option value="emergency_leave">{{ __('leave.types.emergency_leave') }}</option>
                     </select>
                     @error('leave_type')
                         <span class="error">{{ $message }}</span>
@@ -66,7 +70,7 @@
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="from_date">Start Date *</label>
+                    <label for="from_date">{{ __('leave.fields.start_date') }} *</label>
                     <input type="date" id="from_date" name="from_date" value="{{ old('from_date') }}" required>
                     @error('from_date')
                         <span class="error">{{ $message }}</span>
@@ -74,7 +78,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">End Date *</label>
+                    <label for="to_date">{{ __('leave.fields.end_date') }} *</label>
                     <input type="date" id="to_date" name="to_date" value="{{ old('to_date') }}" required>
                     @error('to_date')
                         <span class="error">{{ $message }}</span>
@@ -159,14 +163,14 @@
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn-primary">
-                <i class="material-icons">send</i>
-                Submit Leave Request
-            </button>
-            <a href="{{ route('admin.leaves.index') }}" class="btn-cancel">
-                Cancel
-            </a>
-        </div>
+             <button type="submit" class="btn-primary">
+                 <i class="material-icons">send</i>
+                {{ __('leave.create.submit') }}
+             </button>
+             <a href="{{ route('admin.leaves.index') }}" class="btn-cancel">
+                {{ __('leave.create.cancel') }}
+             </a>
+         </div>
     </form>
 </div>
 @endsection

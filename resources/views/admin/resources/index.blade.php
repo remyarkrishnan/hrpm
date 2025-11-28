@@ -1,32 +1,36 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Resource Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Resource Management')
+@section('title', __('resources.index.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('resources.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-       
-        <p>Manage resources for construction sites</p>
+        <p>{{ __('resources.index.description') }}</p>
     </div>
-    <div class="header-actions" style="display:none">
+    <div class="header-actions">
         <a href="{{ route('admin.resources.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Create Resource Allocation
+            {{ __('resources.index.create_resource') }}
         </a>
     </div>
 </div>
 
-<!-- Shift Stats -->
-<div class="stats-grid" style="display:none">
+<!-- Resource Stats -->
+<div class="stats-grid">
     <div class="stat-card morning">
         <div class="stat-icon">
             <i class="material-icons">wb_sunny</i>
         </div>
         <div class="stat-info">
-            <h3>25</h3>
-            <p>Morning Shift Workers</p>
-            <small>07:00 - 15:00</small>
+            <h3>{{ $stats['morning'] ?? 25 }}</h3>
+            <p>{{ __('resources.index.morning_workers') }}</p>
+            <small>{{ __('resources.index.morning_time') }}</small>
         </div>
     </div>
 
@@ -35,9 +39,9 @@
             <i class="material-icons">brightness_3</i>
         </div>
         <div class="stat-info">
-            <h3>18</h3>
-            <p>Evening Shift Workers</p>
-            <small>15:00 - 23:00</small>
+            <h3>{{ $stats['evening'] ?? 18 }}</h3>
+            <p>{{ __('resources.index.evening_workers') }}</p>
+            <small>{{ __('resources.index.evening_time') }}</small>
         </div>
     </div>
 
@@ -46,9 +50,9 @@
             <i class="material-icons">bedtime</i>
         </div>
         <div class="stat-info">
-            <h3>8</h3>
-            <p>Night Shift Workers</p>
-            <small>23:00 - 07:00</small>
+            <h3>{{ $stats['night'] ?? 8 }}</h3>
+            <p>{{ __('resources.index.night_workers') }}</p>
+            <small>{{ __('resources.index.night_time') }}</small>
         </div>
     </div>
 
@@ -57,64 +61,66 @@
             <i class="material-icons">groups</i>
         </div>
         <div class="stat-info">
-            <h3>51</h3>
-            <p>Total Active Shifts</p>
-            <small>All shifts combined</small>
+            <h3>{{ $stats['total'] ?? 51 }}</h3>
+            <p>{{ __('resources.index.total_active') }}</p>
+            <small>{{ __('resources.index.all_combined') }}</small>
         </div>
     </div>
 </div>
 
-<!-- Shift Schedule Table -->
-<div class="shifts-table-card">
-    <h3>Current Resource Allocation</h3>
+<!-- Resource Table -->
+<div class="resources-table-card">
+    <h3>{{ __('resources.index.current_allocation') }}</h3>
     <div class="table-responsive">
-        <table class="shifts-table">
+        <table class="resources-table">
             <thead>
                 <tr>
-                    <th>Employee</th>
-                    <th>Department</th>
-                    <th>Project Name</th>
-                    <th>Role</th>
-                    <th>Allocation Percentage</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('resources.index.employee') }}</th>
+                    <th>{{ __('resources.index.department') }}</th>
+                    <th>{{ __('resources.index.project_name') }}</th>
+                    <th>{{ __('resources.index.role') }}</th>
+                    <th>{{ __('resources.index.allocation_percentage') }}</th>
+                    <th>{{ __('resources.index.status') }}</th>
+                    <th>{{ __('resources.index.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($resources as $resource)
                 <tr>
                     <td>
-                        <div class="shift-info">
+                        <div class="resource-info">
                             <strong>{{ $resource->employee_name }}</strong>
                             <small>{{ $resource->employee_code }}</small>
                         </div>
                     </td>
                     <td>
-                        <span class="shift-type shift-{{ $resource->department }}">
+                        <span class="resource-type resource-{{ $resource->department }}">
                             {{ ucfirst(str_replace('_', ' ', $resource->department)) }}
                         </span>
                     </td>
                     <td>
-                        <div class="shift-time">
+                        <div class="resource-project">
                             <strong>{{ $resource->project_name }}</strong>
-                           
+                        </div>
                     </td>
-                    <td>{{ $resource->role  }}</td>
+                    <td>{{ $resource->role }}</td>
                     <td>
-                        <span class="employee-count">{{ $resource->allocation_percentage }} </span>
+                        <span class="allocation-badge">{{ $resource->allocation_percentage }}%</span>
                     </td>
                     <td>
-                        <span class="status-badge status-active">Active</span>
+                        <span class="status-badge status-active">
+                            {{ __('resources.index.active') }}
+                        </span>
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a onclick="assignEmployees({{ $resource->id }})" class="btn-action">
+                            <a href="{{ route('admin.resources.show', $resource->id) }}" class="btn-action" title="{{ __('resources.index.view') }}">
                                 <i class="material-icons">visibility</i>
                             </a>
-                            <a onclick="assignEmployees({{ $resource->id }})" class="btn-action">
+                            <a href="{{ route('admin.resources.edit', $resource->id) }}" class="btn-action" title="{{ __('resources.index.edit') }}">
                                 <i class="material-icons">edit</i>
                             </a>
-                            <button class="btn-action btn-assign" onclick="assignEmployees({{ $resource->id }})">
+                            <button class="btn-action btn-assign" onclick="manageAssignments({{ $resource->id }})" title="{{ __('resources.index.assign_employees') }}">
                                 <i class="material-icons">group_add</i>
                             </button>
                         </div>
@@ -122,15 +128,15 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center">No resources configured yet</td>
+                    <td colspan="7" class="text-center">
+                        {{ __('resources.index.no_resources') }}
+                    </td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
-
-
 @endsection
 
 @push('styles')
@@ -148,6 +154,11 @@
         font-weight: 500;
     }
 
+    .header-actions {
+        display: flex;
+        gap: 12px;
+    }
+
     .btn-primary {
         display: inline-flex;
         align-items: center;
@@ -161,7 +172,9 @@
         transition: background 0.2s;
     }
 
-    .btn-primary:hover { background: #5A4A94; }
+    .btn-primary:hover { 
+        background: #5A4A94; 
+    }
 
     .stats-grid {
         display: grid;
@@ -214,7 +227,7 @@
         font-size: 12px;
     }
 
-    .shifts-table-card, .schedule-card {
+    .resources-table-card {
         background: white;
         padding: 28px;
         border-radius: 16px;
@@ -222,7 +235,7 @@
         margin-bottom: 32px;
     }
 
-    .shifts-table-card h3, .schedule-card h3 {
+    .resources-table-card h3 {
         margin: 0 0 20px 0;
         font-size: 18px;
         font-weight: 600;
@@ -232,12 +245,12 @@
         overflow-x: auto;
     }
 
-    .shifts-table {
+    .resources-table {
         width: 100%;
         border-collapse: collapse;
     }
 
-    .shifts-table th {
+    .resources-table th {
         padding: 12px;
         text-align: left;
         border-bottom: 2px solid #f0f0f0;
@@ -245,24 +258,24 @@
         color: #333;
     }
 
-    .shifts-table td {
+    .resources-table td {
         padding: 16px 12px;
         border-bottom: 1px solid #f5f5f5;
         vertical-align: middle;
     }
 
-    .shift-info strong {
+    .resource-info strong {
         display: block;
         font-size: 14px;
         margin-bottom: 2px;
     }
 
-    .shift-info small {
+    .resource-info small {
         color: #666;
         font-size: 12px;
     }
 
-    .shift-type {
+    .resource-type {
         padding: 4px 12px;
         border-radius: 12px;
         font-size: 12px;
@@ -270,22 +283,12 @@
         text-transform: uppercase;
     }
 
-    .shift-morning { background: #fff3e0; color: #f57c00; }
-    .shift-evening { background: #f3e5f5; color: #7b1fa2; }
-    .shift-night { background: #e8eaf6; color: #3949ab; }
-    .shift-flexible { background: #e0f2f1; color: #00695c; }
-
-    .shift-time strong {
+    .resource-project strong {
         display: block;
         margin-bottom: 2px;
     }
 
-    .shift-time small {
-        color: #666;
-        font-size: 12px;
-    }
-
-    .employee-count {
+    .allocation-badge {
         background: #e3f2fd;
         color: #1565c0;
         padding: 4px 8px;
@@ -302,7 +305,10 @@
         text-transform: uppercase;
     }
 
-    .status-active { background: #e8f5e8; color: #2e7d32; }
+    .status-active { 
+        background: #e8f5e8; 
+        color: #2e7d32; 
+    }
 
     .action-buttons {
         display: flex;
@@ -330,61 +336,8 @@
         color: white;
     }
 
-    .btn-assign:hover { background: #4CAF50; }
-
-    .schedule-grid {
-        display: grid;
-        grid-template-columns: 120px repeat(7, 1fr);
-        gap: 1px;
-        background: #e0e0e0;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .schedule-header {
-        display: contents;
-    }
-
-    .schedule-row {
-        display: contents;
-    }
-
-    .time-slot, .day-slot, .shift-slot {
-        background: white;
-        padding: 16px 12px;
-        text-align: center;
-        font-weight: 500;
-    }
-
-    .time-slot, .day-slot {
-        background: #f8f9fa;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .shift-slot {
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .morning-shift {
-        background: #fff3e0;
-        color: #f57c00;
-    }
-
-    .evening-shift {
-        background: #f3e5f5;
-        color: #7b1fa2;
-    }
-
-    .night-shift {
-        background: #e8eaf6;
-        color: #3949ab;
-    }
-
-    .shift-slot.off {
-        background: #f5f5f5;
-        color: #999;
+    .btn-assign:hover { 
+        background: #4CAF50; 
     }
 
     .text-center {
@@ -394,21 +347,25 @@
     }
 
     @media (max-width: 768px) {
-        .stats-grid { grid-template-columns: 1fr; }
-        .schedule-grid { 
-            grid-template-columns: 80px repeat(7, 1fr);
-            font-size: 10px;
+        .stats-grid { 
+            grid-template-columns: 1fr; 
         }
-        .time-slot, .day-slot, .shift-slot { padding: 8px 4px; }
+        .header-actions { 
+            flex-direction: column;
+            width: 100%; 
+        }
+        .btn-primary { 
+            justify-content: center; 
+        }
     }
 </style>
 @endpush
 
 @push('scripts')
 <script>
-function assignEmployees(shiftId) {
-    // TODO: Open modal or redirect to employee assignment page
-    alert('Coming soon');
+function manageAssignments(resourceId) {
+    // TODO: Open assignment management modal
+    alert('{{ __("resources.index.assignment_coming_soon") }}');
 }
 </script>
 @endpush

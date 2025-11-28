@@ -1,17 +1,21 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Shift Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Shift Management')
+@section('title', __('shift.index.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('shift.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <p>Manage employee shifts and schedules for construction sites</p>
+        <p>{{ __('shift.index.description') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('admin.shifts.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Create Shift
+            {{ __('shift.index.create_shift') }}
         </a>
     </div>
 </div>
@@ -24,7 +28,7 @@
         </div>
         <div class="stat-info">
             <h3>25</h3>
-            <p>Morning Shift Workers</p>
+            <p>{{ __('shift.index.stats_morning') }}</p>
             <small>07:00 - 15:00</small>
         </div>
     </div>
@@ -35,7 +39,7 @@
         </div>
         <div class="stat-info">
             <h3>18</h3>
-            <p>Evening Shift Workers</p>
+            <p>{{ __('shift.index.stats_evening') }}</p>
             <small>15:00 - 23:00</small>
         </div>
     </div>
@@ -46,7 +50,7 @@
         </div>
         <div class="stat-info">
             <h3>8</h3>
-            <p>Night Shift Workers</p>
+            <p>{{ __('shift.index.stats_night') }}</p>
             <small>23:00 - 07:00</small>
         </div>
     </div>
@@ -57,26 +61,26 @@
         </div>
         <div class="stat-info">
             <h3>51</h3>
-            <p>Total Active Shifts</p>
-            <small>All shifts combined</small>
+            <p>{{ __('shift.index.stats_total') }}</p>
+            <small>{{ __('shift.index.stats_total_note') }}</small>
         </div>
     </div>
 </div>
 
 <!-- Shift Schedule Table -->
 <div class="shifts-table-card">
-    <h3>Current Shift Schedule</h3>
+    <h3>{{ __('shift.index.current_schedule') }}</h3>
     <div class="table-responsive">
         <table class="shifts-table">
             <thead>
                 <tr>
-                    <th>Shift Name</th>
-                    <th>Type</th>
-                    <th>Time</th>
-                    <th>Location</th>
-                    <th>Employees</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('shift.index.table.shift_name') }}</th>
+                    <th>{{ __('shift.index.table.type') }}</th>
+                    <th>{{ __('shift.index.table.time') }}</th>
+                    <th>{{ __('shift.index.table.location') }}</th>
+                    <th>{{ __('shift.index.table.employees') }}</th>
+                    <th>{{ __('shift.index.table.status') }}</th>
+                    <th>{{ __('shift.index.table.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -85,7 +89,7 @@
                     <td>
                         <div class="shift-info">
                             <strong>{{ $shift->name }}</strong>
-                            <small>{{ $shift->location ?? 'Multiple Sites' }}</small>
+                            <small>{{ $shift->location ?? __('shift.index.multiple_sites') }}</small>
                         </div>
                     </td>
                     <td>
@@ -99,12 +103,12 @@
                             <small>{{ \Carbon\Carbon::parse($shift->start_time)->diffForHumans(\Carbon\Carbon::parse($shift->end_time), true) }}</small>
                         </div>
                     </td>
-                    <td>{{ $shift->location ?? 'Site A' }}</td>
+                    <td>{{ $shift->location ?? __('shift.index.multiple_sites') }}</td>
                     <td>
-                        <span class="employee-count">{{ $shift->employees_count }} workers</span>
+                        <span class="employee-count">{{ $shift->employees_count }} {{ __('shift.index.workers') }}</span>
                     </td>
                     <td>
-                        <span class="status-badge status-active">Active</span>
+                        <span class="status-badge status-active">{{ __('shift.index.status_active') }}</span>
                     </td>
                     <td>
                         <div class="action-buttons">
@@ -122,7 +126,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center">No shifts configured yet</td>
+                    <td colspan="7" class="text-center">{{ __('shift.index.no_shifts') }}</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -132,17 +136,17 @@
 
 <!-- Weekly Schedule View -->
 <div class="schedule-card">
-    <h3>Weekly Shift Schedule</h3>
+    <h3>{{ __('shift.index.weekly_schedule') }}</h3>
     <div class="schedule-grid">
         <div class="schedule-header">
             <div class="time-slot">Time</div>
-            <div class="day-slot">Mon</div>
-            <div class="day-slot">Tue</div>
-            <div class="day-slot">Wed</div>
-            <div class="day-slot">Thu</div>
-            <div class="day-slot">Fri</div>
-            <div class="day-slot">Sat</div>
-            <div class="day-slot">Sun</div>
+            <div class="day-slot">{{ __('shift.index.days.mon') }}</div>
+            <div class="day-slot">{{ __('shift.index.days.tue') }}</div>
+            <div class="day-slot">{{ __('shift.index.days.wed') }}</div>
+            <div class="day-slot">{{ __('shift.index.days.thu') }}</div>
+            <div class="day-slot">{{ __('shift.index.days.fri') }}</div>
+            <div class="day-slot">{{ __('shift.index.days.sat') }}</div>
+            <div class="day-slot">{{ __('shift.index.days.sun') }}</div>
         </div>
 
         <!-- Morning Shift -->
@@ -459,7 +463,7 @@
 <script>
 function assignEmployees(shiftId) {
     // TODO: Open modal or redirect to employee assignment page
-    alert('Employee assignment functionality will be implemented');
+    alert(@json(__('shift.index.assign_alert')));
 }
 </script>
 @endpush

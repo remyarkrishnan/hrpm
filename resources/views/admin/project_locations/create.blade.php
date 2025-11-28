@@ -1,18 +1,23 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Create Project Location - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Create New Project Location')
+@section('title', __('project_locations.create.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('project_locations.create.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.project-locations.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Project Locations
+            {{ __('project_locations.create.back_button') }}
         </a>
     </div>
    
-    <p>Add a new project locations</p>
+    <p>{{ __('project_locations.create.description') }}</p>
 </div>
 
 <form action="{{ route('admin.project-locations.store') }}" method="POST" enctype="multipart/form-data" class="project-form">
@@ -22,16 +27,14 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">info</i>
-            Loation Information
+            {{ __('project_locations.create.location_info') }}
         </h3>
 
         <div class="form-grid">
-
-
-        <div class="form-group">
-                <label for="type">Project  *</label>
+            <div class="form-group">
+                <label for="type">{{ __('project_locations.create.fields.project') }} *</label>
                 <select id="type" name="project_id" required>
-                    <option value="">Select Project</option>
+                    <option value="">{{ __('global.select_option') }}</option>
                     @foreach($projects as $prj)
                         <option value="{{ $prj->id }}" {{ old('project_id') == $prj->id ? 'selected' : '' }}>
                             {{ $prj->name }}
@@ -42,95 +45,88 @@
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
+            
             <div class="form-group">
-                <label for="name">Location Name *</label>
+                <label for="name">{{ __('project_locations.create.fields.location_name') }} *</label>
                 <input type="text" id="location_name" name="location_name" value="{{ old('location_name') }}" required 
-                       placeholder="">
+                       placeholder="{{ __('project_locations.create.fields.location_name_placeholder') }}">
                 @error('location_name')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="city">City *</label>
+                <label for="city">{{ __('project_locations.create.fields.city') }} *</label>
                 <input type="text" id="city" name="city" value="{{ old('city') }}" required
-                       placeholder="">
+                       placeholder="{{ __('project_locations.create.fields.city_placeholder') }}">
                 @error('city')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="type">State *</label>
+                <label for="state">{{ __('project_locations.create.fields.state') }} *</label>
                 <input type="text" id="state" name="state" value="{{ old('state') }}" required
-                       placeholder="">
+                       placeholder="{{ __('project_locations.create.fields.state_placeholder') }}">
                 @error('state')
                     <span class="error">{{ $message }}</span>
                 @enderror
-               
             </div>
 
             <div class="form-group">
-                <label for="type">PIN Code *</label>
+                <label for="postal_code">{{ __('project_locations.create.fields.pin_code') }} *</label>
                 <input type="number" id="postal_code" name="postal_code" value="{{ old('postal_code') }}" required
-                       placeholder="">
+                       placeholder="{{ __('project_locations.create.fields.pin_code_placeholder') }}">
                 @error('postal_code')
                     <span class="error">{{ $message }}</span>
                 @enderror
-               
             </div>
 
-            <div class="form-group"  style="display:none">
-                <label for="type">Latitude </label>
+            <div class="form-group" style="display:none">
+                <label for="latitude">{{ __('project_locations.create.fields.latitude') }}</label>
                 <input type="text" id="latitude" name="latitude" value="{{ old('latitude') }}" 
-                       placeholder="">
+                       placeholder="{{ __('project_locations.create.fields.latitude_placeholder') }}">
                 @error('latitude')
                     <span class="error">{{ $message }}</span>
                 @enderror
-               
             </div>
 
-            <div class="form-group"  style="display:none">
-                <label for="type">Longitude </label>
+            <div class="form-group" style="display:none">
+                <label for="longitude">{{ __('project_locations.create.fields.longitude') }}</label>
                 <input type="text" id="longitude" name="longitude" value="{{ old('longitude') }}" 
-                       placeholder="">
+                       placeholder="{{ __('project_locations.create.fields.longitude_placeholder') }}">
                 @error('longitude')
                     <span class="error">{{ $message }}</span>
                 @enderror
-               
             </div>
-
-           
         </div>
     </div>
 
-    <!-- New Section: Draw Geofence -->
-<div class="form-section">
-    <h3 class="section-title">
-        <i class="material-icons">map</i>
-        Define Geofence Area
-    </h3>
+    <!-- Geofence Section -->
+    <div class="form-section">
+        <h3 class="section-title">
+            <i class="material-icons">map</i>
+            {{ __('project_locations.create.geofence_title') }}
+        </h3>
 
-   <div class="form-group full-width">
-    <label for="map-search">Search Location</label>
-    <input id="map-search" type="text" placeholder="Search for a location..." 
-           style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 12px;">
-    <div id="map" style="height: 500px; width: 100%; border-radius: 12px; border: 1px solid #ccc;"></div>
-    <input type="hidden" name="geofence_coordinates" id="geofence_coordinates">
-    <small class="form-help">Search a place and draw a polygon to define the project boundary.</small>
-</div>
-
-</div>
-
+        <div class="form-group full-width">
+            <label for="map-search">{{ __('project_locations.create.fields.map_search') }}</label>
+            <input id="map-search" type="text" placeholder="{{ __('project_locations.create.map_search_placeholder') }}" 
+                   style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 12px;">
+            <div id="map" style="height: 500px; width: 100%; border-radius: 12px; border: 1px solid #ccc;"></div>
+            <input type="hidden" name="geofence_coordinates" id="geofence_coordinates">
+            <small class="form-help">{{ __('project_locations.create.map_help') }}</small>
+        </div>
+    </div>
 
     <!-- Submit Buttons -->
     <div class="form-actions">
         <button type="submit" class="btn-primary">
             <i class="material-icons">save</i>
-            Create Project Location
+            {{ __('project_locations.create.create_button') }}
         </button>
         <a href="{{ route('admin.project-locations.index') }}" class="btn-cancel">
-            Cancel
+            {{ __('project_locations.create.cancel_button') }}
         </a>
     </div>
 </form>
@@ -139,9 +135,7 @@
 @push('styles')
 <style>
     .page-header { margin-bottom: 32px; }
-
     .page-nav { margin-bottom: 16px; }
-
     .btn-back {
         display: inline-flex;
         align-items: center;
@@ -153,35 +147,29 @@
         border-radius: 6px;
         transition: background 0.2s;
     }
-
     .btn-back:hover { background: rgba(103, 80, 164, 0.08); }
-
     .page-header h2 {
         margin: 0 0 8px 0;
         font-size: 28px;
         font-weight: 500;
         color: #1C1B1F;
     }
-
     .page-header p {
         margin: 0;
         color: #666;
         font-size: 16px;
     }
-
     .project-form {
         display: flex;
         flex-direction: column;
         gap: 32px;
     }
-
     .form-section {
         background: white;
         padding: 28px;
         border-radius: 16px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-
     .section-title {
         display: flex;
         align-items: center;
@@ -191,28 +179,22 @@
         font-weight: 500;
         color: #1C1B1F;
     }
-
     .section-title i { color: #6750A4; }
-
     .form-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 20px;
     }
-
     .form-group {
         display: flex;
         flex-direction: column;
     }
-
     .form-group.full-width { grid-column: 1 / -1; }
-
     .form-group label {
         font-weight: 500;
         color: #333;
         margin-bottom: 8px;
     }
-
     .form-group input,
     .form-group select,
     .form-group textarea {
@@ -223,57 +205,22 @@
         transition: border-color 0.2s;
         background: white;
     }
-
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
         outline: none;
         border-color: #6750A4;
     }
-
     .form-group .error {
         color: #d32f2f;
         font-size: 12px;
         margin-top: 4px;
     }
-
     .form-help {
         color: #666;
         font-size: 12px;
         margin-top: 4px;
     }
-
-    /* Workflow Info Styles */
-    .workflow-info {
-        background: #f8f9fa;
-        padding: 24px;
-        border-radius: 12px;
-        border-left: 4px solid #6750A4;
-    }
-
-    .workflow-description {
-        margin: 0 0 20px 0;
-        color: #333;
-        line-height: 1.5;
-    }
-
-    .workflow-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 12px;
-    }
-
-    .workflow-step {
-        background: white;
-        padding: 12px 16px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #6750A4;
-        text-align: center;
-        border: 1px solid #e0e0e0;
-    }
-
     .form-actions {
         display: flex;
         gap: 16px;
@@ -281,7 +228,6 @@
         padding-top: 24px;
         border-top: 1px solid #e0e0e0;
     }
-
     .btn-primary {
         display: flex;
         align-items: center;
@@ -296,9 +242,7 @@
         text-decoration: none;
         transition: background 0.2s;
     }
-
     .btn-primary:hover { background: #5A4A94; }
-
     .btn-cancel {
         padding: 12px 24px;
         border: 2px solid #e0e0e0;
@@ -308,18 +252,15 @@
         font-weight: 500;
         transition: all 0.2s;
     }
-
     .btn-cancel:hover {
         border-color: #666;
         color: #333;
     }
-
     @media (max-width: 768px) {
         .form-grid { grid-template-columns: 1fr; }
         .form-section { padding: 20px; }
         .form-actions { flex-direction: column; }
         .btn-primary, .btn-cancel { width: 100%; justify-content: center; }
-        .workflow-grid { grid-template-columns: repeat(2, 1fr); }
     }
 </style>
 @endpush
@@ -327,57 +268,11 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const nameInput = document.getElementById('name');
-    const projectCodeInput = document.getElementById('project_code');
-    const typeSelect = document.getElementById('type');
-    const startDateInput = document.getElementById('start_date');
-    const endDateInput = document.getElementById('expected_end_date');
-
-    // Auto-generate project code based on name and type
-    function generateProjectCode() {
-        const name = nameInput.value;
-        const type = typeSelect.value;
-        const year = new Date().getFullYear();
-
-        if (name && type) {
-            const nameCode = name.substring(0, 3).toUpperCase();
-            const typeCode = type.substring(0, 3).toUpperCase();
-            const randomNum = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-
-            projectCodeInput.value = `${typeCode}-${nameCode}-${year}-${randomNum}`;
-        }
-    }
-
-    nameInput.addEventListener('blur', generateProjectCode);
-    typeSelect.addEventListener('change', generateProjectCode);
-
-    // Set minimum end date based on start date
-    startDateInput.addEventListener('change', function() {
-        const startDate = new Date(this.value);
-        const minEndDate = new Date(startDate);
-        minEndDate.setDate(minEndDate.getDate() + 30); // Minimum 30 days
-
-        endDateInput.min = minEndDate.toISOString().split('T')[0];
-
-        if (endDateInput.value && new Date(endDateInput.value) <= startDate) {
-            endDateInput.value = minEndDate.toISOString().split('T')[0];
-        }
-    });
-
     // Form validation
     document.querySelector('.project-form').addEventListener('submit', function(e) {
-        const startDate = new Date(startDateInput.value);
-        const endDate = new Date(endDateInput.value);
-
-        if (endDate <= startDate) {
-            e.preventDefault();
-            alert('Expected completion date must be after start date');
-            return;
-        }
-
         // Show loading state
         const submitButton = this.querySelector('button[type="submit"]');
-        submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> Creating Project...';
+        submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> {{ __("global.creating") }}...';
         submitButton.disabled = true;
     });
 });
@@ -396,9 +291,9 @@ document.addEventListener('DOMContentLoaded', function() {
         map = new google.maps.Map(document.getElementById("map"), {
             center: defaultCenter,
             zoom: 5,
-            zoomControl: true, // ✅ Enable zoom control
+            zoomControl: true,
             zoomControlOptions: {
-                position: google.maps.ControlPosition.RIGHT_BOTTOM // Change position if needed
+                position: google.maps.ControlPosition.RIGHT_BOTTOM
             }
         });
 
@@ -406,25 +301,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const input = document.getElementById("map-search");
         const searchBox = new google.maps.places.SearchBox(input);
 
-        // Bias search results towards current map's viewport.
         map.addListener("bounds_changed", () => {
             searchBox.setBounds(map.getBounds());
         });
 
-        // Listen for place selection
         searchBox.addListener("places_changed", () => {
             const places = searchBox.getPlaces();
-
             if (places.length === 0) return;
 
             const place = places[0];
-
-            // Center map to selected place
             if (place.geometry && place.geometry.location) {
                 map.setCenter(place.geometry.location);
                 map.setZoom(16);
 
-                // Drop a marker
                 if (marker) {
                     marker.setMap(null);
                 }
@@ -451,7 +340,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         drawingManager.setMap(map);
 
-        // Capture polygon coordinates
         google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
             if (selectedPolygon) {
                 selectedPolygon.setMap(null);
@@ -476,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add Clear Button
         const clearControlDiv = document.createElement("div");
         const clearButton = document.createElement("button");
-        clearButton.innerHTML = "🧹 Clear Area";
+        clearButton.innerHTML = "🧹 {{ __('project_locations.create.clear_area') }}";
         clearButton.style.backgroundColor = "#fff";
         clearButton.style.border = "2px solid #ccc";
         clearButton.style.borderRadius = "4px";
@@ -487,17 +375,16 @@ document.addEventListener('DOMContentLoaded', function() {
         clearButton.style.fontWeight = "bold";
 
         clearButton.addEventListener("click", (e) => {
-            e.preventDefault();  // Prevent form reset or page reload
+            e.preventDefault();
 
             if (selectedPolygon) {
-                selectedPolygon.setMap(null);  // Remove polygon from map
+                selectedPolygon.setMap(null);
                 selectedPolygon = null;
-                document.getElementById('geofence_coordinates').value = '';  // Clear hidden input value
+                document.getElementById('geofence_coordinates').value = '';
             }
 
-            // Optionally, you can clear the marker as well
             if (marker) {
-                marker.setMap(null);  // Remove marker from map
+                marker.setMap(null);
                 marker = null;
             }
         });
@@ -512,6 +399,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 </script>
-
-
 @endpush

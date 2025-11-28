@@ -1,18 +1,23 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Create Subplan for Step: ' . $step->step_name . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Create Subplan for Step: ' . $step->step_name)
+@section('title', __('projects.superplans.create.title', ['step' => $step->step_name, 'company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('projects.superplans.create.page_title', ['step' => $step->step_name]))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.subplans.index', $step->id) }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Subplans for {{$step->step_name}}
+            {{ __('projects.superplans.create.back_button', ['step' => $step->step_name]) }}
         </a>
     </div>
    
-    <p>Add a new subplan</p>
+    <p>{{ __('projects.superplans.create.description') }}</p>
 </div>
 
 <form action="{{ route('admin.subplans.store', $step->id) }}" method="POST" enctype="multipart/form-data" class="project-form">
@@ -20,27 +25,27 @@
 
     <!-- Basic Project Information -->
     <div class="form-section">
-      
+         
         <div class="form-grid">
             <div class="form-group">
-                <label for="name">Activity Name *</label>
-                  <input type="text" name="activity_name" class="form-control" required value="{{ old('activity_name') }}">
+                <label for="name">{{ __('projects.superplans.create.form.activity_name') }} *</label>
+                <input type="text" name="activity_name" class="form-control" required value="{{ old('activity_name') }}">
                 @error('activity_name')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="project_code">Description </label>
-                 <textarea name="description" class="form-control">{{ old('description') }}</textarea>
-               
+                <label for="project_code">{{ __('projects.superplans.create.form.description') }}</label>
+                <textarea name="description" class="form-control">{{ old('description') }}</textarea>
+                
                 @error('description')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="start_date">Start Date *</label>
+                <label for="start_date">{{ __('projects.superplans.create.form.start_date') }} *</label>
                 <input type="date" id="start_date" name="start_date" 
                        value="{{ old('start_date', date('Y-m-d')) }}" required>
                 @error('start_date')
@@ -49,31 +54,34 @@
             </div>
 
             <div class="form-group">
-                <label for="end_date">End Date *</label>
+                <label for="end_date">{{ __('projects.superplans.create.form.end_date') }} *</label>
                 <input type="date" id="end_date" name="end_date" 
                        value="{{ old('end_date') }}" required>
                 @error('end_date')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
-<div class="form-group">
-                <label for="name">Progress %</label>
-                  <input type="number" name="progress_percentage"  min="0" max="100" value="0" class="form-control"  value=">{{ old('progress_percentage') }}">
+
+            <div class="form-group">
+                <label for="name">{{ __('projects.superplans.create.form.progress_percentage') }}</label>
+                <input type="number" name="progress_percentage" min="0" max="100" value="0" class="form-control" value="{{ old('progress_percentage', 0) }}">
                 @error('progress_percentage')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
-    <!-- Submit Buttons -->
-    <div class="form-actions">
-        <button type="submit" class="btn-primary">
-            <i class="material-icons">save</i>
-            Create Subplan
-        </button>
-        <a href="{{ route('admin.subplans.index', $step->id) }}" class="btn-cancel">
-            Cancel
-        </a>
+        <!-- Submit Buttons -->
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">
+                <i class="material-icons">save</i>
+                {{ __('projects.superplans.create.form.create_button') }}
+            </button>
+            <a href="{{ route('admin.subplans.index', $step->id) }}" class="btn-cancel">
+                {{ __('projects.superplans.create.form.cancel_button') }}
+            </a>
+        </div>
     </div>
+</div>
 </form>
 @endsection
 
@@ -264,4 +272,3 @@
     }
 </style>
 @endpush
-

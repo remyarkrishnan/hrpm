@@ -1,11 +1,7 @@
-@extends('layouts.admin')
-
-@section('title', 'Resource Allocation for: ' . $subplan->activity_name . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Resource Allocation for: ' . $subplan->activity_name )
-
-
-@section('content')
 @php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+    
     // compute performance buckets from allocations
     $counts = [
         'excellent' => 0,
@@ -25,9 +21,15 @@
     $totalForChart = array_sum($counts) ?: 1; // avoid zero divide
 @endphp
 
+@extends('layouts.admin')
+
+@section('title', __('projects.resource_allocations.title', ['activity' => $subplan->activity_name, 'company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('projects.resource_allocations.page_title', ['activity' => $subplan->activity_name]))
+
+@section('content')
 <div class="page-header">
     <div>
-        <p>View which employees are working on this subplan and their allocation %</p>
+        <p>{{ __('projects.resource_allocations.description') }}</p>
     </div>
 </div>
 
@@ -39,7 +41,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalEmployees }}</h3>
-            <p>Total Employees Assigned</p>
+            <p>{{ __('projects.resource_allocations.stats.total_employees') }}</p>
         </div>
     </div>
 
@@ -49,7 +51,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $activeProjects }}</h3>
-            <p>Active Projects</p>
+            <p>{{ __('projects.resource_allocations.stats.active_projects') }}</p>
         </div>
     </div>
 
@@ -59,32 +61,32 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalSubplans }}</h3>
-            <p>Subplans Under Execution</p>
+            <p>{{ __('projects.resource_allocations.stats.total_subplans') }}</p>
         </div>
     </div>
 
     <!-- Chart Card -->
     <div class="stat-card" style="align-items: stretch;">
         <div style="flex: 1;">
-            <h4 style="margin:0 0 8px 0; font-size:16px;">Performance Summary</h4>
-            <canvas id="perfChart" width="200" height="140"></canvas>
+            <h4 style="margin:0 0 8px 0; font-size:16px;">{{ __('projects.resource_allocations.performance_summary') }}</h4>
+            anvas id="perfChart" width="200" height="140"></canvas>
 
             <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
                 <span style="display:inline-flex;align-items:center;gap:8px;">
                     <span style="width:12px;height:12px;background:#2E7D32;border-radius:3px;display:inline-block"></span>
-                    <small>Excellent ({{ $counts['excellent'] }})</small>
+                    <small>{{ __('projects.resource_allocations.performance.excellent', ['count' => $counts['excellent']]) }}</small>
                 </span>
                 <span style="display:inline-flex;align-items:center;gap:8px;">
                     <span style="width:12px;height:12px;background:#1565C0;border-radius:3px;display:inline-block"></span>
-                    <small>Good ({{ $counts['good'] }})</small>
+                    <small>{{ __('projects.resource_allocations.performance.good', ['count' => $counts['good']]) }}</small>
                 </span>
                 <span style="display:inline-flex;align-items:center;gap:8px;">
                     <span style="width:12px;height:12px;background:#F9A825;border-radius:3px;display:inline-block"></span>
-                    <small>Average ({{ $counts['average'] }})</small>
+                    <small>{{ __('projects.resource_allocations.performance.average', ['count' => $counts['average']]) }}</small>
                 </span>
                 <span style="display:inline-flex;align-items:center;gap:8px;">
                     <span style="width:12px;height:12px;background:#C62828;border-radius:3px;display:inline-block"></span>
-                    <small>Poor ({{ $counts['poor'] }})</small>
+                    <small>{{ __('projects.resource_allocations.performance.poor', ['count' => $counts['poor']]) }}</small>
                 </span>
             </div>
         </div>
@@ -93,74 +95,73 @@
 
 <!-- Add assignment form -->
 <div class="shifts-table-card mb-4">
-    <h3>Assign Employee to Subplan</h3>
-<form action="{{ route('admin.subplans.resources.store', $subplan->id) }}" method="POST" enctype="multipart/form-data" class="project-form">
-    @csrf
+    <h3>{{ __('projects.resource_allocations.assign_title') }}</h3>
+    <form action="{{ route('admin.subplans.resources.store', $subplan->id) }}" method="POST" enctype="multipart/form-data" class="project-form">
+        @csrf
 
-    <!-- Basic Project Information -->
-    <div class="form-section">
-        <div class="form-grid">
-            <div class="form-group">
-                <label for="name">Employee *</label>
-                <select name="employee_id" class="form-select" required>
-                    <option value="">Select Employee</option>
-                    @foreach($employees as $emp)
-                        <option value="{{ $emp->id }}" {{ old('employee_id') == $emp->id ? 'selected' : '' }}>{{ $emp->name }}</option>
-                    @endforeach
-                </select>
-                @error('employee_id')
-                    <span class="error">{{ $message }}</span>
-                @enderror
-            </div>
+        <!-- Basic Project Information -->
+        <div class="form-section">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">{{ __('projects.resource_allocations.form.employee_label') }} *</label>
+                    <select name="employee_id" class="form-select" required>
+                        <option value="">{{ __('projects.resource_allocations.form.select_employee') }}</option>
+                        @foreach($employees as $emp)
+                            <option value="{{ $emp->id }}" {{ old('employee_id') == $emp->id ? 'selected' : '' }}>{{ $emp->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('employee_id')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <div class="form-group">
-                <label for="project_code">Role </label>
-                <input type="text" name="role" class="form-control" value="{{ old('role') }}">
-                @error('role')
-                    <span class="error">{{ $message }}</span>
-                @enderror
-            </div>
+                <div class="form-group">
+                    <label for="project_code">{{ __('projects.resource_allocations.form.role_label') }}</label>
+                    <input type="text" name="role" class="form-control" value="{{ old('role') }}">
+                    @error('role')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <div class="form-group">
-                <label for="start_date">Allocation % *</label>
-                <input type="number" required name="allocation_percentage" class="form-control" min="0" max="100" value="{{ old('allocation_percentage') }}">
-                @error('allocation_percentage')
-                    <span class="error">{{ $message }}</span>
-                @enderror
-            </div>
+                <div class="form-group">
+                    <label for="start_date">{{ __('projects.resource_allocations.form.allocation_label') }} *</label>
+                    <input type="number" required name="allocation_percentage" class="form-control" min="0" max="100" value="{{ old('allocation_percentage') }}">
+                    @error('allocation_percentage')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <div class="form-group">
-                <label>Remarks</label>
-                <input type="text" name="remarks" class="form-control"  value="{{ old('remarks') }}">
-                @error('remarks')
-                    <span class="error">{{ $message }}</span>
-                @enderror
-            </div>
+                <div class="form-group">
+                    <label>{{ __('projects.resource_allocations.form.remarks_label') }}</label>
+                    <input type="text" name="remarks" class="form-control" value="{{ old('remarks') }}">
+                    @error('remarks')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            <!-- Submit Buttons -->
-            <div class="form-actions full-width" style="display:flex; gap:12px; align-items:flex-end;">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="material-icons">save</i>
-                    Create Allocation
-                </button>
+                <!-- Submit Buttons -->
+                <div class="form-actions full-width" style="display:flex; gap:12px; align-items:flex-end;">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="material-icons">save</i>
+                        {{ __('projects.resource_allocations.form.create_button') }}
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 </div>
 
 <!-- Allocation Table -->
 <div class="shifts-table-card mb-4">
-    <h3>Employee Resource Allocation for: <strong>{{ $subplan->activity_name }}</strong></h3>
+    <h3>{{ __('projects.resource_allocations.table_title', ['activity' => $subplan->activity_name]) }}</h3>
     <div class="table-responsive">
         <table class="shifts-table">
             <thead>
                 <tr>
-                    <th>Employee</th>
-                    <th>Allocation %</th>
-                 
-                    <th>Performance</th>
-                    <th>Actions</th>
+                    <th>{{ __('projects.resource_allocations.table.employee') }}</th>
+                    <th>{{ __('projects.resource_allocations.table.allocation') }}</th>
+                    <th>{{ __('projects.resource_allocations.table.performance') }}</th>
+                    <th>{{ __('projects.resource_allocations.table.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -172,6 +173,13 @@
                         elseif ($p >= 50) $perfClass = 'perf-good';
                         elseif ($p >= 20) $perfClass = 'perf-average';
                         else $perfClass = 'perf-poor';
+                        
+                        $perfLabel = match(true) {
+                            $p >= 80 => __('projects.resource_allocations.performance_labels.excellent'),
+                            $p >= 50 => __('projects.resource_allocations.performance_labels.good'),
+                            $p >= 20 => __('projects.resource_allocations.performance_labels.average'),
+                            default => __('projects.resource_allocations.performance_labels.poor')
+                        };
                     @endphp
                     <tr>
                         <td>
@@ -181,17 +189,16 @@
                             </div>
                         </td>
                         <td>{{ $alloc->allocation_percentage }}%</td>
-                     
                         <td>
                             <span class="status-badge {{ $perfClass }}">
-                                {{ $alloc->allocation_percentage }}%
+                                {{ $perfLabel }} ({{ $alloc->allocation_percentage }}%)
                             </span>
                         </td>
                         <td>
-                            <form action="{{ route('admin.subplans.resources.destroy', [$subplan->id, $alloc->id]) }}" method="POST" onsubmit="return confirm('Remove allocation?');">
+                            <form action="{{ route('admin.subplans.resources.destroy', [$subplan->id, $alloc->id]) }}" method="POST" onsubmit="return confirm('{{ __("projects.resource_allocations.delete_confirm") }}');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-action delete" title="Remove allocation">
+                                <button type="submit" class="btn-action delete" title="{{ __('projects.resource_allocations.delete_tooltip') }}">
                                     <i class="material-icons">delete</i>
                                 </button>
                             </form>
@@ -199,7 +206,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">No employees assigned to this subplan yet</td>
+                        <td colspan="4" class="text-center text-muted">{{ __('projects.resource_allocations.no_allocations') }}</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -260,7 +267,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('perfChart').getContext('2d');
 
     const data = {
-        labels: ['Excellent', 'Good', 'Average', 'Poor'],
+        labels: [
+            '{{ __("projects.resource_allocations.chart.excellent") }}',
+            '{{ __("projects.resource_allocations.chart.good") }}',
+            '{{ __("projects.resource_allocations.chart.average") }}',
+            '{{ __("projects.resource_allocations.chart.poor") }}'
+        ],
         datasets: [{
             data: [
                 {{ $counts['excellent'] }},

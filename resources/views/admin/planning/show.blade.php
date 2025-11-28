@@ -1,28 +1,32 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Project Plan Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Project Plan Details')
+@section('title', __('planning.show.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('planning.show.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.planning.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Planning
+            {{ __('planning.show.back') }}
         </a>
     </div>
     <div class="plan-header">
         <div class="plan-info">
-            <h2>Residential Complex - Phase 2</h2>
-            <p>PROJ-001 • Foundation Phase Plan</p>
+            <h2>{{ $project->name ?? 'Residential Complex - Phase 2' }}</h2>
+            <p>{{ $project->code ?? 'PROJ-001' }} • {{ __('planning.show.foundation_plan') }}</p>
             <div class="plan-timeline">
                 <i class="material-icons">schedule</i>
-                <span>Oct 2025 - Dec 2025</span>
-                <strong>195 days total</strong>
+                <span>{{ __('planning.show.timeline', ['from' => 'Oct 2025', 'to' => 'Dec 2025']) }}</span>
+                <strong>{{ __('planning.show.total_days', ['count' => 195]) }}</strong>
             </div>
         </div>
         <div class="plan-status">
-            <span class="status-badge status-on-track">On Track</span>
+            <span class="status-badge status-on-track">{{ __('planning.show.status.on_track') }}</span>
             <div class="plan-progress">
                 <div class="progress-circle">
                     <svg viewBox="0 0 36 36">
@@ -320,22 +324,22 @@
         <div class="plan-actions">
             <a href="{{ route('admin.planning.edit', 1) }}" class="btn-primary">
                 <i class="material-icons">edit</i>
-                Edit Plan
+                {{ __('planning.show.actions.edit_plan') }}
             </a>
             <button class="btn-secondary" onclick="generateReport()">
                 <i class="material-icons">assessment</i>
-                Generate Report
+                {{ __('planning.show.actions.generate_report') }}
             </button>
         </div>
 
         <div class="other-actions">
             <button class="btn-success" onclick="markMilestone()">
                 <i class="material-icons">flag</i>
-                Mark Milestone
+                {{ __('planning.show.actions.mark_milestone') }}
             </button>
             <button class="btn-warning" onclick="updateProgress()">
                 <i class="material-icons">update</i>
-                Update Progress
+                {{ __('planning.show.actions.update_progress') }}
             </button>
         </div>
     </div>

@@ -1,18 +1,21 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Project Planning - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Project Planning')
+@section('title', __('planning.index.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('planning.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        
-        <p>Manage construction project phases and milestones</p>
+        <p>{{ __('planning.index.description') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('admin.planning.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Create Plan
+            {{ __('planning.index.create_button') }}
         </a>
     </div>
 </div>
@@ -24,9 +27,9 @@
             <i class="material-icons">engineering</i>
         </div>
         <div class="stat-info">
-            <h3>8</h3>
-            <p>Active Projects</p>
-            <small>In planning phase</small>
+            <h3>{{ $stats->active_projects ?? 0 }}</h3>
+            <p>{{ __('planning.index.stats.active_projects') }}</p>
+            <small>{{ __('planning.index.stats.in_planning') }}</small>
         </div>
     </div>
 
@@ -66,7 +69,7 @@
 
 <!-- Project Phases Overview -->
 <div class="phases-overview">
-    <h3>Construction Project Phases</h3>
+    <h3>{{ __('planning.index.phases_title') }}</h3>
     <div class="phases-grid">
         <div class="phase-card foundation">
             <div class="phase-icon">
@@ -120,18 +123,18 @@
 
 <!-- Current Projects Planning Table -->
 <div class="planning-table-card">
-    <h3>Current Project Plans</h3>
+    <h3>{{ __('planning.index.current_plans') }}</h3>
     <div class="table-responsive">
         <table class="planning-table">
             <thead>
                 <tr>
-                    <th>Project</th>
-                    <th>Current Phase</th>
-                    <th>Progress</th>
-                    <th>Timeline</th>
-                    <th>Next Milestone</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('planning.index.table.project') }}</th>
+                    <th>{{ __('planning.index.table.current_phase') }}</th>
+                    <th>{{ __('planning.index.table.progress') }}</th>
+                    <th>{{ __('planning.index.table.timeline') }}</th>
+                    <th>{{ __('planning.index.table.next_milestone') }}</th>
+                    <th>{{ __('planning.index.table.status') }}</th>
+                    <th>{{ __('planning.index.table.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -165,10 +168,10 @@
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a href="{{ route('admin.planning.show', 1) }}" class="btn-action">
+                            <a href="{{ route('admin.planning.show', 1) }}" class="btn-action" title="{{ __('planning.index.actions.view') }}">
                                 <i class="material-icons">visibility</i>
                             </a>
-                            <a href="{{ route('admin.planning.edit', 1) }}" class="btn-action">
+                            <a href="{{ route('admin.planning.edit', 1) }}" class="btn-action" title="{{ __('planning.index.actions.edit') }}">
                                 <i class="material-icons">edit</i>
                             </a>
                         </div>
@@ -205,10 +208,10 @@
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a href="{{ route('admin.planning.show', 2) }}" class="btn-action">
+                            <a href="{{ route('admin.planning.show', 2) }}" class="btn-action" title="{{ __('planning.index.actions.view') }}">
                                 <i class="material-icons">visibility</i>
                             </a>
-                            <a href="{{ route('admin.planning.edit', 2) }}" class="btn-action">
+                            <a href="{{ route('admin.planning.edit', 2) }}" class="btn-action" title="{{ __('planning.index.actions.edit') }}">
                                 <i class="material-icons">edit</i>
                             </a>
                         </div>
@@ -245,14 +248,18 @@
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a href="{{ route('admin.planning.show', 3) }}" class="btn-action">
+                            <a href="{{ route('admin.planning.show', 3) }}" class="btn-action" title="{{ __('planning.index.actions.view') }}">
                                 <i class="material-icons">visibility</i>
                             </a>
-                            <a href="{{ route('admin.planning.edit', 3) }}" class="btn-action">
+                            <a href="{{ route('admin.planning.edit', 3) }}" class="btn-action" title="{{ __('planning.index.actions.edit') }}">
                                 <i class="material-icons">edit</i>
                             </a>
                         </div>
                     </td>
+                </tr>
+
+                <tr>
+                    <td colspan="7" class="text-center">No planning entries found</td>
                 </tr>
             </tbody>
         </table>

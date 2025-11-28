@@ -1,22 +1,26 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Edit Overtime Request - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Overtime Request')
+@section('title', __('overtime.edit.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('overtime.edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.overtime.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Overtime
+            {{ __('overtime.edit.back') }}
         </a>
         <a href="{{ route('admin.overtime.show', $overtime->id ?? 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('overtime.edit.view_details') }}
         </a>
     </div>
-    <h2>Edit Overtime Request</h2>
-    <p>Update overtime request for {{ $overtime->employee_name ?? 'Rajesh Kumar' }}</p>
+    <h2>{{ __('overtime.edit.header') }}</h2>
+    <p>{{ __('overtime.edit.update_note', ['name' => $overtime->employee_name ?? '']) }}</p>
 </div>
 
 <div class="form-container">
@@ -218,14 +222,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Overtime Request
+                {{ __('overtime.edit.update_button') }}
             </button>
             <a href="{{ route('admin.overtime.show', $overtime->id ?? 1) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('overtime.edit.cancel') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteOvertime()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('overtime.show.delete_request') }}
             </button>
         </div>
     </form>
@@ -552,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function deleteOvertime() {
-    if (confirm('Are you sure you want to delete this overtime request?\n\nThis action cannot be undone.')) {
+    if (confirm(@json(__('overtime.show.delete_confirm')))) {
         fetch(`/admin/overtime/{{ $overtime->id ?? 1 }}`, {
             method: 'DELETE',
             headers: {
@@ -563,16 +567,13 @@ function deleteOvertime() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Overtime request deleted successfully');
+                alert(@json(__('overtime.show.delete_success')));
                 window.location.href = '/admin/overtime';
             } else {
-                alert('Error deleting overtime request');
+                alert(@json(__('overtime.show.delete_error')));
             }
         })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting overtime request');
-        });
+        .catch(() => alert(@json(__('overtime.show.delete_error'))));
     }
 }
 

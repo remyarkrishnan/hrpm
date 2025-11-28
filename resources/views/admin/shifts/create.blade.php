@@ -1,17 +1,21 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Create Shift - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Create Shift')
+@section('title', __('shift.create.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('shift.create.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.shifts.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Shifts
+            {{ __('shift.create.back_to_shifts') }}
         </a>
     </div>
-    <p>Set up a new shift schedule for construction teams</p>
+    <p>{{ __('shift.create.description') }}</p>
 </div>
 
 <div class="form-container">
@@ -21,27 +25,27 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">schedule</i>
-                Shift Information
+                {{ __('shift.create.shift_information') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="name">Shift Name *</label>
-                    <input type="text" id="name" name="name" value="{{ old('name') }}" required 
-                           placeholder="e.g. Morning Construction Shift">
+                    <label for="name">{{ __('shift.create.shift_name') }} *</label>
+                    <input type="text" id="name" name="name" value="{{ old('name') }}" required
+                           placeholder="{{ __('shift.create.placeholder_shift_name') }}">
                     @error('name')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="type">Shift Type *</label>
+                    <label for="type">{{ __('shift.create.shift_type') }} *</label>
                     <select id="type" name="type" required>
-                        <option value="">Select Shift Type</option>
-                        <option value="morning" {{ old('type') === 'morning' ? 'selected' : '' }}>Morning Shift</option>
-                        <option value="evening" {{ old('type') === 'evening' ? 'selected' : '' }}>Evening Shift</option>
-                        <option value="night" {{ old('type') === 'night' ? 'selected' : '' }}>Night Shift</option>
-                        <option value="flexible" {{ old('type') === 'flexible' ? 'selected' : '' }}>Flexible Shift</option>
+                        <option value="">{{ __('shift.create.select_shift_type') }}</option>
+                        <option value="morning" {{ old('type') === 'morning' ? 'selected' : '' }}>{{ __('shift.create.type_morning') }}</option>
+                        <option value="evening" {{ old('type') === 'evening' ? 'selected' : '' }}>{{ __('shift.create.type_evening') }}</option>
+                        <option value="night" {{ old('type') === 'night' ? 'selected' : '' }}>{{ __('shift.create.type_night') }}</option>
+                        <option value="flexible" {{ old('type') === 'flexible' ? 'selected' : '' }}>{{ __('shift.create.type_flexible') }}</option>
                     </select>
                     @error('type')
                         <span class="error">{{ $message }}</span>
@@ -53,12 +57,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">access_time</i>
-                Shift Timing
+                {{ __('shift.create.shift_timing') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="start_time">Start Time *</label>
+                    <label for="start_time">{{ __('shift.create.start_time') }} *</label>
                     <input type="time" id="start_time" name="start_time" value="{{ old('start_time') }}" required>
                     @error('start_time')
                         <span class="error">{{ $message }}</span>
@@ -66,7 +70,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_time">End Time *</label>
+                    <label for="end_time">{{ __('shift.create.end_time') }} *</label>
                     <input type="time" id="end_time" name="end_time" value="{{ old('end_time') }}" required>
                     @error('end_time')
                         <span class="error">{{ $message }}</span>
@@ -74,14 +78,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="break_duration">Break Duration (minutes)</label>
-                    <input type="number" id="break_duration" name="break_duration" 
-                           value="{{ old('break_duration', 60) }}" min="0" max="120" 
-                           placeholder="60">
+                    <label for="break_duration">{{ __('shift.create.break_duration') }}</label>
+                    <input type="number" id="break_duration" name="break_duration"
+                           value="{{ old('break_duration', 60) }}" min="0" max="120"
+                           placeholder="{{ __('shift.create.placeholder_break') }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="total_hours">Total Working Hours</label>
+                    <label for="total_hours">{{ __('shift.create.total_working_hours') }}</label>
                     <input type="text" id="total_hours" readonly class="calculated-field">
                 </div>
             </div>
@@ -90,14 +94,14 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">location_on</i>
-                Location & Assignment
+                {{ __('shift.create.location_assignment') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="location">Work Location</label>
+                    <label for="location">{{ __('shift.create.work_location') }}</label>
                     <select id="location" name="location">
-                        <option value="">Select Location</option>
+                        <option value="">{{ __('shift.create.select_location') }}</option>
                         <option value="Site A - Gurgaon">Site A - Gurgaon</option>
                         <option value="Site B - Noida">Site B - Noida</option>
                         <option value="Site C - Faridabad">Site C - Faridabad</option>
@@ -106,16 +110,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="max_employees">Maximum Employees</label>
-                    <input type="number" id="max_employees" name="max_employees" 
-                           value="{{ old('max_employees') }}" min="1" max="100" 
-                           placeholder="e.g. 25">
+                    <label for="max_employees">{{ __('shift.create.max_employees') }}</label>
+                    <input type="number" id="max_employees" name="max_employees"
+                           value="{{ old('max_employees') }}" min="1" max="100"
+                           placeholder="{{ __('shift.create.placeholder_max_employees') }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="supervisor">Shift Supervisor</label>
+                    <label for="supervisor">{{ __('shift.create.supervisor') }}</label>
                     <select id="supervisor" name="supervisor">
-                        <option value="">Select Supervisor</option>
+                        <option value="">{{ __('shift.create.select_supervisor') }}</option>
                         <option value="1">Rajesh Kumar - Site Engineer</option>
                         <option value="2">Priya Singh - Construction Manager</option>
                         <option value="3">Amit Sharma - Safety Officer</option>
@@ -123,9 +127,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="project_id">Associated Project</label>
+                    <label for="project_id">{{ __('shift.create.associated_project') }}</label>
                     <select id="project_id" name="project_id">
-                        <option value="">Select Project (Optional)</option>
+                        <option value="">{{ __('shift.create.select_project_optional') }}</option>
                         <option value="1">Residential Complex - Phase 2</option>
                         <option value="2">Commercial Mall Construction</option>
                         <option value="3">Highway Bridge Project</option>
@@ -137,12 +141,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">settings</i>
-                Shift Configuration
+                {{ __('shift.create.shift_configuration') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="working_days">Working Days</label>
+                    <label for="working_days">{{ __('shift.create.working_days') }}</label>
                     <div class="checkbox-group">
                         <label class="checkbox-item">
                             <input type="checkbox" name="working_days[]" value="monday" checked>
@@ -176,23 +180,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="overtime_allowed">Overtime Settings</label>
+                    <label for="overtime_allowed">{{ __('shift.create.overtime_settings') }}</label>
                     <div class="radio-group">
                         <label class="radio-item">
                             <input type="radio" name="overtime_allowed" value="1" checked>
-                            <span>Overtime Allowed</span>
+                            <span>{{ __('shift.create.overtime_allowed') }}</span>
                         </label>
                         <label class="radio-item">
                             <input type="radio" name="overtime_allowed" value="0">
-                            <span>No Overtime</span>
+                            <span>{{ __('shift.create.no_overtime') }}</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="description">Shift Description</label>
-                    <textarea id="description" name="description" rows="3" 
-                              placeholder="Describe the shift duties, requirements, or special instructions">{{ old('description') }}</textarea>
+                    <label for="description">{{ __('shift.create.shift_description') }}</label>
+                    <textarea id="description" name="description" rows="3"
+                              placeholder="{{ __('shift.create.shift_description') }}">{{ old('description') }}</textarea>
                 </div>
             </div>
         </div>
@@ -201,29 +205,29 @@
         <div class="preview-section">
             <h3 class="section-title">
                 <i class="material-icons">preview</i>
-                Shift Preview
+                {{ __('shift.create.preview') }}
             </h3>
 
             <div class="preview-card">
                 <div class="preview-header">
-                    <h4 id="preview-name">New Shift</h4>
-                    <span class="preview-type" id="preview-type">morning</span>
+                    <h4 id="preview-name">{{ __('shift.create.preview_new_shift') }}</h4>
+                    <span class="preview-type" id="preview-type">{{ __('shift.create.preview_type_default') }}</span>
                 </div>
 
                 <div class="preview-details">
                     <div class="preview-time">
                         <i class="material-icons">schedule</i>
-                        <span id="preview-time">--:-- to --:--</span>
+                        <span id="preview-time">{{ __('shift.create.preview_time_default') }}</span>
                     </div>
 
                     <div class="preview-location">
                         <i class="material-icons">location_on</i>
-                        <span id="preview-location">No location selected</span>
+                        <span id="preview-location">{{ __('shift.create.preview_location_none') }}</span>
                     </div>
 
                     <div class="preview-capacity">
                         <i class="material-icons">groups</i>
-                        <span id="preview-capacity">No limit set</span>
+                        <span id="preview-capacity">{{ __('shift.create.preview_capacity_none') }}</span>
                     </div>
                 </div>
             </div>
@@ -232,10 +236,10 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">add</i>
-                Create Shift
+                {{ __('shift.create.create_shift') }}
             </button>
             <a href="{{ route('admin.shifts.index') }}" class="btn-cancel">
-                Cancel
+                {{ __('shift.create.cancel') }}
             </a>
         </div>
     </form>
@@ -467,6 +471,15 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // translations for JS preview defaults
+    const t = {
+        newShift: @json(__('shift.create.preview_new_shift')),
+        typeDefault: @json(__('shift.create.preview_type_default')),
+        timeDefault: @json(__('shift.create.preview_time_default')),
+        locationNone: @json(__('shift.create.preview_location_none')),
+        capacityNone: @json(__('shift.create.preview_capacity_none'))
+    };
+
     const nameInput = document.getElementById('name');
     const typeSelect = document.getElementById('type');
     const startTimeInput = document.getElementById('start_time');
@@ -508,10 +521,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update preview
     function updatePreview() {
         // Name
-        previewName.textContent = nameInput.value || 'New Shift';
+        previewName.textContent = nameInput.value || t.newShift;
 
         // Type
-        const typeValue = typeSelect.value || 'morning';
+        const typeValue = typeSelect.value || t.typeDefault;
         previewType.textContent = typeValue.replace('_', ' ');
         previewType.className = 'preview-type shift-' + typeValue;
 
@@ -519,17 +532,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (startTimeInput.value && endTimeInput.value) {
             previewTime.textContent = startTimeInput.value + ' to ' + endTimeInput.value;
         } else {
-            previewTime.textContent = '--:-- to --:--';
+            previewTime.textContent = t.timeDefault;
         }
 
         // Location
-        previewLocation.textContent = locationSelect.value || 'No location selected';
+        previewLocation.textContent = locationSelect.value || t.locationNone;
 
         // Capacity
         if (maxEmployeesInput.value) {
             previewCapacity.textContent = 'Max ' + maxEmployeesInput.value + ' employees';
         } else {
-            previewCapacity.textContent = 'No limit set';
+            previewCapacity.textContent = t.capacityNone;
         }
     }
 

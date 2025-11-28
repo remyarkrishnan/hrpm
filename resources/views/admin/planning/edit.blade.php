@@ -1,22 +1,26 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Edit Project Plan - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Project Plan')
+@section('title', __('planning.edit.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('planning.edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.planning.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Planning
+            {{ __('planning.edit.back') }}
         </a>
         <a href="{{ route('admin.planning.show', 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('planning.edit.view_details') }}
         </a>
     </div>
    
-    <p>Update planning phases and milestones for Residential Complex - Phase 2</p>
+    <p>{{ __('planning.edit.update_note', ['project' => $project->name ?? 'Residential Complex - Phase 2']) }}</p>
 </div>
 
 <div class="form-container">
@@ -31,8 +35,8 @@
                     <i class="material-icons">engineering</i>
                 </div>
                 <div>
-                    <h3>Residential Complex - Phase 2</h3>
-                    <p>PROJ-001 • 85% Complete • On Track</p>
+                    <h3>{{ $project->name ?? 'Residential Complex - Phase 2' }}</h3>
+                    <p>{{ $project->code ?? 'PROJ-001' }} • {{ __('planning.edit.overall_progress', ['percent' => 85]) }} • {{ __('planning.edit.status.on_track') }}</p>
                 </div>
             </div>
             <div class="current-progress">
@@ -49,12 +53,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">edit</i>
-                Update Project Information
+                {{ __('planning.edit.update_project_information') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="plan_name">Plan Name *</label>
+                    <label for="plan_name">{{ __('planning.fields.plan_name') }} *</label>
                     <input type="text" id="plan_name" name="plan_name" value="Foundation Phase Plan" required>
                     @error('plan_name')
                         <span class="error">{{ $message }}</span>
@@ -62,22 +66,22 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="current_status">Project Status</label>
+                    <label for="current_status">{{ __('planning.fields.project_status') }}</label>
                     <select id="current_status" name="current_status">
-                        <option value="planning">Planning</option>
-                        <option value="in_progress" selected>In Progress</option>
-                        <option value="on_hold">On Hold</option>
-                        <option value="completed">Completed</option>
+                        <option value="planning">{{ __('planning.status.planning') }}</option>
+                        <option value="in_progress" selected>{{ __('planning.status.in_progress') }}</option>
+                        <option value="on_hold">{{ __('planning.status.on_hold') }}</option>
+                        <option value="completed">{{ __('planning.status.completed') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="start_date">Project Start Date *</label>
+                    <label for="start_date">{{ __('planning.fields.start_date') }} *</label>
                     <input type="date" id="start_date" name="start_date" value="2025-10-01" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">Expected End Date *</label>
+                    <label for="end_date">{{ __('planning.fields.end_date') }} *</label>
                     <input type="date" id="end_date" name="end_date" value="2025-12-31" required>
                 </div>
             </div>
@@ -86,19 +90,19 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">timeline</i>
-                Update Construction Phases
+                {{ __('planning.edit.update_construction_phases') }}
             </h3>
 
             <div class="phases-container">
                 <div class="phase-item completed">
                     <div class="phase-header">
-                        <h4>Phase 1: Foundation</h4>
+                        <h4>{{ __('planning.phases.foundation.title') }}</h4>
                         <div class="phase-controls">
                             <select name="foundation_status">
-                                <option value="not_started">Not Started</option>
-                                <option value="in_progress">In Progress</option>
-                                <option value="completed" selected>Completed</option>
-                                <option value="on_hold">On Hold</option>
+                                <option value="not_started">{{ __('planning.status.not_started') }}</option>
+                                <option value="in_progress">{{ __('planning.status.in_progress') }}</option>
+                                <option value="completed" selected>{{ __('planning.status.completed') }}</option>
+                                <option value="on_hold">{{ __('planning.status.on_hold') }}</option>
                             </select>
                             <input type="checkbox" name="phases[]" value="foundation" checked>
                         </div>
@@ -106,35 +110,35 @@
                     <div class="phase-content">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Duration (days)</label>
+                                <label>{{ __('planning.fields.duration') }}</label>
                                 <input type="number" name="foundation_duration" value="45" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Budget Used (%)</label>
+                                <label>{{ __('planning.fields.budget_used') }}</label>
                                 <input type="number" name="foundation_budget" value="30" min="0" max="100">
                             </div>
                             <div class="form-group">
-                                <label>Progress (%)</label>
+                                <label>{{ __('planning.fields.progress') }}</label>
                                 <input type="number" name="foundation_progress" value="100" min="0" max="100">
                             </div>
                             <div class="form-group">
-                                <label>Team Size</label>
+                                <label>{{ __('planning.fields.team_size') }}</label>
                                 <input type="number" name="foundation_team" value="12" min="1">
                             </div>
                         </div>
-                        <textarea name="foundation_description" rows="2">Site preparation, excavation, foundation laying - COMPLETED</textarea>
+                        <textarea name="foundation_description" rows="2">{{ __('planning.phases.foundation.description') }}</textarea>
                     </div>
                 </div>
 
                 <div class="phase-item active">
                     <div class="phase-header">
-                        <h4>Phase 2: Structure</h4>
+                        <h4>{{ __('planning.phases.structure.title') }}</h4>
                         <div class="phase-controls">
                             <select name="structure_status">
-                                <option value="not_started">Not Started</option>
-                                <option value="in_progress" selected>In Progress</option>
-                                <option value="completed">Completed</option>
-                                <option value="on_hold">On Hold</option>
+                                <option value="not_started">{{ __('planning.status.not_started') }}</option>
+                                <option value="in_progress" selected>{{ __('planning.status.in_progress') }}</option>
+                                <option value="completed">{{ __('planning.status.completed') }}</option>
+                                <option value="on_hold">{{ __('planning.status.on_hold') }}</option>
                             </select>
                             <input type="checkbox" name="phases[]" value="structure" checked>
                         </div>
@@ -142,35 +146,35 @@
                     <div class="phase-content">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Duration (days)</label>
+                                <label>{{ __('planning.fields.duration') }}</label>
                                 <input type="number" name="structure_duration" value="90" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Budget Used (%)</label>
+                                <label>{{ __('planning.fields.budget_used') }}</label>
                                 <input type="number" name="structure_budget" value="28" min="0" max="100">
                             </div>
                             <div class="form-group">
-                                <label>Progress (%)</label>
+                                <label>{{ __('planning.fields.progress') }}</label>
                                 <input type="number" name="structure_progress" value="62" min="0" max="100">
                             </div>
                             <div class="form-group">
-                                <label>Team Size</label>
+                                <label>{{ __('planning.fields.team_size') }}</label>
                                 <input type="number" name="structure_team" value="25" min="1">
                             </div>
                         </div>
-                        <textarea name="structure_description" rows="2">Framework, walls, structural elements - IN PROGRESS</textarea>
+                        <textarea name="structure_description" rows="2">{{ __('planning.phases.structure.description') }}</textarea>
                     </div>
                 </div>
 
                 <div class="phase-item">
                     <div class="phase-header">
-                        <h4>Phase 3: Finishing</h4>
+                        <h4>{{ __('planning.phases.finishing.title') }}</h4>
                         <div class="phase-controls">
                             <select name="finishing_status">
-                                <option value="not_started" selected>Not Started</option>
-                                <option value="in_progress">In Progress</option>
-                                <option value="completed">Completed</option>
-                                <option value="on_hold">On Hold</option>
+                                <option value="not_started" selected>{{ __('planning.status.not_started') }}</option>
+                                <option value="in_progress">{{ __('planning.status.in_progress') }}</option>
+                                <option value="completed">{{ __('planning.status.completed') }}</option>
+                                <option value="on_hold">{{ __('planning.status.on_hold') }}</option>
                             </select>
                             <input type="checkbox" name="phases[]" value="finishing" checked>
                         </div>
@@ -178,23 +182,23 @@
                     <div class="phase-content">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Duration (days)</label>
+                                <label>{{ __('planning.fields.duration') }}</label>
                                 <input type="number" name="finishing_duration" value="60" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Budget Allocated (%)</label>
+                                <label>{{ __('planning.fields.budget_allocated') }}</label>
                                 <input type="number" name="finishing_budget" value="25" min="0" max="100">
                             </div>
                             <div class="form-group">
-                                <label>Progress (%)</label>
+                                <label>{{ __('planning.fields.progress') }}</label>
                                 <input type="number" name="finishing_progress" value="0" min="0" max="100">
                             </div>
                             <div class="form-group">
-                                <label>Planned Team Size</label>
+                                <label>{{ __('planning.fields.planned_team_size') }}</label>
                                 <input type="number" name="finishing_team" value="18" min="1">
                             </div>
                         </div>
-                        <textarea name="finishing_description" rows="2">Interior work, painting, final touches - PLANNED</textarea>
+                        <textarea name="finishing_description" rows="2">{{ __('planning.phases.finishing.description') }}</textarea>
                     </div>
                 </div>
             </div>
@@ -203,7 +207,7 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">flag</i>
-                Update Milestones
+                {{ __('planning.edit.update_milestones') }}
             </h3>
 
             <div class="milestones-container">
@@ -219,19 +223,19 @@
                     </div>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Milestone Name</label>
+                            <label>{{ __('planning.fields.milestone_name') }}</label>
                             <input type="text" name="milestone_1_name" value="Foundation Inspection">
                         </div>
                         <div class="form-group">
-                            <label>Target Date</label>
+                            <label>{{ __('planning.fields.target_date') }}</label>
                             <input type="date" name="milestone_1_date" value="2025-11-15">
                         </div>
                         <div class="form-group">
-                            <label>Actual Completion</label>
+                            <label>{{ __('planning.fields.actual_completion') }}</label>
                             <input type="date" name="milestone_1_actual" value="2025-11-15">
                         </div>
                         <div class="form-group">
-                            <label>Phase</label>
+                            <label>{{ __('planning.fields.phase') }}</label>
                             <select name="milestone_1_phase">
                                 <option value="foundation" selected>Foundation</option>
                                 <option value="structure">Structure</option>
@@ -253,19 +257,19 @@
                     </div>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Milestone Name</label>
+                            <label>{{ __('planning.fields.milestone_name') }}</label>
                             <input type="text" name="milestone_2_name" value="Structural Framework Complete">
                         </div>
                         <div class="form-group">
-                            <label>Target Date</label>
+                            <label>{{ __('planning.fields.target_date') }}</label>
                             <input type="date" name="milestone_2_date" value="2026-01-10">
                         </div>
                         <div class="form-group">
-                            <label>Expected Completion</label>
+                            <label>{{ __('planning.fields.expected_completion') }}</label>
                             <input type="date" name="milestone_2_expected" value="2026-01-12">
                         </div>
                         <div class="form-group">
-                            <label>Phase</label>
+                            <label>{{ __('planning.fields.phase') }}</label>
                             <select name="milestone_2_phase">
                                 <option value="foundation">Foundation</option>
                                 <option value="structure" selected>Structure</option>
@@ -280,12 +284,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">groups</i>
-                Update Resource Allocation
+                {{ __('planning.edit.update_resource_allocation') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="project_manager">Project Manager</label>
+                    <label for="project_manager">{{ __('planning.fields.project_manager') }}</label>
                     <select id="project_manager" name="project_manager">
                         <option value="1" selected>Rajesh Kumar - Senior PM</option>
                         <option value="2">Priya Singh - Construction Manager</option>
@@ -328,7 +332,7 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Update Project Details
+                {{ __('planning.edit.update_project_details') }}
             </h3>
 
             <div class="form-grid">
@@ -353,7 +357,7 @@
         <div class="audit-section">
             <h3 class="section-title">
                 <i class="material-icons">history</i>
-                Recent Updates
+                {{ __('planning.edit.recent_updates') }}
             </h3>
 
             <div class="audit-trail">
@@ -380,14 +384,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Project Plan
+                {{ __('planning.edit.update_plan') }}
             </button>
             <a href="{{ route('admin.planning.show', 1) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('planning.edit.cancel_changes') }}
             </a>
             <button type="button" class="btn-warning" onclick="exportPlan()">
                 <i class="material-icons">download</i>
-                Export Plan
+                {{ __('planning.edit.export_plan') }}
             </button>
         </div>
     </form>

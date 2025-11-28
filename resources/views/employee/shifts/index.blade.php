@@ -1,18 +1,23 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.employee')
 
-@section('title', 'Shift Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Shift Management')
+@section('title', __('shifts.index1.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('shifts.index1.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h2>Shift Management</h2>
-        <p>Manage employee shifts and schedules for construction sites</p>
+        <h2>{{ __('shifts.index1.page_title') }}</h2>
+        <p>{{ __('shifts.index1.description') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('admin.shifts.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Create Shift
+            {{ __('shifts.index1.create_shift') }}
         </a>
     </div>
 </div>
@@ -24,9 +29,9 @@
             <i class="material-icons">wb_sunny</i>
         </div>
         <div class="stat-info">
-            <h3>25</h3>
-            <p>Morning Shift Workers</p>
-            <small>07:00 - 15:00</small>
+            <h3>{{ $stats['morning'] ?? 25 }}</h3>
+            <p>{{ __('shifts.index1.morning_workers') }}</p>
+            <small>{{ __('shifts.index1.morning_time') }}</small>
         </div>
     </div>
 
@@ -35,9 +40,9 @@
             <i class="material-icons">brightness_3</i>
         </div>
         <div class="stat-info">
-            <h3>18</h3>
-            <p>Evening Shift Workers</p>
-            <small>15:00 - 23:00</small>
+            <h3>{{ $stats['evening'] ?? 18 }}</h3>
+            <p>{{ __('shifts.index1.evening_workers') }}</p>
+            <small>{{ __('shifts.index1.evening_time') }}</small>
         </div>
     </div>
 
@@ -46,9 +51,9 @@
             <i class="material-icons">bedtime</i>
         </div>
         <div class="stat-info">
-            <h3>8</h3>
-            <p>Night Shift Workers</p>
-            <small>23:00 - 07:00</small>
+            <h3>{{ $stats['night'] ?? 8 }}</h3>
+            <p>{{ __('shifts.index1.night_workers') }}</p>
+            <small>{{ __('shifts.index1.night_time') }}</small>
         </div>
     </div>
 
@@ -57,27 +62,27 @@
             <i class="material-icons">groups</i>
         </div>
         <div class="stat-info">
-            <h3>51</h3>
-            <p>Total Active Shifts</p>
-            <small>All shifts combined</small>
+            <h3>{{ $stats['total'] ?? 51 }}</h3>
+            <p>{{ __('shifts.index1.total_active') }}</p>
+            <small>{{ __('shifts.index1.all_combined') }}</small>
         </div>
     </div>
 </div>
 
 <!-- Shift Schedule Table -->
 <div class="shifts-table-card">
-    <h3>Current Shift Schedule</h3>
+    <h3>{{ __('shifts.index1.current_schedule') }}</h3>
     <div class="table-responsive">
         <table class="shifts-table">
             <thead>
                 <tr>
-                    <th>Shift Name</th>
-                    <th>Type</th>
-                    <th>Time</th>
-                    <th>Location</th>
-                    <th>Employees</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('shifts.index1.shift_name') }}</th>
+                    <th>{{ __('shifts.index1.shift_type') }}</th>
+                    <th>{{ __('shifts.index1.time') }}</th>
+                    <th>{{ __('shifts.index1.location') }}</th>
+                    <th>{{ __('shifts.index1.employees') }}</th>
+                    <th>{{ __('shifts.index1.status') }}</th>
+                    <th>{{ __('shifts.index1.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,12 +91,12 @@
                     <td>
                         <div class="shift-info">
                             <strong>{{ $shift->name }}</strong>
-                            <small>{{ $shift->location ?? 'Multiple Sites' }}</small>
+                            <small>{{ $shift->location ?? __('shifts.index1.multiple_sites') }}</small>
                         </div>
                     </td>
                     <td>
                         <span class="shift-type shift-{{ $shift->type }}">
-                            {{ ucfirst(str_replace('_', ' ', $shift->type)) }}
+                            {{ __('shifts.index1.shift_types.' . $shift->type) }}
                         </span>
                     </td>
                     <td>
@@ -100,22 +105,22 @@
                             <small>{{ \Carbon\Carbon::parse($shift->start_time)->diffForHumans(\Carbon\Carbon::parse($shift->end_time), true) }}</small>
                         </div>
                     </td>
-                    <td>{{ $shift->location ?? 'Site A' }}</td>
+                    <td>{{ $shift->location ?? __('shifts.index1.site_a') }}</td>
                     <td>
-                        <span class="employee-count">{{ $shift->employees_count }} workers</span>
+                        <span class="employee-count">{{ $shift->employees_count }} {{ __('shifts.index1.workers') }}</span>
                     </td>
                     <td>
-                        <span class="status-badge status-active">Active</span>
+                        <span class="status-badge status-active">{{ __('shifts.index1.active') }}</span>
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a href="{{ route('admin.shifts.show', $shift->id) }}" class="btn-action">
+                            <a href="{{ route('admin.shifts.show', $shift->id) }}" class="btn-action" title="{{ __('shifts.index1.view') }}">
                                 <i class="material-icons">visibility</i>
                             </a>
-                            <a href="{{ route('admin.shifts.edit', $shift->id) }}" class="btn-action">
+                            <a href="{{ route('admin.shifts.edit', $shift->id) }}" class="btn-action" title="{{ __('shifts.index1.edit') }}">
                                 <i class="material-icons">edit</i>
                             </a>
-                            <button class="btn-action btn-assign" onclick="assignEmployees({{ $shift->id }})">
+                            <button class="btn-action btn-assign" onclick="assignEmployees({{ $shift->id }})" title="{{ __('shifts.index1.assign_employees') }}">
                                 <i class="material-icons">group_add</i>
                             </button>
                         </div>
@@ -123,7 +128,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center">No shifts configured yet</td>
+                    <td colspan="7" class="text-center">{{ __('shifts.index1.no_shifts') }}</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -133,53 +138,49 @@
 
 <!-- Weekly Schedule View -->
 <div class="schedule-card">
-    <h3>Weekly Shift Schedule</h3>
+    <h3>{{ __('shifts.index1.weekly_schedule') }}</h3>
     <div class="schedule-grid">
         <div class="schedule-header">
-            <div class="time-slot">Time</div>
-            <div class="day-slot">Mon</div>
-            <div class="day-slot">Tue</div>
-            <div class="day-slot">Wed</div>
-            <div class="day-slot">Thu</div>
-            <div class="day-slot">Fri</div>
-            <div class="day-slot">Sat</div>
-            <div class="day-slot">Sun</div>
+            <div class="time-slot">{{ __('shifts.index1.time') }}</div>
+            @foreach(config('shifts.days', [['label' => 'Mon'], ['label' => 'Tue'], ['label' => 'Wed'], ['label' => 'Thu'], ['label' => 'Fri'], ['label' => 'Sat'], ['label' => 'Sun']]) as $day)
+            <div class="day-slot">{{ $day['label'] }}</div>
+            @endforeach
         </div>
 
         <!-- Morning Shift -->
         <div class="schedule-row">
-            <div class="time-slot">07:00 - 15:00</div>
-            <div class="shift-slot morning-shift">25 workers</div>
-            <div class="shift-slot morning-shift">25 workers</div>
-            <div class="shift-slot morning-shift">25 workers</div>
-            <div class="shift-slot morning-shift">25 workers</div>
-            <div class="shift-slot morning-shift">25 workers</div>
-            <div class="shift-slot morning-shift">22 workers</div>
-            <div class="shift-slot off">Off</div>
+            <div class="time-slot">{{ __('shifts.index1.morning_time_full') }}</div>
+            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot morning-shift">{{ $stats['morning_sat'] ?? 22 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot off">{{ __('shifts.index1.off') }}</div>
         </div>
 
         <!-- Evening Shift -->
         <div class="schedule-row">
-            <div class="time-slot">15:00 - 23:00</div>
-            <div class="shift-slot evening-shift">18 workers</div>
-            <div class="shift-slot evening-shift">18 workers</div>
-            <div class="shift-slot evening-shift">18 workers</div>
-            <div class="shift-slot evening-shift">18 workers</div>
-            <div class="shift-slot evening-shift">18 workers</div>
-            <div class="shift-slot evening-shift">15 workers</div>
-            <div class="shift-slot off">Off</div>
+            <div class="time-slot">{{ __('shifts.index1.evening_time_full') }}</div>
+            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot evening-shift">{{ $stats['evening_sat'] ?? 15 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot off">{{ __('shifts.index1.off') }}</div>
         </div>
 
         <!-- Night Shift -->
         <div class="schedule-row">
-            <div class="time-slot">23:00 - 07:00</div>
-            <div class="shift-slot night-shift">8 workers</div>
-            <div class="shift-slot night-shift">8 workers</div>
-            <div class="shift-slot night-shift">8 workers</div>
-            <div class="shift-slot night-shift">8 workers</div>
-            <div class="shift-slot night-shift">8 workers</div>
-            <div class="shift-slot off">Off</div>
-            <div class="shift-slot off">Off</div>
+            <div class="time-slot">{{ __('shifts.index1.night_time_full') }}</div>
+            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
+            <div class="shift-slot off">{{ __('shifts.index1.off') }}</div>
+            <div class="shift-slot off">{{ __('shifts.index1.off') }}</div>
         </div>
     </div>
 </div>
@@ -194,11 +195,13 @@
         margin-bottom: 32px;
     }
 
+
     .page-header h2 {
         margin: 0 0 8px 0;
         font-size: 24px;
         font-weight: 500;
     }
+
 
     .btn-primary {
         display: inline-flex;
@@ -213,7 +216,9 @@
         transition: background 0.2s;
     }
 
+
     .btn-primary:hover { background: #5A4A94; }
+
 
     .stats-grid {
         display: grid;
@@ -221,6 +226,7 @@
         gap: 20px;
         margin-bottom: 32px;
     }
+
 
     .stat-card {
         background: white;
@@ -231,6 +237,7 @@
         align-items: center;
         gap: 16px;
     }
+
 
     .stat-icon {
         width: 56px;
@@ -243,16 +250,19 @@
         color: white;
     }
 
+
     .stat-card.morning .stat-icon { background: #FF9800; }
     .stat-card.evening .stat-icon { background: #673AB7; }
     .stat-card.night .stat-icon { background: #3F51B5; }
     .stat-card.total .stat-icon { background: #4CAF50; }
+
 
     .stat-info h3 {
         margin: 0;
         font-size: 24px;
         font-weight: 600;
     }
+
 
     .stat-info p {
         margin: 4px 0 0 0;
@@ -261,10 +271,12 @@
         font-weight: 500;
     }
 
+
     .stat-info small {
         color: #666;
         font-size: 12px;
     }
+
 
     .shifts-table-card, .schedule-card {
         background: white;
@@ -274,20 +286,24 @@
         margin-bottom: 32px;
     }
 
+
     .shifts-table-card h3, .schedule-card h3 {
         margin: 0 0 20px 0;
         font-size: 18px;
         font-weight: 600;
     }
 
+
     .table-responsive {
         overflow-x: auto;
     }
+
 
     .shifts-table {
         width: 100%;
         border-collapse: collapse;
     }
+
 
     .shifts-table th {
         padding: 12px;
@@ -297,11 +313,13 @@
         color: #333;
     }
 
+
     .shifts-table td {
         padding: 16px 12px;
         border-bottom: 1px solid #f5f5f5;
         vertical-align: middle;
     }
+
 
     .shift-info strong {
         display: block;
@@ -309,10 +327,12 @@
         margin-bottom: 2px;
     }
 
+
     .shift-info small {
         color: #666;
         font-size: 12px;
     }
+
 
     .shift-type {
         padding: 4px 12px;
@@ -322,20 +342,24 @@
         text-transform: uppercase;
     }
 
+
     .shift-morning { background: #fff3e0; color: #f57c00; }
     .shift-evening { background: #f3e5f5; color: #7b1fa2; }
     .shift-night { background: #e8eaf6; color: #3949ab; }
     .shift-flexible { background: #e0f2f1; color: #00695c; }
+
 
     .shift-time strong {
         display: block;
         margin-bottom: 2px;
     }
 
+
     .shift-time small {
         color: #666;
         font-size: 12px;
     }
+
 
     .employee-count {
         background: #e3f2fd;
@@ -346,6 +370,7 @@
         font-weight: 600;
     }
 
+
     .status-badge {
         padding: 6px 12px;
         border-radius: 12px;
@@ -354,12 +379,15 @@
         text-transform: uppercase;
     }
 
+
     .status-active { background: #e8f5e8; color: #2e7d32; }
+
 
     .action-buttons {
         display: flex;
         gap: 8px;
     }
+
 
     .btn-action {
         width: 32px;
@@ -377,12 +405,15 @@
         cursor: pointer;
     }
 
+
     .btn-action:hover {
         background: #6750A4;
         color: white;
     }
 
+
     .btn-assign:hover { background: #4CAF50; }
+
 
     .schedule-grid {
         display: grid;
@@ -393,13 +424,16 @@
         overflow: hidden;
     }
 
+
     .schedule-header {
         display: contents;
     }
 
+
     .schedule-row {
         display: contents;
     }
+
 
     .time-slot, .day-slot, .shift-slot {
         background: white;
@@ -408,36 +442,43 @@
         font-weight: 500;
     }
 
+
     .time-slot, .day-slot {
         background: #f8f9fa;
         font-weight: 600;
         color: #333;
     }
 
+
     .shift-slot {
         font-size: 12px;
         font-weight: 600;
     }
+
 
     .morning-shift {
         background: #fff3e0;
         color: #f57c00;
     }
 
+
     .evening-shift {
         background: #f3e5f5;
         color: #7b1fa2;
     }
+
 
     .night-shift {
         background: #e8eaf6;
         color: #3949ab;
     }
 
+
     .shift-slot.off {
         background: #f5f5f5;
         color: #999;
     }
+
 
     .text-center {
         text-align: center;
@@ -445,9 +486,10 @@
         color: #666;
     }
 
+
     @media (max-width: 768px) {
         .stats-grid { grid-template-columns: 1fr; }
-        .schedule-grid { 
+        .schedule-grid {
             grid-template-columns: 80px repeat(7, 1fr);
             font-size: 10px;
         }
@@ -459,8 +501,7 @@
 @push('scripts')
 <script>
 function assignEmployees(shiftId) {
-    // TODO: Open modal or redirect to employee assignment page
-    alert('Employee assignment functionality will be implemented');
+    alert('{{ __("shifts.index1.assignment_todo") }}');
 }
 </script>
 @endpush

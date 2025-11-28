@@ -1,21 +1,25 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Edit Attendance - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Attendance')
+@section('title', __('attendance.edit.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('attendance.edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.attendance.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Attendance
+            {{ __('attendance.edit.back') }}
         </a>
         <a href="{{ route('admin.attendance.show', 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('attendance.edit.view_details') }}
         </a>
     </div>
-    <p>Update attendance information</p>
+    <p>{{ __('attendance.edit.update_note') }}</p>
 </div>
 
 <div class="form-container">
@@ -52,17 +56,17 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">schedule</i>
-                Time Information
+                {{ __('attendance.edit.time_information') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="date">Attendance Date *</label>
+                    <label for="date">{{ __('attendance.fields.date') }} *</label>
                     <input type="date" id="date" name="date" value="{{ $attendance->date->format('Y-m-d') }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="check_in">Check In Time *</label>
+                    <label for="check_in">{{ __('attendance.fields.check_in') }} *</label>
                     <input type="time" id="check_in" name="check_in" value="{{ $attendance->check_in ? \Carbon\Carbon::parse($attendance->check_in)->format('H:i') : '' }}" required>
                     <small class="form-help" style="display:none">Original: 09:15 AM (15 minutes late)</small>
                 </div>
@@ -101,7 +105,7 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">location_on</i>
-                Location Information
+                {{ __('attendance.edit.location_information') }}
             </h3>
 
             <div class="form-grid">
@@ -183,7 +187,7 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">note</i>
-                Notes & Remarks
+                {{ __('attendance.edit.notes_remarks') }}
             </h3>
 
             <div class="form-grid">
@@ -253,14 +257,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Attendance
+                {{ __('attendance.edit.update_button') }}
             </button>
             <a href="{{ route('admin.attendance.show', $attendance->id) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('attendance.edit.cancel') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteAttendance()">
                 <i class="material-icons">delete</i>
-                Delete Record
+                {{ __('attendance.show.delete_record') }}
             </button>
         </div>
     </form>
@@ -525,14 +529,12 @@
 @push('scripts')
 <script>
 function deleteAttendance() {
-    if (confirm('Are you sure you want to delete this attendance record?\n\nThis action cannot be undone.')) {
-        // Delete attendance logic here
-        alert('Attendance record deleted successfully');
+    if (confirm(@json(__('attendance.show.delete_confirm')))) {
+        // Delete attendance logic here (existing deletion)
+        alert(@json(__('attendance.show.delete_success')));
         window.location.href = '/admin/attendance';
     }
 }
-
-
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {

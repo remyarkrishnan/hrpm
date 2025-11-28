@@ -1,17 +1,21 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Project Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Project Management')
+@section('title', __('projects.index.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('projects.index.page_title'))
 
 @section('content')
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
     <div>
-      
-        <p style="margin: 4px 0 0 0; color: #666;">Manage projects with 12-step approval workflow</p>
+        <p style="margin: 4px 0 0 0; color: #666;">{{ __('projects.index.description') }}</p>
     </div>
     <a href="{{ route('admin.projects.create') }}" class="btn-primary">
         <i class="material-icons">add</i>
-        New Project
+        {{ __('projects.index.new_project') }}
     </a>
 </div>
 
@@ -19,24 +23,22 @@
 <div class="filters-card">
     <form method="GET" class="filters-form">
         <div class="filter-group">
-            <input type="text" name="search" placeholder="Search projects..." 
+            <input type="text" name="search" placeholder="{{ __('projects.index.filters.search_placeholder') }}" 
                    value="{{ request('search') }}" class="filter-input">
         </div>
 
         <div class="filter-group">
             <select name="priority" class="filter-select">
-                <option value="">Priority</option>
-                 <option value="low" {{ request('priority') =='low' ? 'selected' : '' }}>Low</option>
-            <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
-            <option value="high" {{ request('priority') =='high' ? 'selected' : '' }}>High</option>
+                <option value="">{{ __('projects.index.filters.priority') }}</option>
+                <option value="low" {{ request('priority') =='low' ? 'selected' : '' }}>{{ __('projects.index.filters.priority_low') }}</option>
+                <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>{{ __('projects.index.filters.priority_medium') }}</option>
+                <option value="high" {{ request('priority') =='high' ? 'selected' : '' }}>{{ __('projects.index.filters.priority_high') }}</option>
             </select>
         </div>
 
-       
-
         <div class="filter-group">
             <select name="manager" class="filter-select">
-                <option value="">All Managers</option>
+                <option value="">{{ __('projects.index.filters.all_managers') }}</option>
                 @foreach($projectManagers as $manager)
                     <option value="{{ $manager->id }}" {{ request('manager') == $manager->id ? 'selected' : '' }}>
                         {{ $manager->name }}
@@ -47,13 +49,13 @@
 
         <button type="submit" class="btn-filter">
             <i class="material-icons">search</i>
-            Filter
+            {{ __('projects.index.filters.filter_button') }}
         </button>
 
         @if(request()->hasAny(['search', 'status', 'type', 'project_manager']))
             <a href="{{ route('admin.projects.index') }}" class="btn-clear">
                 <i class="material-icons">clear</i>
-                Clear
+                {{ __('projects.index.filters.clear_button') }}
             </a>
         @endif
     </form>
@@ -68,7 +70,7 @@
                     <div class="project-info">
                         <h3>{{ $project->name }}</h3>
                         <p class="project-code">{{ $project->project_code }}</p>
-                        <p class="project-location">📍 {{ $project->location }}</p>
+                        <p class="project-location">{{ __('projects.index.location_icon') }} {{ $project->location }}</p>
                     </div>
                     <div class="project-actions">
                         <div class="dropdown">
@@ -78,15 +80,15 @@
                             <div class="dropdown-menu">
                                 <a href="{{ route('admin.projects.show', $project) }}">
                                     <i class="material-icons">visibility</i>
-                                    View Details
+                                    {{ __('projects.index.actions.view_details') }}
                                 </a>
                                 <a href="{{ route('admin.projects.edit', $project) }}">
                                     <i class="material-icons">edit</i>
-                                    Edit Project
+                                    {{ __('projects.index.actions.edit_project') }}
                                 </a>
                                 <a href="#" onclick="deleteProject({{ $project->id }})">
                                     <i class="material-icons">delete</i>
-                                    Delete
+                                    {{ __('projects.index.actions.delete') }}
                                 </a>
                             </div>
                         </div>
@@ -95,22 +97,22 @@
 
                 <div class="project-meta">
                     <div class="meta-item" style="display:none">
-                        <span class="meta-label">Type</span>
+                        <span class="meta-label">{{ __('projects.index.meta.type') }}</span>
                         <span class="type-badge type-{{ $project->type }}">{{ $project->type_label }}</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">Priority</span>
-                        <span class="priority-badge priority-{{ $project->priority }}">{{ $project->priority }}</span>
+                        <span class="meta-label">{{ __('projects.index.meta.priority') }}</span>
+                        <span class="priority-badge priority-{{ $project->priority }}">{{ $project->priority_label ?? $project->priority }}</span>
                     </div>
-                    <div class="meta-item"  style="display:none">>
-                        <span class="meta-label">Status</span>
+                    <div class="meta-item" style="display:none">
+                        <span class="meta-label">{{ __('projects.index.meta.status') }}</span>
                         <span class="status-badge status-{{ $project->status }}">{{ $project->status_label }}</span>
                     </div>
                 </div>
 
                 <div class="project-progress">
                     <div class="progress-header">
-                        <span>Progress</span>
+                        <span>{{ __('projects.index.progress_label') }}</span>
                         <span class="progress-percentage">{{ number_format($project->progress_percentage, 1) }}%</span>
                     </div>
                     <div class="progress-bar">
@@ -121,25 +123,25 @@
                 <div class="project-details">
                     <div class="detail-item">
                         <i class="material-icons">person</i>
-                        <span>{{ $project->manager->name ?? 'Not Assigned' }}</span>
+                        <span>{{ $project->manager->name ?? __('projects.index.not_assigned') }}</span>
                     </div>
                     <div class="detail-item">
                         <i class="material-icons">account_balance_wallet</i>
-                        <span>₹{{ number_format($project->budget / 100000, 2) }}L</span>
+                        <span>{{ __('projects.index.currency_symbol') }}{{ number_format($project->budget / 100000, 2) }}L</span>
                     </div>
                     <div class="detail-item">
                         <i class="material-icons">event</i>
-                        <span>{{ $project->start_date ? $project->start_date->format('M d, Y') : 'Not set' }} - {{ $project->end_date ? $project->end_date->format('M d, Y') : 'Not set' }}</span>
+                        <span>{{ $project->start_date ? $project->start_date->format('M d, Y') : __('projects.index.not_set') }} - {{ $project->end_date ? $project->end_date->format('M d, Y') : __('projects.index.not_set') }}</span>
                     </div>
                     @if($project->is_overdue)
                         <div class="detail-item overdue">
                             <i class="material-icons">warning</i>
-                            <span>{{ abs($project->days_remaining) }} days overdue</span>
+                            <span>{{ abs($project->days_remaining) }} {{ __('projects.index.days_overdue') }}</span>
                         </div>
                     @elseif($project->days_remaining !== null)
                         <div class="detail-item">
                             <i class="material-icons">schedule</i>
-                            <span>{{ $project->days_remaining }} days left</span>
+                            <span>{{ $project->days_remaining }} {{ __('projects.index.days_left') }}</span>
                         </div>
                     @endif
                 </div>
@@ -156,7 +158,7 @@
                             $approvedSteps = $project->steps->where('status', 'approved')->count();
                             $totalSteps = $project->steps->count();
                         @endphp
-                        <span class="approval-count">{{ $approvedSteps }}/{{ $totalSteps }} Approved</span>
+                        <span class="approval-count">{{ $approvedSteps }}/{{ $totalSteps }} {{ __('projects.index.approved') }}</span>
                     </div>
                 </div>
             </div>
@@ -169,12 +171,12 @@
     @else
         <div class="empty-state">
             <i class="material-icons">engineering</i>
-            <h3>No Projects Found</h3>
-            <p>{{ request()->hasAny(['search', 'status', 'type', 'project_manager']) ? 'No projects match your filters.' : 'Start by creating your first construction project.' }}</p>
+            <h3>{{ __('projects.index.no_projects') }}</h3>
+            <p>{{ request()->hasAny(['search', 'status', 'type', 'project_manager']) ? __('projects.index.no_matching_projects') : __('projects.index.start_first_project') }}</p>
             @if(!request()->hasAny(['search', 'status', 'type', 'project_manager']))
                 <a href="{{ route('admin.projects.create') }}" class="btn-primary">
                     <i class="material-icons">add</i>
-                    Create First Project
+                    {{ __('projects.index.create_first_project') }}
                 </a>
             @endif
         </div>
@@ -544,13 +546,13 @@
 @push('scripts')
 <script>
     async function deleteProject(projectId) {
-        if (!confirm('Are you sure you want to delete this project?\n\nThis will permanently remove:\n• Project information and documents\n• All approval steps and progress\n• Resource allocations\n\nType "DELETE" to confirm.')) {
+        if (!confirm('{{ __("projects.index.delete.confirm1") }}')) {
             return;
         }
 
-        const confirmation = prompt('Type "DELETE" to confirm project deletion:');
+        const confirmation = prompt('{{ __("projects.index.delete.confirm2") }}');
         if (confirmation !== 'DELETE') {
-            alert('Deletion cancelled. You must type "DELETE" exactly.');
+            alert('{{ __("projects.index.delete.cancelled") }}');
             return;
         }
 
@@ -568,10 +570,10 @@
             if (data.success) {
                 location.reload();
             } else {
-                alert(data.message || 'Failed to delete project');
+                alert(data.message || '{{ __("projects.index.delete.error") }}');
             }
         } catch (error) {
-            alert('Error deleting project: ' + error.message);
+            alert('{{ __("projects.index.delete.error") }}: ' + error.message);
             console.error(error);
         }
     }

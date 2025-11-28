@@ -1,18 +1,21 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Attendance Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Attendance Management')
+@section('title', __('attendance.index.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('attendance.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-       
-        <p>Track employee attendance with GPS location validation</p>
+        <p>{{ __('attendance.index.description') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('admin.attendance.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Manual Entry
+            {{ __('attendance.index.manual_entry') }}
         </a>
     </div>
 </div>
@@ -25,7 +28,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $attendanceCounts->present ?? 0 }}</h3>
-            <p>Present Today</p>
+            <p>{{ __('attendance.index.stats.present') }}</p>
         </div>
     </div>
 
@@ -35,7 +38,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $attendanceCounts->absent ?? 0 }}</h3>
-            <p>Absent Today</p>
+            <p>{{ __('attendance.index.stats.absent') }}</p>
         </div>
     </div>
 
@@ -45,7 +48,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $attendanceCounts->late ?? 0 }}</h3>
-            <p>Late Arrivals</p>
+            <p>{{ __('attendance.index.stats.late') }}</p>
         </div>
     </div>
 
@@ -55,28 +58,28 @@
         </div>
         <div class="stat-info">
             <h3>{{ $attendanceCounts->leave_count ?? 0 }}</h3>
-            <p>On Leave</p>
+            <p>{{ __('attendance.index.stats.on_leave') }}</p>
         </div>
     </div>
 </div>
 
 <!-- Attendance Table -->
 <div class="attendance-table-card">
-    <h3>Today's Attendance</h3>
+    <h3>{{ __('attendance.index.today_attendance') }}</h3>
     <div class="table-responsive">
         <table class="attendance-table">
             <thead>
                 <tr>
-                    <th>Employee</th>
-                    <th>Project</th>
-                    <th>Location</th>
-                    <th>Date</th>
-                    <th>Check-in</th>
-                    <th>Check-out</th>
-                    <th>Working Hours</th>
-                    <th>Status</th>
-                    <th>Notes</th>
-                    <th>Actions</th>
+                    <th>{{ __('attendance.index.table.employee') }}</th>
+                    <th>{{ __('attendance.index.table.project') }}</th>
+                    <th>{{ __('attendance.index.table.location') }}</th>
+                    <th>{{ __('attendance.index.table.date') }}</th>
+                    <th>{{ __('attendance.index.table.check_in') }}</th>
+                    <th>{{ __('attendance.index.table.check_out') }}</th>
+                    <th>{{ __('attendance.index.table.working_hours') }}</th>
+                    <th>{{ __('attendance.index.table.status') }}</th>
+                    <th>{{ __('attendance.index.table.notes') }}</th>
+                    <th>{{ __('attendance.index.table.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -128,7 +131,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center">No attendance records found</td>
+                    <td colspan="10" class="text-center">{{ __('attendance.index.no_records') }}</td>
                 </tr>
                 @endforelse
             </tbody>

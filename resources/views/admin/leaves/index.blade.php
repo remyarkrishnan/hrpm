@@ -1,16 +1,21 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
-@section('title', 'Leave Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Leave Management')
+
+@section('title', __('leave.index.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('leave.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <p>Manage employee leave requests and approvals</p>
+        <p>{{ __('leave.index.description') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('admin.leaves.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Apply for Leave
+            {{ __('leave.index.apply_button') }}
         </a>
     </div>
 </div>
@@ -23,7 +28,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalPendingLeaves }}</h3>
-            <p>Pending Requests</p>
+            <p>{{ __('leave.index.stats.pending') }}</p>
         </div>
     </div>
 
@@ -33,7 +38,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalApprovedLeaves }}</h3>
-            <p>Approved </p>
+            <p>{{ __('leave.index.stats.approved') }}</p>
         </div>
     </div>
    <div class="stat-card balance">
@@ -42,7 +47,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalRejectedLeaves }}</h3>
-            <p>Rejected</p>
+            <p>{{ __('leave.index.stats.rejected') }}</p>
         </div>
     </div>
 
@@ -53,7 +58,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $todayLeaves }}</h3>
-            <p>On Leave Today</p>
+            <p>{{ __('leave.index.stats.on_leave') }}</p>
         </div>
     </div>
 
@@ -62,18 +67,18 @@
 
 <!-- Leave Requests Table -->
 <div class="leave-table-card">
-    <h3>Leave Requests</h3>
+    <h3>{{ __('leave.index.list_title') }}</h3>
     <div class="table-responsive">
         <table class="leave-table">
             <thead>
                 <tr>
-                    <th>Employee</th>
-                    <th>Type</th>
-                    <th>Duration</th>
-                    <th>Applied Date</th>
-                    <th>Assigned Manager </th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('leave.index.table.employee') }}</th>
+                    <th>{{ __('leave.index.table.type') }}</th>
+                    <th>{{ __('leave.index.table.duration') }}</th>
+                    <th>{{ __('leave.index.table.applied_date') }}</th>
+                    <th>{{ __('leave.index.table.manager_assigned') }}</th>
+                    <th>{{ __('leave.index.table.status') }}</th>
+                    <th>{{ __('leave.index.table.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -103,7 +108,7 @@
                         <span class="badge bg-success">{{ $leave->assignedManager->name ?? 'N/A' }}</span>
                     @elseif($leave->status === 'pending')
                         <select class="form-select form-select-sm manager-select" data-leave-id="{{ $leave->id }}">
-                            <option value="">Select Manager</option>
+                            <option value="">{{ __('leave.index.select_manager') }}</option>
                             @foreach($projectManagers as $manager)
                                 <option value="{{ $manager->id }}">{{ $manager->name }}</option>
                             @endforeach
@@ -134,7 +139,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center">No leave requests found</td>
+                    <td colspan="7" class="text-center">{{ __('leave.index.no_requests') }}</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -342,7 +347,7 @@
 @push('scripts')
 <script>
 function approveLeave(id) {
-        const reason = prompt('Please enter remarks if any:');
+        const reason = prompt(@json(__('leave.index.approve_prompt')));
 
         fetch(`/admin/leaves/${id}/approve`, {
             method: 'POST',
@@ -355,36 +360,36 @@ function approveLeave(id) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                 alert('Leave request approved successfully');
+                 alert(@json(__('leave.index.approve_success')));
                 location.reload();
             } else {
-                alert('Error approving leave request');
+                alert(@json(__('leave.index.approve_error')));
             }
         });
-  
+
 }
 
 function rejectLeave(id) {
-    const reason = prompt('Please enter rejection reason:');
-    if (reason) {
-        fetch(`/admin/leaves/${id}/reject`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ rejection_reason: reason })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                 alert('Leave request rejected successfully');
+    const reason = prompt(@json(__('leave.index.reject_prompt')));
+     if (reason) {
+         fetch(`/admin/leaves/${id}/reject`, {
+             method: 'POST',
+             headers: {
+                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                 'Content-Type': 'application/json'
+             },
+             body: JSON.stringify({ rejection_reason: reason })
+         })
+         .then(response => response.json())
+         .then(data => {
+             if (data.success) {
+                 alert(@json(__('leave.index.reject_success')));
                 location.reload();
-            } else {
-                alert('Error rejecting leave request');
-            }
-        });
-    }
+             } else {
+                alert(@json(__('leave.index.reject_error')));
+             }
+         });
+     }
 }
 </script>
 

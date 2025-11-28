@@ -1,17 +1,21 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Overtime Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Overtime Management')
+@section('title', __('overtime.index.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('overtime.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <p>Track and manage employee overtime requests and approvals</p>
+        <p>{{ __('overtime.index.description') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('admin.overtime.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Request Overtime
+            {{ __('overtime.index.request_button') }}
         </a>
     </div>
 </div>
@@ -23,8 +27,8 @@
             <i class="material-icons">pending_actions</i>
         </div>
         <div class="stat-info">
-            <h3>12</h3>
-            <p>Pending Requests</p>
+            <h3>{{ $stats->pending ?? 0 }}</h3>
+            <p>{{ __('overtime.index.stats.pending') }}</p>
         </div>
     </div>
 
@@ -33,8 +37,8 @@
             <i class="material-icons">check_circle</i>
         </div>
         <div class="stat-info">
-            <h3>45</h3>
-            <p>Approved This Month</p>
+            <h3>{{ $stats->approved ?? 0 }}</h3>
+            <p>{{ __('overtime.index.stats.approved') }}</p>
         </div>
     </div>
 
@@ -43,8 +47,8 @@
             <i class="material-icons">schedule</i>
         </div>
         <div class="stat-info">
-            <h3>324.5</h3>
-            <p>Total Hours This Month</p>
+            <h3>{{ $stats->hours ?? 0 }}</h3>
+            <p>{{ __('overtime.index.stats.hours') }}</p>
         </div>
     </div>
 
@@ -53,26 +57,26 @@
             <i class="material-icons">attach_money</i>
         </div>
         <div class="stat-info">
-            <h3>₹2,48,750</h3>
-            <p>Overtime Cost This Month</p>
+            <h3>{{ $stats->cost ?? '₹0.00' }}</h3>
+            <p>{{ __('overtime.index.stats.cost') }}</p>
         </div>
     </div>
 </div>
 
 <!-- Overtime Requests Table -->
 <div class="overtime-table-card">
-    <h3>Overtime Requests</h3>
+    <h3>{{ __('overtime.index.list_title') }}</h3>
     <div class="table-responsive">
         <table class="overtime-table">
             <thead>
                 <tr>
-                    <th>Employee</th>
-                    <th>Project</th>
-                    <th>Date</th>
-                    <th>Hours</th>
-                    <th>Reason</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('overtime.index.table.employee') }}</th>
+                    <th>{{ __('overtime.index.table.project') }}</th>
+                    <th>{{ __('overtime.index.table.date') }}</th>
+                    <th>{{ __('overtime.index.table.hours') }}</th>
+                    <th>{{ __('overtime.index.table.reason') }}</th>
+                    <th>{{ __('overtime.index.table.status') }}</th>
+                    <th>{{ __('overtime.index.table.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,11 +91,9 @@
                             </div>
                         </div>
                     </td>
-                    <td>{{ $overtime->project ?? 'General Work' }}</td>
+                    <td>{{ $overtime->project ?? '-' }}</td>
                     <td>{{ $overtime->date }}</td>
-                    <td>
-                        <span class="overtime-hours">{{ $overtime->hours }} hrs</span>
-                    </td>
+                    <td><span class="overtime-hours">{{ $overtime->hours }} {{ __('overtime.show.hour_short') }}</span></td>
                     <td>{{ Str::limit($overtime->reason, 30) }}</td>
                     <td>
                         <span class="status-badge status-{{ $overtime->status }}">
@@ -116,7 +118,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center">No overtime requests found</td>
+                    <td colspan="7" class="text-center">{{ __('overtime.index.no_requests') }}</td>
                 </tr>
                 @endforelse
             </tbody>

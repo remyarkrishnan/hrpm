@@ -1,19 +1,23 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Edit Project Location - ' . $projectLocation->location_name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Project Location')
+@section('title', __('project_locations.edit.title', ['location' => $projectLocation->location_name, 'company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('project_locations.edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.project-locations.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Project Locations
+            {{ __('project_locations.edit.back_button') }}
         </a>
-      
     </div>
     <h2>{{ $projectLocation->location_name }}</h2>
-    <p>Update project location information</p>
+    <p>{{ __('project_locations.edit.description') }}</p>
 </div>
 
 <form action="{{ route('admin.project-locations.update', $projectLocation) }}" method="POST" enctype="multipart/form-data" class="project-form">
@@ -24,17 +28,16 @@
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">info</i>
-            Project Information
+            {{ __('project_locations.edit.location_info') }}
         </h3>
 
- <div class="form-grid">
-
-        <div class="form-group">
-                <label for="type">Project  *</label>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="type">{{ __('project_locations.edit.fields.project') }} *</label>
                 <select id="type" name="project_id" required>
-                    <option value="">Select Project</option>
+                    <option value="">{{ __('global.select_option') }}</option>
                     @foreach($projects as $prj)
-                        <option value="{{ $prj->id }}" {{ old('project_id', $projectLocation->project_id) === $prj->id ? 'selected' : '' }} >
+                        <option value="{{ $prj->id }}" {{ old('project_id', $projectLocation->project_id) === $prj->id ? 'selected' : '' }}>
                             {{ $prj->name }}
                         </option>
                     @endforeach
@@ -45,119 +48,108 @@
             </div>
 
             <div class="form-group">
-                <label for="project_code">Location Name *</label>
-                <input type="text" id="location_name" name="location_name" value="{{ old('location_name' , $projectLocation->location_name) }}" required 
-                       placeholder="">
+                <label for="location_name">{{ __('project_locations.edit.fields.location_name') }} *</label>
+                <input type="text" id="location_name" name="location_name" value="{{ old('location_name', $projectLocation->location_name) }}" required 
+                       placeholder="{{ __('project_locations.edit.fields.location_name_placeholder') }}">
                 @error('location_name')
                     <span class="error">{{ $message }}</span>
                 @enderror
-               
             </div>
 
             <div class="form-group">
-                <label for="city">City *</label>
-                <input type="text" id="city" name="city" value="{{ old('city' , $projectLocation->city) }}" required
-                       placeholder="">
+                <label for="city">{{ __('project_locations.edit.fields.city') }} *</label>
+                <input type="text" id="city" name="city" value="{{ old('city', $projectLocation->city) }}" required
+                       placeholder="{{ __('project_locations.edit.fields.city_placeholder') }}">
                 @error('city')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="type">State *</label>
-                <input type="text" id="state" name="state" value="{{ old('state'  , $projectLocation->state) }}" required
-                       placeholder="">
+                <label for="state">{{ __('project_locations.edit.fields.state') }} *</label>
+                <input type="text" id="state" name="state" value="{{ old('state', $projectLocation->state) }}" required
+                       placeholder="{{ __('project_locations.edit.fields.state_placeholder') }}">
                 @error('state')
                     <span class="error">{{ $message }}</span>
                 @enderror
-               
             </div>
 
             <div class="form-group">
-                <label for="type">PIN Code *</label>
-                <input type="number" id="postal_code" name="postal_code" value="{{ old('postal_code'  , $projectLocation->postal_code) }}" required
-                       placeholder="">
+                <label for="postal_code">{{ __('project_locations.edit.fields.pin_code') }} *</label>
+                <input type="number" id="postal_code" name="postal_code" value="{{ old('postal_code', $projectLocation->postal_code) }}" required
+                       placeholder="{{ __('project_locations.edit.fields.pin_code_placeholder') }}">
                 @error('postal_code')
                     <span class="error">{{ $message }}</span>
                 @enderror
-               
             </div>
 
             <div class="form-group" style="display:none">
-                <label for="type">Latitude </label>
-                <input type="text" id="latitude" name="latitude" value="{{ old('latitude'  , $projectLocation->latitude) }}" 
-                       placeholder="">
+                <label for="latitude">{{ __('project_locations.edit.fields.latitude') }}</label>
+                <input type="text" id="latitude" name="latitude" value="{{ old('latitude', $projectLocation->latitude) }}" 
+                       placeholder="{{ __('project_locations.edit.fields.latitude_placeholder') }}">
                 @error('latitude')
                     <span class="error">{{ $message }}</span>
                 @enderror
-               
             </div>
 
-            <div class="form-group"  style="display:none">
-                <label for="type">Longitude </label>
-                <input type="text" id="longitude" name="longitude" value="{{ old('longitude'  , $projectLocation->longitude) }}" 
-                       placeholder="">
+            <div class="form-group" style="display:none">
+                <label for="longitude">{{ __('project_locations.edit.fields.longitude') }}</label>
+                <input type="text" id="longitude" name="longitude" value="{{ old('longitude', $projectLocation->longitude) }}" 
+                       placeholder="{{ __('project_locations.edit.fields.longitude_placeholder') }}">
                 @error('longitude')
                     <span class="error">{{ $message }}</span>
                 @enderror
-               
             </div>
-
-
         </div>
     </div>
 
     <!-- Geofence Section -->
-<div class="form-section">
-    <h3 class="section-title">
-        <i class="material-icons">map</i>
-        Define / Edit Geofence Area
-    </h3>
+    <div class="form-section">
+        <h3 class="section-title">
+            <i class="material-icons">map</i>
+            {{ __('project_locations.edit.geofence_title') }}
+        </h3>
 
-    <div class="form-group full-width">
-        <label for="map-search">Search Location</label>
-        <input id="map-search" type="text" placeholder="Search for a location…"
-               style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-bottom:12px;">
-
-        <div id="map" style="height:500px; width:100%; border-radius:12px; border:1px solid #ccc;"></div>
-
-        <input type="hidden" name="geofence_coordinates" id="geofence_coordinates"
-               value="{{ old('geofence_coordinates', $projectLocation->geofence_coordinates) }}">
-
-        <small class="form-help">Edit the polygon shown, or redraw it by selecting “Draw Polygon” again.</small>
+        <div class="form-group full-width">
+            <label for="map-search">{{ __('project_locations.edit.fields.map_search') }}</label>
+            <input id="map-search" type="text" placeholder="{{ __('project_locations.edit.map_search_placeholder') }}"
+                   style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-bottom:12px;">
+            
+            <div id="map" style="height:500px; width:100%; border-radius:12px; border:1px solid #ccc;"></div>
+            
+            <input type="hidden" name="geofence_coordinates" id="geofence_coordinates"
+                   value="{{ old('geofence_coordinates', $projectLocation->geofence_coordinates) }}">
+            
+            <small class="form-help">{{ __('project_locations.edit.map_help') }}</small>
+        </div>
     </div>
-</div>
-
 
     <!-- Submit Buttons -->
     <div class="form-actions">
         <button type="submit" class="btn-primary">
             <i class="material-icons">save</i>
-            Update Project Location
+            {{ __('project_locations.edit.update_button') }}
         </button>
         <a href="{{ route('admin.project-locations.show', $projectLocation) }}" class="btn-cancel">
-            Cancel
+            {{ __('project_locations.edit.cancel_button') }}
         </a>
-        <button type="button" onclick="deleteProject({{ $projectLocation->id }})" class="btn-danger">
+        <button type="button" onclick="deleteProjectLocation({{ $projectLocation->id }})" class="btn-danger">
             <i class="material-icons">delete</i>
-            Delete Project Location
+            {{ __('project_locations.edit.delete_button') }}
         </button>
     </div>
-     </div>
 </form>
 @endsection
 
 @push('styles')
 <style>
     .page-header { margin-bottom: 32px; }
-
     .page-nav {
         margin-bottom: 16px;
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
     }
-
     .btn-back, .btn-secondary {
         display: inline-flex;
         align-items: center;
@@ -169,35 +161,29 @@
         border-radius: 6px;
         transition: background 0.2s;
     }
-
     .btn-back:hover, .btn-secondary:hover { background: rgba(103, 80, 164, 0.08); }
-
     .page-header h2 {
         margin: 0 0 8px 0;
         font-size: 28px;
         font-weight: 500;
         color: #1C1B1F;
     }
-
     .page-header p {
         margin: 0;
         color: #666;
         font-size: 16px;
     }
-
     .project-form {
         display: flex;
         flex-direction: column;
         gap: 32px;
     }
-
     .form-section {
         background: white;
         padding: 28px;
         border-radius: 16px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-
     .section-title {
         display: flex;
         align-items: center;
@@ -207,28 +193,22 @@
         font-weight: 500;
         color: #1C1B1F;
     }
-
     .section-title i { color: #6750A4; }
-
     .form-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 20px;
     }
-
     .form-group {
         display: flex;
         flex-direction: column;
     }
-
     .form-group.full-width { grid-column: 1 / -1; }
-
     .form-group label {
         font-weight: 500;
         color: #333;
         margin-bottom: 8px;
     }
-
     .form-group input,
     .form-group select,
     .form-group textarea {
@@ -239,68 +219,22 @@
         transition: border-color 0.2s;
         background: white;
     }
-
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
         outline: none;
         border-color: #6750A4;
     }
-
     .form-group .error {
         color: #d32f2f;
         font-size: 12px;
         margin-top: 4px;
     }
-
     .form-help {
         color: #666;
         font-size: 12px;
         margin-top: 4px;
     }
-
-    /* Document List Styles */
-    .document-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .document-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        border: 1px solid #e0e0e0;
-    }
-
-    .document-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: #333;
-    }
-
-    .document-info i {
-        color: #6750A4;
-    }
-
-    .btn-view {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        color: #6750A4;
-        text-decoration: none;
-        padding: 6px 12px;
-        border-radius: 6px;
-        transition: background 0.2s;
-        font-size: 14px;
-    }
-
-    .btn-view:hover { background: rgba(103, 80, 164, 0.08); }
-
     .form-actions {
         display: flex;
         gap: 16px;
@@ -309,7 +243,6 @@
         border-top: 1px solid #e0e0e0;
         flex-wrap: wrap;
     }
-
     .btn-primary, .btn-cancel, .btn-danger {
         display: flex;
         align-items: center;
@@ -322,32 +255,25 @@
         transition: all 0.2s;
         border: none;
     }
-
     .btn-primary {
         background: #6750A4;
         color: white;
     }
-
     .btn-primary:hover { background: #5A4A94; }
-
     .btn-cancel {
         border: 2px solid #e0e0e0;
         color: #666;
         background: white;
     }
-
     .btn-cancel:hover {
         border-color: #666;
         color: #333;
     }
-
     .btn-danger {
         background: #d32f2f;
         color: white;
     }
-
     .btn-danger:hover { background: #b71c1c; }
-
     @media (max-width: 768px) {
         .form-grid { grid-template-columns: 1fr; }
         .form-section { padding: 20px; }
@@ -359,78 +285,7 @@
 @endpush
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const startDateInput = document.getElementById('start_date');
-    const endDateInput = document.getElementById('expected_end_date');
-
-    // Set minimum end date based on start date
-    startDateInput.addEventListener('change', function() {
-        const startDate = new Date(this.value);
-        const minEndDate = new Date(startDate);
-        minEndDate.setDate(minEndDate.getDate() + 1);
-
-        endDateInput.min = minEndDate.toISOString().split('T')[0];
-
-        if (endDateInput.value && new Date(endDateInput.value) <= startDate) {
-            endDateInput.value = minEndDate.toISOString().split('T')[0];
-        }
-    });
-
-    // Form validation
-    document.querySelector('.project-form').addEventListener('submit', function(e) {
-        const startDate = new Date(startDateInput.value);
-        const endDate = new Date(endDateInput.value);
-
-        if (endDate <= startDate) {
-            e.preventDefault();
-            alert('Expected completion date must be after start date');
-            return;
-        }
-
-        // Show loading state
-        const submitButton = this.querySelector('button[type="submit"]');
-        submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> Updating Project...';
-        submitButton.disabled = true;
-    });
-});
-
-// Delete project function
-async function deleteProject(projectId) {
-    if (!confirm('Are you sure you want to delete this project location \n\nType "DELETE" to confirm.')) {
-        return;
-    }
-
-    const confirmation = prompt('Type "DELETE" to confirm project location deletion:');
-    if (confirmation !== 'DELETE') {
-        alert('Deletion cancelled. You must type "DELETE" exactly.');
-        return;
-    }
-
-    try {
-        const response = await fetch(`/admin/project-locations/${projectId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            }
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            alert('Project location deleted successfully');
-            window.location.href = '/admin/project-locations';
-        } else {
-            alert(data.message || 'Failed to delete project location');
-        }
-    } catch (error) {
-        alert('Error deleting project: ' + error.message);
-        console.error(error);
-    }
-}
-</script>
-
+<script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places,drawing,geometry"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     let map;
@@ -550,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add clear button
         const clearControlDiv = document.createElement("div");
         const clearButton = document.createElement("button");
-        clearButton.innerHTML = "🧹 Clear Area";
+        clearButton.innerHTML = "🧹 {{ __('project_locations.edit.clear_area') }}";
         clearButton.style.backgroundColor = "#fff";
         clearButton.style.border = "2px solid #ccc";
         clearButton.style.borderRadius = "4px";
@@ -561,11 +416,15 @@ document.addEventListener('DOMContentLoaded', function() {
         clearButton.style.fontWeight = "bold";
 
         clearButton.addEventListener("click", (e) => {
-            e.preventDefault();  // Prevent page reload or form reset
+            e.preventDefault();
             if (selectedPolygon) {
-                selectedPolygon.setMap(null);  // Remove the polygon
+                selectedPolygon.setMap(null);
                 selectedPolygon = null;
-                document.getElementById('geofence_coordinates').value = '';  // Clear hidden input
+                document.getElementById('geofence_coordinates').value = '';
+            }
+            if (marker) {
+                marker.setMap(null);
+                marker = null;
             }
         });
 
@@ -576,9 +435,48 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof initMap === 'function') {
         initMap();
     }
+
+    // Form submission loading state
+    document.querySelector('.project-form').addEventListener('submit', function(e) {
+        const submitButton = this.querySelector('button[type="submit"]');
+        submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> {{ __("global.updating") }}...';
+        submitButton.disabled = true;
+    });
 });
+
+// Delete project location function
+async function deleteProjectLocation(projectLocationId) {
+    if (!confirm('{{ __("project_locations.edit.delete_confirm") }}')) {
+        return;
+    }
+
+    const confirmation = prompt('{{ __("project_locations.edit.delete_confirm_text") }}');
+    if (confirmation !== 'DELETE') {
+        alert('{{ __("project_locations.edit.delete_cancelled") }}');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/admin/project-locations/${projectLocationId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('{{ __("project_locations.edit.delete_success") }}');
+            window.location.href = '/admin/project-locations';
+        } else {
+            alert(data.message || '{{ __("project_locations.edit.delete_error") }}');
+        }
+    } catch (error) {
+        alert('{{ __("project_locations.edit.delete_network_error") }}: ' + error.message);
+        console.error(error);
+    }
+}
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places,drawing,geometry"></script>
-
-
 @endpush

@@ -1,33 +1,37 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Shift Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Shift Details')
+@section('title', __('shift.show.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
+@section('page-title', __('shift.show.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.shifts.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Shifts
+            {{ __('shift.show.back_to_shifts') }}
         </a>
     </div>
     <div class="shift-header">
         <div class="shift-info">
-            <h2>{{ $shift->name ?? 'Morning Shift' }}</h2>
-            <p>{{ $shift->location ?? 'Site A' }} • {{ $shift->employees_count ?? 15 }} employees assigned</p>
+            <h2>{{ $shift->name ?? __('shift.show.default_name') }}</h2>
+            <p>{{ $shift->location ?? __('shift.show.default_location') }} • {{ $shift->employees_count ?? 15 }} {{ __('shift.show.labels.currently_assigned') }}</p>
             <div class="shift-timing">
                 <i class="material-icons">schedule</i>
                 <span>{{ $shift->start_time ?? '07:00' }} - {{ $shift->end_time ?? '15:00' }}</span>
-                <strong>(8 hours)</strong>
+                <strong>({{ $shift->working_hours ?? 8 }} {{ __('shift.show.labels.working_hours') }})</strong>
             </div>
         </div>
         <div class="shift-status">
             <span class="shift-type shift-{{ $shift->type ?? 'morning' }}">
-                {{ ucfirst($shift->type ?? 'Morning') }} Shift
+                {{ ucfirst($shift->type ?? 'Morning') }} {{ __('shift.show.section.shift_information') ?? 'Shift' }}
             </span>
             <div class="shift-capacity">
                 <strong>{{ $shift->employees_count ?? 15 }}/{{ $shift->max_employees ?? 25 }}</strong>
-                <small>Capacity</small>
+                <small>{{ __('shift.show.capacity') }}</small>
             </div>
         </div>
     </div>
@@ -37,63 +41,63 @@
     <!-- Shift Information -->
     <div class="detail-grid">
         <div class="detail-card">
-            <h3>Shift Information</h3>
+            <h3>{{ __('shift.show.section.shift_information') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Shift Name:</strong>
-                    <span>{{ $shift->name ?? 'Morning Shift' }}</span>
+                    <strong>{{ __('shift.show.labels.shift_name') }}</strong>
+                    <span>{{ $shift->name ?? __('shift.show.default_name') }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Type:</strong>
+                    <strong>{{ __('shift.show.labels.type') }}</strong>
                     <span class="shift-type shift-{{ $shift->type ?? 'morning' }}">
-                        {{ ucfirst($shift->type ?? 'morning') }} Shift
+                        {{ ucfirst($shift->type ?? 'morning') }} {{ __('shift.show.section.shift_information') }}
                     </span>
                 </div>
                 <div class="info-item">
-                    <strong>Start Time:</strong>
+                    <strong>{{ __('shift.show.labels.start_time') }}</strong>
                     <span>{{ $shift->start_time ?? '07:00 AM' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>End Time:</strong>
+                    <strong>{{ __('shift.show.labels.end_time') }}</strong>
                     <span>{{ $shift->end_time ?? '15:00 PM' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Break Duration:</strong>
-                    <span>{{ $shift->break_duration ?? 60 }} minutes</span>
+                    <strong>{{ __('shift.show.labels.break_duration') }}</strong>
+                    <span>{{ $shift->break_duration ?? 60 }} {{ __('shift.show.labels.minutes') }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Working Hours:</strong>
-                    <span>{{ $shift->working_hours ?? 8 }} hours</span>
+                    <strong>{{ __('shift.show.labels.working_hours') }}</strong>
+                    <span>{{ $shift->working_hours ?? 8 }} {{ __('shift.show.labels.hours') }}</span>
                 </div>
             </div>
         </div>
 
         <div class="detail-card">
-            <h3>Location & Assignment</h3>
+            <h3>{{ __('shift.show.section.location_assignment') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Work Location:</strong>
+                    <strong>{{ __('shift.show.labels.work_location') }}</strong>
                     <span>{{ $shift->location ?? 'Site A - Gurgaon' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Supervisor:</strong>
+                    <strong>{{ __('shift.show.labels.supervisor') }}</strong>
                     <span>{{ $shift->supervisor ?? 'Rajesh Kumar' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Project:</strong>
+                    <strong>{{ __('shift.show.labels.project') }}</strong>
                     <span>{{ $shift->project ?? 'Residential Complex - Phase 2' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Max Capacity:</strong>
-                    <span>{{ $shift->max_employees ?? 25 }} employees</span>
+                    <strong>{{ __('shift.show.labels.max_capacity') }}</strong>
+                    <span>{{ $shift->max_employees ?? 25 }} {{ __('shift.show.labels.employees') }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Currently Assigned:</strong>
-                    <span class="employee-count">{{ $shift->employees_count ?? 15 }} employees</span>
+                    <strong>{{ __('shift.show.labels.currently_assigned') }}</strong>
+                    <span class="employee-count">{{ $shift->employees_count ?? 15 }} {{ __('shift.show.labels.employees') }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Overtime Allowed:</strong>
-                    <span class="overtime-status">{{ $shift->overtime_allowed ? 'Yes' : 'No' }}</span>
+                    <strong>{{ __('shift.show.labels.overtime_allowed') }}</strong>
+                    <span class="overtime-status">{{ $shift->overtime_allowed ? __('shift.show.yes') : __('shift.show.no') }}</span>
                 </div>
             </div>
         </div>
@@ -101,41 +105,41 @@
 
     <!-- Working Days Schedule -->
     <div class="schedule-section">
-        <h3>Working Days Schedule</h3>
+        <h3>{{ __('shift.show.section.working_days_schedule') }}</h3>
         <div class="days-grid">
             <div class="day-item active">
                 <div class="day-name">Mon</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('shift.show.days.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Tue</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('shift.show.days.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Wed</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('shift.show.days.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Thu</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('shift.show.days.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Fri</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('shift.show.days.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Sat</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('shift.show.days.working') }}</div>
                 <div class="day-hours">6h</div>
             </div>
             <div class="day-item off">
                 <div class="day-name">Sun</div>
-                <div class="day-status">Off</div>
+                <div class="day-status">{{ __('shift.show.days.off') }}</div>
                 <div class="day-hours">-</div>
             </div>
         </div>
@@ -144,10 +148,10 @@
     <!-- Assigned Employees -->
     <div class="employees-section">
         <div class="employees-header">
-            <h3>Assigned Employees ({{ $shift->employees_count ?? 15 }})</h3>
+            <h3>{{ __('shift.show.section.assigned_employees') }} ({{ $shift->employees_count ?? 15 }})</h3>
             <button class="btn-primary" onclick="assignMoreEmployees()">
                 <i class="material-icons">person_add</i>
-                Assign More
+                {{ __('shift.show.assign_more') }}
             </button>
         </div>
 
@@ -202,8 +206,8 @@
             <div class="employee-card placeholder">
                 <div class="employee-avatar">+</div>
                 <div class="employee-info">
-                    <h4>12 more employees...</h4>
-                    <p>Click "View All" to see complete list</p>
+                    <h4>{{ __('shift.show.view_more_count', ['count' => 12]) }}</h4>
+                    <p>{{ __('shift.show.view_all_hint') }}</p>
                 </div>
                 <div class="employee-actions">
                     <button class="btn-action" onclick="viewAllEmployees()">
@@ -217,7 +221,7 @@
     <!-- Shift Description -->
     @if(isset($shift->description))
     <div class="description-section">
-        <h3>Shift Description</h3>
+        <h3>{{ __('shift.show.section.shift_description') }}</h3>
         <div class="description-content">
             <p>{{ $shift->description ?? 'This shift handles primary construction activities including foundation work, structural assembly, and site preparation. All safety protocols must be followed strictly.' }}</p>
         </div>
@@ -229,22 +233,22 @@
         <div class="shift-actions">
             <a href="{{ route('admin.shifts.edit', $shift->id ?? 1) }}" class="btn-primary">
                 <i class="material-icons">edit</i>
-                Edit Shift
+                {{ __('shift.edit.page_title') }}
             </a>
             <button class="btn-secondary" onclick="duplicateShift()">
                 <i class="material-icons">content_copy</i>
-                Duplicate Shift
+                {{ __('shift.show.duplicate') }}
             </button>
         </div>
 
         <div class="other-actions">
             <button class="btn-success" onclick="activateShift()">
                 <i class="material-icons">play_arrow</i>
-                Activate Shift
+                {{ __('shift.show.activate') }}
             </button>
             <button class="btn-danger" onclick="deleteShift()">
                 <i class="material-icons">delete</i>
-                Delete Shift
+                {{ __('shift.show.delete') }}
             </button>
         </div>
     </div>
@@ -623,56 +627,56 @@
 <script>
 function assignMoreEmployees() {
     // TODO: Open employee assignment modal
-    alert('Employee assignment functionality will be implemented');
+    alert(@json(__('shift.show.assign_alert')));
 }
 
 function removeEmployee(employeeId) {
-    if (confirm('Are you sure you want to remove this employee from the shift?')) {
-        // TODO: Implement employee removal
-        alert('Employee removal functionality will be implemented');
-    }
+    if (confirm(@json(__('shift.show.remove_employee_confirm')))) {
+         // TODO: Implement employee removal
+         alert(@json(__('shift.show.remove_employee_alert')));
+     }
 }
 
 function viewAllEmployees() {
     // TODO: Open detailed employee list modal
-    alert('Employee list view functionality will be implemented');
+    alert(@json(__('shift.show.view_all')));
 }
 
 function duplicateShift() {
-    if (confirm('Create a copy of this shift?')) {
-        // TODO: Implement shift duplication
-        alert('Shift duplication functionality will be implemented');
-    }
+    if (confirm(@json(__('shift.show.duplicate_confirm')))) {
+         // TODO: Implement shift duplication
+         alert(@json(__('shift.show.duplicate_alert')));
+     }
 }
 
 function activateShift() {
-    // TODO: Implement shift activation
-    alert('Shift activation functionality will be implemented');
+     // TODO: Implement shift activation
+    alert(@json(__('shift.show.activate_alert')));
 }
 
 function deleteShift() {
-    if (confirm('Are you sure you want to delete this shift?\n\nThis action cannot be undone and will remove all employee assignments.')) {
-        fetch(`/admin/shifts/{{ $shift->id ?? 1 }}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Shift deleted successfully');
-                window.location.href = '/admin/shifts';
-            } else {
-                alert('Error deleting shift');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting shift');
-        });
-    }
+    if (confirm(@json(__('shift.show.delete_confirm')))) {
+         fetch(`/admin/shifts/{{ $shift->id ?? 1 }}`, {
+             method: 'DELETE',
+             headers: {
+                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                 'Content-Type': 'application/json'
+             }
+         })
+         .then(response => response.json())
+         .then(data => {
+             if (data.success) {
+                alert(@json(__('shift.show.delete_success')));
+                 window.location.href = '/admin/shifts';
+             } else {
+                alert(@json(__('shift.show.delete_error')));
+             }
+         })
+         .catch(error => {
+             console.error('Error:', error);
+            alert(@json(__('shift.show.delete_error')));
+         });
+     }
 }
 </script>
 @endpush
