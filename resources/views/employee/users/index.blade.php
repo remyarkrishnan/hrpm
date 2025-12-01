@@ -1,14 +1,14 @@
 @extends('layouts.employee')
 
-@section('title', 'Employee Profile - ' . $user->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Employee Profile')
+@section('title', __('employee/users/show.title') . ' - ' . $user->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/users/show.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.dashboard') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Dashboard
+            {{ __('employee/users/common.actions.back') }}
         </a>
     </div>
      <div class="profile-header">
@@ -28,10 +28,10 @@
             <p>{{ $user->designation }} • {{ $user->department }}</p>
             <div class="profile-badges">
                 <span class="role-badge role-{{ $user->getRoleNames()->first() }}">
-                    {{ ucwords(str_replace('-', ' ', $user->getRoleNames()->first() ?? 'No Role')) }}
+                    {{ ucwords(str_replace('-', ' ', $user->getRoleNames()->first() ?? __('employee/users/common.misc.no_role'))) }}
                 </span>
                 <span class="status-badge {{ $user->status ? 'active' : 'inactive' }}">
-                    {{ $user->status ? 'Active' : 'Inactive' }}
+                    {{ $user->status ? __('employee/users/common.status.active') : __('employee/users/common.status.inactive') }}
                 </span>
             </div>
         </div>
@@ -40,71 +40,69 @@
 </div>
 
 <div class="profile-content">
-    <!-- Basic Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">person</i>
-            Basic Information
+            {{ __('employee/users/show.sections.basic') }}
         </h3>
         <div class="info-grid">
             <div class="info-item">
-                <label>Full Name</label>
+                <label>{{ __('employee/users/common.labels.full_name') }}</label>
                 <value>{{ $user->name }}</value>
             </div>
             <div class="info-item">
-                <label>Email Address</label>
+                <label>{{ __('employee/users/common.labels.email') }}</label>
                 <value>{{ $user->email }}</value>
             </div>
             <div class="info-item">
-                <label>Employee ID</label>
+                <label>{{ __('employee/users/common.labels.employee_id') }}</label>
                 <value class="employee-id">{{ $user->employee_id }}</value>
             </div>
             <div class="info-item">
-                <label>Phone Number</label>
-                <value>{{ $user->phone ?? 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.phone') }}</label>
+                <value>{{ $user->phone ?? __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>Date of Birth</label>
-                <value>{{ $user->date_of_birth ? $user->date_of_birth->format('M d, Y') : 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.dob') }}</label>
+                <value>{{ $user->date_of_birth ? $user->date_of_birth->format('M d, Y') : __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>Gender</label>
-                <value>{{ $user->gender ? ucfirst($user->gender) : 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.gender') }}</label>
+                <value>{{ $user->gender ? ucfirst($user->gender) : __('employee/users/common.misc.not_provided') }}</value>
             </div>
              <div class="info-item">
-                <label>Address</label>
-                <value>{{ $user->address ? $user->address : 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.address') }}</label>
+                <value>{{ $user->address ? $user->address : __('employee/users/common.misc.not_provided') }}</value>
             </div>
         </div>
     </div>
 
-    <!-- Employment Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">work</i>
-            Employment Information
+            {{ __('employee/users/show.sections.employment') }}
         </h3>
         <div class="info-grid">
             <div class="info-item">
-                <label>Department</label>
+                <label>{{ __('employee/users/common.labels.department') }}</label>
                 <value>{{ $user->department }}</value>
             </div>
             <div class="info-item">
-                <label>Designation</label>
+                <label>{{ __('employee/users/common.labels.designation') }}</label>
                 <value>{{ $user->designation }}</value>
             </div>
             <div class="info-item">
-                <label>System Role</label>
+                <label>{{ __('employee/users/common.labels.role') }}</label>
                 <value>
                     <span class="role-badge role-{{ $user->getRoleNames()->first() }}">
-                        {{ ucwords(str_replace('-', ' ', $user->getRoleNames()->first() ?? 'No Role')) }}
+                        {{ ucwords(str_replace('-', ' ', $user->getRoleNames()->first() ?? __('employee/users/common.misc.no_role'))) }}
                     </span>
                 </value>
             </div>
 
             @if($user->getRoleNames()->first() === 'employee')
                 <div class="info-item">
-                    <label>Reporting Manager</label>
+                    <label>{{ __('employee/users/common.labels.reporting_manager') }}</label>
                     <value>
                         <span class="role-badge role-{{ $user->getRoleNames()->first() }}">
                             @if($user->reporting_manager)
@@ -112,12 +110,12 @@
                                     $manager = \App\Models\User::find($user->reporting_manager);
                                 @endphp
                                 @if($manager)
-                                    {{ $manager->name ?? 'No Manager Assigned' }}
+                                    {{ $manager->name ?? __('employee/users/common.misc.no_manager') }}
                                 @else
-                                    No Manager Assigned
+                                    {{ __('employee/users/common.misc.no_manager') }}
                                 @endif
                             @else
-                                No Manager Assigned
+                                {{ __('employee/users/common.misc.no_manager') }}
                             @endif
                         </span>
                     </value>
@@ -126,18 +124,18 @@
 
 
             <div class="info-item">
-                <label>Joining Date</label>
-                <value>{{ $user->joining_date ? $user->joining_date->format('M d, Y') : 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.joining_date') }}</label>
+                <value>{{ $user->joining_date ? $user->joining_date->format('M d, Y') : __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>Employee Type</label>
-                <value>{{ $user->employee_type ?  ucfirst($user->employee_type) : 'Not disclosed' }}</value>
+                <label>{{ __('employee/users/common.labels.employee_type') }}</label>
+                <value>{{ $user->employee_type ?  ucfirst($user->employee_type) : __('employee/users/common.misc.not_disclosed') }}</value>
             </div>
             <div class="info-item">
-                <label>Employment Status</label>
+                <label>{{ __('employee/users/common.labels.status') }}</label>
                 <value>
                     <span class="status-badge {{ $user->status ? 'active' : 'inactive' }}">
-                        {{ $user->status ? 'Active' : 'Inactive' }}
+                        {{ $user->status ? __('employee/users/common.status.active') : __('employee/users/common.status.inactive') }}
                     </span>
                 </value>
             </div>
@@ -145,19 +143,18 @@
         </div>
     </div>
 
-    <!-- Contact Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">work</i>
-            Salary Information
+            {{ __('employee/users/show.sections.salary') }}
         </h3>
         <div class="info-grid">
             <div class="info-item full-width">
-                <label>Basic Salary</label>
-                <value>{{ $user->basic_salary ? '₹' . number_format($user->basic_salary, 2) : 'Not added' }}</value>
+                <label>{{ __('employee/users/common.labels.basic_salary') }}</label>
+                <value>{{ $user->basic_salary ? '₹' . number_format($user->basic_salary, 2) : __('employee/users/common.misc.not_provided') }}</value>
             </div>
              <div class="info-item full-width">
-            <label>Allowances</label> 
+            <label>{{ __('employee/users/common.labels.allowances') }}</label> 
               </div>
               @if($user->allowances->isNotEmpty())
                 @foreach($user->allowances->where('allowance_name', '!=', 'all_allowance') as $allowance)
@@ -170,8 +167,8 @@
                 @endforeach
             @else
                 <div class="info-item">
-                    <label>Allowances</label>
-                    <value><span>No Allowances Assigned</span></value>
+                    <label>{{ __('employee/users/common.labels.allowances') }}</label>
+                    <value><span>{{ __('employee/users/common.misc.no_allowances') }}</span></value>
                 </div>
             @endif
 
@@ -179,30 +176,29 @@
     </div>
 
 
-<!-- Employment Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">work</i>
-            Bank Information
+            {{ __('employee/users/show.sections.bank') }}
         </h3>
         <div class="info-grid">
             <div class="info-item">
-                <label>Bank Name</label>
-                <value>{{ $user->bank_name ? $user->bank_name : 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.bank_name') }}</label>
+                <value>{{ $user->bank_name ? $user->bank_name : __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>IBAN No</label>
-                <value>{{ $user->iban_no ? $user->iban_no : 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.iban') }}</label>
+                <value>{{ $user->iban_no ? $user->iban_no : __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>Document</label>
+                <label>{{ __('employee/users/common.labels.document') }}</label>
                 <value>
                    @if(!empty($user->bank_proof_document) && Storage::disk('public')->exists($user->bank_proof_document))
                 <img src="{{ asset('storage/' . $user->bank_proof_document) }}" alt="{{ $user->name }}" 
                     style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
                     @else
                         <span >
-                            No document uploaded
+                            {{ __('employee/users/common.misc.no_docs') }}
                         </span>
                     @endif
                 </value>
@@ -211,11 +207,10 @@
         </div>
     </div>
 
-<!-- Employment Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">work</i>
-            Attachements
+            {{ __('employee/users/show.sections.attachments') }}
         </h3>
         <div class="info-grid">
             @if($user->attachments->isNotEmpty())
@@ -246,18 +241,17 @@
           @else
     <div class="info-item">
         <label></label>
-        <value><span>No Attachments Found</span></value>
+        <value><span>{{ __('employee/users/common.misc.no_attachments_found') }}</span></value>
     </div>
 @endif
            
         </div>
     </div>
 
-<!-- Employment Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">work</i>
-            Documents
+            {{ __('employee/users/show.sections.documents') }}
         </h3>
         <div class="info-grid">
             @if($user->documents->isNotEmpty())
@@ -281,7 +275,7 @@
                             </a>   
                         @else
                             <a href="{{ $fileUrldoc }}" target="_blank" style="text-decoration: none; color: #007bff;">
-                                📎 View
+                                📎 {{ __('employee/users/common.actions.view') }}
                             </a>
                         @endif
 
@@ -291,7 +285,7 @@
           @else
     <div class="info-item">
         <label></label>
-        <value><span>No Documents Found</span></value>
+        <value><span>{{ __('employee/users/common.misc.no_documents_found') }}</span></value>
     </div>
 @endif
            
@@ -299,28 +293,27 @@
     </div>
 
 
-    <!-- Account Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">info</i>
-            Account Information
+            {{ __('employee/users/show.sections.account') }}
         </h3>
         <div class="info-grid">
             <div class="info-item">
-                <label>Account Created</label>
+                <label>{{ __('employee/users/common.labels.account_created') }}</label>
                 <value>{{ $user->created_at->format('M d, Y \a\t g:i A') }}</value>
             </div>
             <div class="info-item">
-                <label>Last Updated</label>
+                <label>{{ __('employee/users/common.labels.last_updated') }}</label>
                 <value>{{ $user->updated_at->format('M d, Y \a\t g:i A') }}</value>
             </div>
             <div class="info-item">
-                <label>Email Verified</label>
-                <value>{{ $user->email_verified_at ? 'Yes (' . $user->email_verified_at->format('M d, Y') . ')' : 'No' }}</value>
+                <label>{{ __('employee/users/common.labels.email_verified') }}</label>
+                <value>{{ $user->email_verified_at ? __('employee/users/common.misc.yes') . ' (' . $user->email_verified_at->format('M d, Y') . ')' : __('employee/users/common.misc.no') }}</value>
             </div>
             <div class="info-item">
-                <label>Last Login</label>
-                <value>{{ $user->last_login_at ? $user->last_login_at->format('M d, Y \a\t g:i A') : 'Never' }}</value>
+                <label>{{ __('employee/users/common.labels.last_login') }}</label>
+                <value>{{ $user->last_login_at ? $user->last_login_at->format('M d, Y \a\t g:i A') : __('employee/users/common.misc.never') }}</value>
             </div>
         </div>
     </div>

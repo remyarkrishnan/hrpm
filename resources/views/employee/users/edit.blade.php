@@ -1,38 +1,37 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Employee - ' . $user->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Employee')
+@section('title', __('employee/users/edit.title') . ' - ' . $user->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/users/edit.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.users.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Employees
+            {{ __('employee/users/common.actions.back_employees') }}
         </a>
         <a href="{{ route('admin.users.show', $user) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Profile
+            {{ __('employee/users/common.actions.view_profile') }}
         </a>
     </div>
-    <h2>Edit Employee: {{ $user->name }}</h2>
-    <p>Update employee information for {{ env('COMPANY_NAME', 'Teqin Vally') }}</p>
+    <h2>{{ __('employee/users/edit.title') }}: {{ $user->name }}</h2>
+    <p>{{ __('employee/users/edit.description', ['company' => env('COMPANY_NAME', 'Teqin Vally')]) }}</p>
 </div>
 
 <form action="{{ route('admin.users.update', $user) }}" method="POST" class="employee-form">
     @csrf
     @method('PUT')
 
-    <!-- Basic Information -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">person</i>
-            Basic Information
+            {{ __('employee/users/edit.sections.basic') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="name">Full Name *</label>
+                <label for="name">{{ __('employee/users/common.labels.full_name') }} *</label>
                 <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required>
                 @error('name')
                     <span class="error">{{ $message }}</span>
@@ -40,7 +39,7 @@
             </div>
 
             <div class="form-group">
-                <label for="email">Email Address *</label>
+                <label for="email">{{ __('employee/users/common.labels.email') }} *</label>
                 <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required>
                 @error('email')
                     <span class="error">{{ $message }}</span>
@@ -48,20 +47,20 @@
             </div>
 
             <div class="form-group">
-                <label for="password">New Password</label>
-                <input type="password" id="password" name="password" placeholder="Leave blank to keep current password">
+                <label for="password">{{ __('employee/users/edit.fields.new_password') }}</label>
+                <input type="password" id="password" name="password" placeholder="{{ __('employee/users/edit.fields.password_placeholder') }}">
                 @error('password')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="password_confirmation">Confirm New Password</label>
-                <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm new password">
+                <label for="password_confirmation">{{ __('employee/users/edit.fields.confirm_password') }}</label>
+                <input type="password" id="password_confirmation" name="password_confirmation" placeholder="{{ __('employee/users/edit.fields.confirm_password') }}">
             </div>
 
             <div class="form-group">
-                <label for="employee_id">Employee ID *</label>
+                <label for="employee_id">{{ __('employee/users/common.labels.employee_id') }} *</label>
                 <input type="text" id="employee_id" name="employee_id" value="{{ old('employee_id', $user->employee_id) }}" required>
                 @error('employee_id')
                     <span class="error">{{ $message }}</span>
@@ -69,7 +68,7 @@
             </div>
 
             <div class="form-group">
-                <label for="phone">Phone Number *</label>
+                <label for="phone">{{ __('employee/users/common.labels.phone') }} *</label>
                 <input type="tel" id="phone" name="phone" value="{{ old('phone', $user->phone) }}" required>
                 @error('phone')
                     <span class="error">{{ $message }}</span>
@@ -78,18 +77,17 @@
         </div>
     </div>
 
-    <!-- Employment Information -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">work</i>
-            Employment Information
+            {{ __('employee/users/edit.sections.employment') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="department">Department *</label>
+                <label for="department">{{ __('employee/users/common.labels.department') }} *</label>
                 <select id="department" name="department" required>
-                    <option value="">Select Department</option>
+                    <option value="">{{ __('employee/users/create.placeholders.select_dept') }}</option>
                     @foreach($departments as $dept)
                         <option value="{{ $dept }}" {{ old('department', $user->department) === $dept ? 'selected' : '' }}>
                             {{ $dept }}
@@ -102,7 +100,7 @@
             </div>
 
             <div class="form-group">
-                <label for="designation">Designation *</label>
+                <label for="designation">{{ __('employee/users/common.labels.designation') }} *</label>
                 <input type="text" id="designation" name="designation" value="{{ old('designation', $user->designation) }}" required>
                 @error('designation')
                     <span class="error">{{ $message }}</span>
@@ -110,9 +108,9 @@
             </div>
 
             <div class="form-group">
-                <label for="role">System Role *</label>
+                <label for="role">{{ __('employee/users/common.labels.role') }} *</label>
                 <select id="role" name="role" required>
-                    <option value="">Select Role</option>
+                    <option value="">{{ __('employee/users/create.placeholders.select_role') }}</option>
                     @foreach($roles as $role)
                         <option value="{{ $role->name }}" {{ old('role', $user->getRoleNames()->first()) === $role->name ? 'selected' : '' }}>
                             {{ ucwords(str_replace('-', ' ', $role->name)) }}
@@ -125,7 +123,7 @@
             </div>
 
             <div class="form-group">
-                <label for="joining_date">Joining Date *</label>
+                <label for="joining_date">{{ __('employee/users/common.labels.joining_date') }} *</label>
                 <input type="date" id="joining_date" name="joining_date" value="{{ old('joining_date', $user->joining_date ? $user->joining_date->format('Y-m-d') : '') }}" required>
                 @error('joining_date')
                     <span class="error">{{ $message }}</span>
@@ -133,75 +131,73 @@
             </div>
 
             <div class="form-group">
-                <label for="salary">Monthly Salary</label>
-                <input type="number" id="salary" name="salary" value="{{ old('salary', $user->salary) }}" min="0" step="0.01" placeholder="Optional">
+                <label for="salary">{{ __('employee/users/create.fields.monthly_salary') }}</label>
+                <input type="number" id="salary" name="salary" value="{{ old('salary', $user->salary) }}" min="0" step="0.01" placeholder="{{ __('employee/users/create.placeholders.optional') }}">
                 @error('salary')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="status">Employee Status</label>
+                <label for="status">{{ __('employee/users/create.fields.employee_status') }}</label>
                 <select id="status" name="status">
-                    <option value="1" {{ old('status', $user->status ? '1' : '0') === '1' ? 'selected' : '' }}>Active</option>
-                    <option value="0" {{ old('status', $user->status ? '1' : '0') === '0' ? 'selected' : '' }}>Inactive</option>
+                    <option value="1" {{ old('status', $user->status ? '1' : '0') === '1' ? 'selected' : '' }}>{{ __('employee/users/common.status.active') }}</option>
+                    <option value="0" {{ old('status', $user->status ? '1' : '0') === '0' ? 'selected' : '' }}>{{ __('employee/users/common.status.inactive') }}</option>
                 </select>
             </div>
         </div>
     </div>
 
-    <!-- Personal Information -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">account_circle</i>
-            Personal Information (Optional)
+            {{ __('employee/users/edit.sections.personal') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="date_of_birth">Date of Birth</label>
+                <label for="date_of_birth">{{ __('employee/users/common.labels.dob') }}</label>
                 <input type="date" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', $user->date_of_birth ? $user->date_of_birth->format('Y-m-d') : '') }}">
             </div>
 
             <div class="form-group">
-                <label for="gender">Gender</label>
+                <label for="gender">{{ __('employee/users/common.labels.gender') }}</label>
                 <select id="gender" name="gender">
-                    <option value="">Select Gender</option>
-                    <option value="male" {{ old('gender', $user->gender) === 'male' ? 'selected' : '' }}>Male</option>
-                    <option value="female" {{ old('gender', $user->gender) === 'female' ? 'selected' : '' }}>Female</option>
-                    <option value="other" {{ old('gender', $user->gender) === 'other' ? 'selected' : '' }}>Other</option>
+                    <option value="">{{ __('employee/users/create.placeholders.select_gender') }}</option>
+                    <option value="male" {{ old('gender', $user->gender) === 'male' ? 'selected' : '' }}>{{ __('employee/users/create.options.male') }}</option>
+                    <option value="female" {{ old('gender', $user->gender) === 'female' ? 'selected' : '' }}>{{ __('employee/users/create.options.female') }}</option>
+                    <option value="other" {{ old('gender', $user->gender) === 'other' ? 'selected' : '' }}>{{ __('employee/users/create.options.other') }}</option>
                 </select>
             </div>
 
             <div class="form-group full-width">
-                <label for="address">Address</label>
-                <textarea id="address" name="address" rows="3" placeholder="Full address">{{ old('address', $user->address) }}</textarea>
+                <label for="address">{{ __('employee/users/common.labels.address') }}</label>
+                <textarea id="address" name="address" rows="3" placeholder="{{ __('employee/users/create.placeholders.address') }}">{{ old('address', $user->address) }}</textarea>
             </div>
 
             <div class="form-group">
-                <label for="emergency_contact">Emergency Contact Name</label>
+                <label for="emergency_contact">{{ __('employee/users/edit.fields.emergency_contact') }}</label>
                 <input type="text" id="emergency_contact" name="emergency_contact" value="{{ old('emergency_contact', $user->emergency_contact) }}">
             </div>
 
             <div class="form-group">
-                <label for="emergency_phone">Emergency Phone</label>
+                <label for="emergency_phone">{{ __('employee/users/edit.fields.emergency_phone') }}</label>
                 <input type="tel" id="emergency_phone" name="emergency_phone" value="{{ old('emergency_phone', $user->emergency_phone) }}">
             </div>
         </div>
     </div>
 
-    <!-- Submit Buttons -->
     <div class="form-actions">
         <button type="submit" class="btn-primary">
             <i class="material-icons">save</i>
-            Update Employee
+            {{ __('employee/users/edit.buttons.update') }}
         </button>
         <a href="{{ route('admin.users.show', $user) }}" class="btn-cancel">
-            Cancel
+            {{ __('employee/users/common.actions.cancel') }}
         </a>
         <button type="button" onclick="deleteEmployee({{ $user->id }})" class="btn-danger">
             <i class="material-icons">delete</i>
-            Delete Employee
+            {{ __('employee/users/edit.buttons.delete') }}
         </button>
     </div>
 </form>

@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Employee Profile - ' . $user->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Employee Profile')
+@section('title', __('employee/users/show.title') . ' - ' . $user->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/users/show.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.users.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Employees
+            {{ __('employee/users/common.actions.back_employees') }}
         </a>
     </div>
     <div class="profile-header">
@@ -20,143 +20,139 @@
             <p>{{ $user->designation }} • {{ $user->department }}</p>
             <div class="profile-badges">
                 <span class="role-badge role-{{ $user->getRoleNames()->first() }}">
-                    {{ ucwords(str_replace('-', ' ', $user->getRoleNames()->first() ?? 'No Role')) }}
+                    {{ ucwords(str_replace('-', ' ', $user->getRoleNames()->first() ?? __('employee/users/common.misc.no_role'))) }}
                 </span>
                 <span class="status-badge {{ $user->status ? 'active' : 'inactive' }}">
-                    {{ $user->status ? 'Active' : 'Inactive' }}
+                    {{ $user->status ? __('employee/users/common.status.active') : __('employee/users/common.status.inactive') }}
                 </span>
             </div>
         </div>
         <div class="profile-actions">
             <a href="{{ route('admin.users.edit', $user) }}" class="btn-primary">
                 <i class="material-icons">edit</i>
-                Edit Employee
+                {{ __('employee/users/common.actions.edit') }}
             </a>
         </div>
     </div>
 </div>
 
 <div class="profile-content">
-    <!-- Basic Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">person</i>
-            Basic Information
+            {{ __('employee/users/show.sections.basic') }}
         </h3>
         <div class="info-grid">
             <div class="info-item">
-                <label>Full Name</label>
+                <label>{{ __('employee/users/common.labels.full_name') }}</label>
                 <value>{{ $user->name }}</value>
             </div>
             <div class="info-item">
-                <label>Email Address</label>
+                <label>{{ __('employee/users/common.labels.email') }}</label>
                 <value>{{ $user->email }}</value>
             </div>
             <div class="info-item">
-                <label>Employee ID</label>
+                <label>{{ __('employee/users/common.labels.employee_id') }}</label>
                 <value class="employee-id">{{ $user->employee_id }}</value>
             </div>
             <div class="info-item">
-                <label>Phone Number</label>
-                <value>{{ $user->phone ?? 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.phone') }}</label>
+                <value>{{ $user->phone ?? __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>Date of Birth</label>
-                <value>{{ $user->date_of_birth ? $user->date_of_birth->format('M d, Y') : 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.dob') }}</label>
+                <value>{{ $user->date_of_birth ? $user->date_of_birth->format('M d, Y') : __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>Gender</label>
-                <value>{{ $user->gender ? ucfirst($user->gender) : 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.gender') }}</label>
+                <value>{{ $user->gender ? ucfirst($user->gender) : __('employee/users/common.misc.not_provided') }}</value>
             </div>
         </div>
     </div>
 
-    <!-- Employment Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">work</i>
-            Employment Information
+            {{ __('employee/users/show.sections.employment') }}
         </h3>
         <div class="info-grid">
             <div class="info-item">
-                <label>Department</label>
+                <label>{{ __('employee/users/common.labels.department') }}</label>
                 <value>{{ $user->department }}</value>
             </div>
             <div class="info-item">
-                <label>Designation</label>
+                <label>{{ __('employee/users/common.labels.designation') }}</label>
                 <value>{{ $user->designation }}</value>
             </div>
             <div class="info-item">
-                <label>System Role</label>
+                <label>{{ __('employee/users/common.labels.role') }}</label>
                 <value>
                     <span class="role-badge role-{{ $user->getRoleNames()->first() }}">
-                        {{ ucwords(str_replace('-', ' ', $user->getRoleNames()->first() ?? 'No Role')) }}
+                        {{ ucwords(str_replace('-', ' ', $user->getRoleNames()->first() ?? __('employee/users/common.misc.no_role'))) }}
                     </span>
                 </value>
             </div>
             <div class="info-item">
-                <label>Joining Date</label>
-                <value>{{ $user->joining_date ? $user->joining_date->format('M d, Y') : 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.joining_date') }}</label>
+                <value>{{ $user->joining_date ? $user->joining_date->format('M d, Y') : __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>Employment Status</label>
+                <label>{{ __('employee/users/common.labels.status') }}</label>
                 <value>
                     <span class="status-badge {{ $user->status ? 'active' : 'inactive' }}">
-                        {{ $user->status ? 'Active' : 'Inactive' }}
+                        {{ $user->status ? __('employee/users/common.status.active') : __('employee/users/common.status.inactive') }}
                     </span>
                 </value>
             </div>
             <div class="info-item">
-                <label>Monthly Salary</label>
-                <value>{{ $user->salary ? '₹' . number_format($user->salary, 2) : 'Not disclosed' }}</value>
+                <label>{{ __('employee/users/create.fields.monthly_salary') }}</label>
+                <value>{{ $user->salary ? '₹' . number_format($user->salary, 2) : __('employee/users/common.misc.not_disclosed') }}</value>
             </div>
         </div>
     </div>
 
-    <!-- Contact Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">contact_phone</i>
-            Contact Information
+            {{ __('employee/users/show.sections.contact') }}
         </h3>
         <div class="info-grid">
             <div class="info-item full-width">
-                <label>Address</label>
-                <value>{{ $user->address ?? 'Not provided' }}</value>
+                <label>{{ __('employee/users/common.labels.address') }}</label>
+                <value>{{ $user->address ?? __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>Emergency Contact</label>
-                <value>{{ $user->emergency_contact ?? 'Not provided' }}</value>
+                <label>{{ __('employee/users/edit.fields.emergency_contact') }}</label>
+                <value>{{ $user->emergency_contact ?? __('employee/users/common.misc.not_provided') }}</value>
             </div>
             <div class="info-item">
-                <label>Emergency Phone</label>
-                <value>{{ $user->emergency_phone ?? 'Not provided' }}</value>
+                <label>{{ __('employee/users/edit.fields.emergency_phone') }}</label>
+                <value>{{ $user->emergency_phone ?? __('employee/users/common.misc.not_provided') }}</value>
             </div>
         </div>
     </div>
 
-    <!-- Account Information -->
     <div class="info-card">
         <h3 class="card-title">
             <i class="material-icons">info</i>
-            Account Information
+            {{ __('employee/users/show.sections.account') }}
         </h3>
         <div class="info-grid">
             <div class="info-item">
-                <label>Account Created</label>
+                <label>{{ __('employee/users/common.labels.account_created') }}</label>
                 <value>{{ $user->created_at->format('M d, Y \a\t g:i A') }}</value>
             </div>
             <div class="info-item">
-                <label>Last Updated</label>
+                <label>{{ __('employee/users/common.labels.last_updated') }}</label>
                 <value>{{ $user->updated_at->format('M d, Y \a\t g:i A') }}</value>
             </div>
             <div class="info-item">
-                <label>Email Verified</label>
-                <value>{{ $user->email_verified_at ? 'Yes (' . $user->email_verified_at->format('M d, Y') . ')' : 'No' }}</value>
+                <label>{{ __('employee/users/common.labels.email_verified') }}</label>
+                <value>{{ $user->email_verified_at ? __('employee/users/common.misc.yes') . ' (' . $user->email_verified_at->format('M d, Y') . ')' : __('employee/users/common.misc.no') }}</value>
             </div>
             <div class="info-item">
-                <label>Last Login</label>
-                <value>{{ $user->last_login_at ? $user->last_login_at->format('M d, Y \a\t g:i A') : 'Never' }}</value>
+                <label>{{ __('employee/users/common.labels.last_login') }}</label>
+                <value>{{ $user->last_login_at ? $user->last_login_at->format('M d, Y \a\t g:i A') : __('employee/users/common.misc.never') }}</value>
             </div>
         </div>
     </div>
