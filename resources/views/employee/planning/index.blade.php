@@ -1,23 +1,26 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Project Planning - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Project Planning')
+@section('title', __('employee/planning/index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/planning/index.title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h2>Project Planning</h2>
-        <p>Manage construction project phases and milestones</p>
+        <h2>{{ __('employee/planning/index.title') }}</h2>
+        <p>{{ __('employee/planning/index.subtitle') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('admin.planning.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Create Plan
+            {{ __('employee/planning/common.actions.create') }}
         </a>
     </div>
 </div>
 
-<!-- Planning Stats -->
 <div class="stats-grid">
     <div class="stat-card active">
         <div class="stat-icon">
@@ -25,8 +28,8 @@
         </div>
         <div class="stat-info">
             <h3>8</h3>
-            <p>Active Projects</p>
-            <small>In planning phase</small>
+            <p>{{ __('employee/planning/index.stats.active') }}</p>
+            <small>{{ __('employee/planning/common.status.in_progress') }}</small>
         </div>
     </div>
 
@@ -36,7 +39,7 @@
         </div>
         <div class="stat-info">
             <h3>156</h3>
-            <p>Total Milestones</p>
+            <p>{{ __('employee/planning/index.stats.milestones') }}</p>
             <small>Across all projects</small>
         </div>
     </div>
@@ -47,7 +50,7 @@
         </div>
         <div class="stat-info">
             <h3>89</h3>
-            <p>Completed Tasks</p>
+            <p>{{ __('employee/planning/index.stats.completed') }}</p>
             <small>This month</small>
         </div>
     </div>
@@ -58,28 +61,27 @@
         </div>
         <div class="stat-info">
             <h3>74%</h3>
-            <p>Average Progress</p>
+            <p>{{ __('employee/planning/index.stats.avg_progress') }}</p>
             <small>All active projects</small>
         </div>
     </div>
 </div>
 
-<!-- Project Phases Overview -->
 <div class="phases-overview">
-    <h3>Construction Project Phases</h3>
+    <h3>{{ __('employee/planning/phases.title') }}</h3>
     <div class="phases-grid">
         <div class="phase-card foundation">
             <div class="phase-icon">
                 <i class="material-icons">foundation</i>
             </div>
             <div class="phase-info">
-                <h4>Foundation Phase</h4>
-                <p>Site preparation, excavation, and foundation work</p>
+                <h4>{{ __('employee/planning/common.phases.foundation') }}</h4>
+                <p>{{ __('employee/planning/index.phases.foundation_desc') }}</p>
                 <div class="phase-progress">
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 85%"></div>
                     </div>
-                    <span>85% Complete</span>
+                    <span>85% {{ __('employee/planning/index.phases.complete') }}</span>
                 </div>
             </div>
         </div>
@@ -89,13 +91,13 @@
                 <i class="material-icons">apartment</i>
             </div>
             <div class="phase-info">
-                <h4>Structure Phase</h4>
-                <p>Framework, walls, and structural elements</p>
+                <h4>{{ __('employee/planning/common.phases.structure') }}</h4>
+                <p>{{ __('employee/planning/index.phases.structure_desc') }}</p>
                 <div class="phase-progress">
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 62%"></div>
                     </div>
-                    <span>62% Complete</span>
+                    <span>62% {{ __('employee/planning/index.phases.complete') }}</span>
                 </div>
             </div>
         </div>
@@ -105,33 +107,32 @@
                 <i class="material-icons">palette</i>
             </div>
             <div class="phase-info">
-                <h4>Finishing Phase</h4>
-                <p>Interior work, painting, and final touches</p>
+                <h4>{{ __('employee/planning/common.phases.finishing') }}</h4>
+                <p>{{ __('employee/planning/index.phases.finishing_desc') }}</p>
                 <div class="phase-progress">
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 28%"></div>
                     </div>
-                    <span>28% Complete</span>
+                    <span>28% {{ __('employee/planning/index.phases.complete') }}</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Current Projects Planning Table -->
 <div class="planning-table-card">
-    <h3>Current Project Plans</h3>
+    <h3>{{ __('employee/planning/index.table.title') }}</h3>
     <div class="table-responsive">
         <table class="planning-table">
             <thead>
                 <tr>
-                    <th>Project</th>
-                    <th>Current Phase</th>
-                    <th>Progress</th>
-                    <th>Timeline</th>
-                    <th>Next Milestone</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('employee/planning/index.table.project') }}</th>
+                    <th>{{ __('employee/planning/index.table.phase') }}</th>
+                    <th>{{ __('employee/planning/index.table.progress') }}</th>
+                    <th>{{ __('employee/planning/index.table.timeline') }}</th>
+                    <th>{{ __('employee/planning/index.table.milestone') }}</th>
+                    <th>{{ __('employee/planning/index.table.status') }}</th>
+                    <th>{{ __('employee/planning/index.table.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -143,7 +144,7 @@
                         </div>
                     </td>
                     <td>
-                        <span class="phase-badge foundation">Foundation</span>
+                        <span class="phase-badge foundation">{{ __('employee/planning/common.phases.foundation') }}</span>
                     </td>
                     <td>
                         <div class="progress-cell">
@@ -156,12 +157,12 @@
                     <td>
                         <div class="timeline-info">
                             <strong>Dec 2025</strong>
-                            <small>Expected completion</small>
+                            <small>{{ __('employee/planning/index.table.expected') }}</small>
                         </div>
                     </td>
                     <td>Foundation Inspection</td>
                     <td>
-                        <span class="status-badge status-on-track">On Track</span>
+                        <span class="status-badge status-on-track">{{ __('employee/planning/common.status.on_track') }}</span>
                     </td>
                     <td>
                         <div class="action-buttons">
@@ -183,7 +184,7 @@
                         </div>
                     </td>
                     <td>
-                        <span class="phase-badge structure">Structure</span>
+                        <span class="phase-badge structure">{{ __('employee/planning/common.phases.structure') }}</span>
                     </td>
                     <td>
                         <div class="progress-cell">
@@ -196,12 +197,12 @@
                     <td>
                         <div class="timeline-info">
                             <strong>Mar 2026</strong>
-                            <small>Expected completion</small>
+                            <small>{{ __('employee/planning/index.table.expected') }}</small>
                         </div>
                     </td>
                     <td>Structural Framework</td>
                     <td>
-                        <span class="status-badge status-on-track">On Track</span>
+                        <span class="status-badge status-on-track">{{ __('employee/planning/common.status.on_track') }}</span>
                     </td>
                     <td>
                         <div class="action-buttons">
@@ -223,7 +224,7 @@
                         </div>
                     </td>
                     <td>
-                        <span class="phase-badge finishing">Finishing</span>
+                        <span class="phase-badge finishing">{{ __('employee/planning/common.phases.finishing') }}</span>
                     </td>
                     <td>
                         <div class="progress-cell">
@@ -236,12 +237,12 @@
                     <td>
                         <div class="timeline-info">
                             <strong>Jun 2026</strong>
-                            <small>Expected completion</small>
+                            <small>{{ __('employee/planning/index.table.expected') }}</small>
                         </div>
                     </td>
                     <td>Bridge Surface Coating</td>
                     <td>
-                        <span class="status-badge status-delayed">Delayed</span>
+                        <span class="status-badge status-delayed">{{ __('employee/planning/common.status.delayed') }}</span>
                     </td>
                     <td>
                         <div class="action-buttons">

@@ -1,22 +1,26 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Edit Loan Request - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Employee Dashboard')
+@section('title', __('employee/loans/edit.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/loans/edit.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.loans.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Loans
+            {{ __('employee/loans/common.actions.back') }}
         </a>
         <a href="{{ route('employee.loans.show', $loan->id ) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('employee/loans/common.actions.view') }}
         </a>
     </div>
-    <h2>Edit Loan Request</h2>
-    <p>Update loan request </p>
+    <h2>{{ __('employee/loans/edit.title') }}</h2>
+    <p>{{ __('employee/loans/edit.subtitle') }} </p>
 </div>
 
 <div class="form-container">
@@ -29,19 +33,19 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">edit</i>
-                Update Loan Information
+                {{ __('employee/loans/edit.sections.update') }}
             </h3>
 
             <div class="form-grid">
 
 
             <div class="form-group">
-                    <label for="start_date">Purpose *</label>
+                    <label for="start_date">{{ __('employee/loans/common.labels.purpose') }} *</label>
                      <select id="purpose" name="purpose" required>
-                        <option value="">Select Loan Purose</option>
-                        <option value="medical_emergency"  {{ ($loan->purpose ?? 'medical_emergency') === 'medical_emergency' ? 'selected' : '' }}>Medical Emergency</option>
-                        <option value="personal_expenses"  {{ ($loan->purpose ?? 'personal_expenses') === 'personal_expenses' ? 'selected' : '' }}>Personal Expenses</option>
-                        <option value="other"  {{ ($loan->purpose ?? 'other') === 'other' ? 'selected' : '' }}>Other</option>
+                        <option value="">{{ __('employee/loans/create.placeholders.select_purpose') }}</option>
+                        <option value="medical_emergency"  {{ ($loan->purpose ?? 'medical_emergency') === 'medical_emergency' ? 'selected' : '' }}>{{ __('employee/loans/common.purposes.medical_emergency') }}</option>
+                        <option value="personal_expenses"  {{ ($loan->purpose ?? 'personal_expenses') === 'personal_expenses' ? 'selected' : '' }}>{{ __('employee/loans/common.purposes.personal_expenses') }}</option>
+                        <option value="other"  {{ ($loan->purpose ?? 'other') === 'other' ? 'selected' : '' }}>{{ __('employee/loans/common.purposes.other') }}</option>
                     </select>
                   
                     @error('purpose')
@@ -49,7 +53,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="type">Loan Amount *</label>
+                    <label for="type">{{ __('employee/loans/common.labels.loan_amount') }} *</label>
                     <input type="text" id="amount"  name="amount" value="{{ $loan->amount }}" required>
                     @error('amount')
                         <span class="error">{{ $message }}</span>
@@ -59,13 +63,13 @@
                 
 
                 <div class="form-group">
-                    <label for="end_date">Repayment Duration *</label>
+                    <label for="end_date">{{ __('employee/loans/common.labels.duration') }} *</label>
                     <select id="repayment_duration" name="repayment_duration" required>
-                        <option value="">Select Repayment Duration</option>
-                        <option value="6_months"  {{ ($loan->repayment_duration ?? '6_months') === '6_months' ? 'selected' : '' }}>6 Months</option>
-                        <option value="9_months"  {{ ($loan->repayment_duration ?? '9_months') === '9_months' ? 'selected' : '' }}>9 Months</option>
-                        <option value="12_months"  {{ ($loan->repayment_duration ?? '12_months') === '12_months' ? 'selected' : '' }}>12 Months</option>
-                        <option value="24_months"  {{ ($loan->repayment_duration ?? '24_months') === '24_months' ? 'selected' : '' }}>24 Months</option>
+                        <option value="">{{ __('employee/loans/create.placeholders.select_duration') }}</option>
+                        <option value="6_months"  {{ ($loan->repayment_duration ?? '6_months') === '6_months' ? 'selected' : '' }}>{{ __('employee/loans/common.durations.6_months') }}</option>
+                        <option value="9_months"  {{ ($loan->repayment_duration ?? '9_months') === '9_months' ? 'selected' : '' }}>{{ __('employee/loans/common.durations.9_months') }}</option>
+                        <option value="12_months"  {{ ($loan->repayment_duration ?? '12_months') === '12_months' ? 'selected' : '' }}>{{ __('employee/loans/common.durations.12_months') }}</option>
+                        <option value="24_months"  {{ ($loan->repayment_duration ?? '24_months') === '24_months' ? 'selected' : '' }}>{{ __('employee/loans/common.durations.24_months') }}</option>
                     </select>
                     @error('repayment_duration')
                         <span class="error">{{ $message }}</span>
@@ -79,13 +83,13 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Loan Details
+                {{ __('employee/loans/edit.sections.details') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="reason">Reason for taking Loan *</label>
-                    <textarea id="reason" name="reason" rows="4" required>{{ old('reason', $loan->reason ?? 'Please provide detailed reason for taking loan.') }}</textarea>
+                    <label for="reason">{{ __('employee/loans/common.labels.reason') }} *</label>
+                    <textarea id="reason" name="reason" rows="4" required>{{ old('reason', $loan->reason ?? __('employee/loans/create.placeholders.reason')) }}</textarea>
                     @error('reason')
                         <span class="error">{{ $message }}</span>
                     @enderror
@@ -94,20 +98,19 @@
              
 
                 <div class="form-group">
-                    <label for="documents">Additional Documents</label>
+                    <label for="documents">{{ __('employee/loans/common.labels.additional_docs') }}</label>
                     <input type="file" id="supporting_document" name="supporting_document[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                    <small class="form-help">Upload salary slip, ID Proof etc. Max 5MB per file.</small>
+                    <small class="form-help">{{ __('employee/loans/common.labels.doc_help') }}</small>
                 </div>
             </div>
         </div>
 
-        <!-- Current Documents -->
-    @php
+        @php
     $documents = json_decode($loan->supporting_document ?? '[]', true);
     @endphp
     @if(isset($documents) && count($documents) > 0)
     <div class="documents-section">
-        <h3>Supporting Documents</h3>
+        <h3>{{ __('employee/loans/common.labels.documents') }}</h3>
         <div class="documents-grid">
             @foreach($documents as $document)
             <div class="document-item">
@@ -116,7 +119,7 @@
                 </div>
                 <div class="document-info">
                    
-                    <small>Supporting Document</small>
+                    <small>{{ __('employee/loans/common.labels.supporting_doc') }}</small>
                 </div>
                 <div class="document-actions">
                     <a href="{{ asset('storage/'.$document) }}" class="btn-action" target="_blank">
@@ -135,24 +138,23 @@
 
     
 
-        <!-- Audit Trail -->
         <div class="audit-section">
             <h3 class="section-title">
                 <i class="material-icons">history</i>
-                Change History
+                {{ __('employee/loans/edit.sections.history') }}
             </h3>
 
             <div class="audit-trail">
                 <div class="audit-item">
                     <div class="audit-time">{{ $loan->created_at->format('d-m-Y')  }}</div>
-                    <div class="audit-action">Loan request submitted</div>
+                    <div class="audit-action">{{ __('employee/loans/edit.audit.submitted') }}</div>
                     <div class="audit-user">{{ $loan->user->name }}</div>
                 </div>
 
                 @if(($loan->status ?? '') === 'approved')
                 <div class="audit-item">
                     <div class="audit-time">{{ $loan->approved_at->format('d-m-Y')  }}</div>
-                    <div class="audit-action">Loan request approved</div>
+                    <div class="audit-action">{{ __('employee/loans/edit.audit.approved') }}</div>
                     <div class="audit-user">{{ $loan->approver->name  }}</div>
                 </div>
                 @endif
@@ -162,14 +164,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Loan Request
+                {{ __('employee/loans/common.actions.update') }}
             </button>
             <a href="{{ route('employee.loans.show', $loan->id) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('employee/loans/common.actions.cancel_changes') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteLoan()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('employee/loans/common.actions.delete') }}
             </button>
         </div>
     </form>

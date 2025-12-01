@@ -1,18 +1,22 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Apply Loan - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Employee Dashboard')
+@section('title', __('employee/loans/create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/loans/create.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.loans.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Loans
+            {{ __('employee/loans/common.actions.back') }}
         </a>
     </div>
-    <h2>Apply for Loan</h2>
-    <p>Submit a loan request for approval</p>
+    <h2>{{ __('employee/loans/create.title') }}</h2>
+    <p>{{ __('employee/loans/create.subtitle') }}</p>
 </div>
 
 <div class="form-container">
@@ -22,19 +26,19 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">person</i>
-                Loan Purpose & Amount
+                {{ __('employee/loans/create.sections.info') }}
             </h3>
 
             <div class="form-grid">
                 
 
                 <div class="form-group">
-                    <label for="type">Loan Purpose *</label>
+                    <label for="type">{{ __('employee/loans/common.labels.purpose') }} *</label>
                     <select id="purpose" name="purpose" required>
-                        <option value="">Select Loan Purose</option>
-                        <option value="medical_emergency" {{ old('purpose') === 'medical_emergency' ? 'selected' : '' }}>Medical Emergency</option>
-                        <option value="personal_expenses" {{ old('purpose') === 'personal_expenses' ? 'selected' : '' }}>Personal Expenses</option>
-                        <option value="other" {{ old('purpose') === 'other' ? 'selected' : '' }}>Other</option>
+                        <option value="">{{ __('employee/loans/create.placeholders.select_purpose') }}</option>
+                        <option value="medical_emergency" {{ old('purpose') === 'medical_emergency' ? 'selected' : '' }}>{{ __('employee/loans/common.purposes.medical_emergency') }}</option>
+                        <option value="personal_expenses" {{ old('purpose') === 'personal_expenses' ? 'selected' : '' }}>{{ __('employee/loans/common.purposes.personal_expenses') }}</option>
+                        <option value="other" {{ old('purpose') === 'other' ? 'selected' : '' }}>{{ __('employee/loans/common.purposes.other') }}</option>
                     </select>
                     @error('type')
                         <span class="error">{{ $message }}</span>
@@ -43,9 +47,9 @@
 
 
                 <div class="form-group">
-                    <label for="loan_amount">Loan Amount *</label>
+                    <label for="loan_amount">{{ __('employee/loans/common.labels.loan_amount') }} *</label>
                      <input type="text" id="amount" name="amount" value="{{ old('amount') }}" 
-                           placeholder="Loan Amount">
+                           placeholder="{{ __('employee/loans/create.placeholders.amount') }}">
                     @error('loan_amount')
                         <span class="error">{{ $message }}</span>
                     @enderror
@@ -56,18 +60,18 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">date_range</i>
-                Repayment Duration
+                {{ __('employee/loans/create.sections.duration') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="start_date">Repayment Duration *</label>
+                    <label for="start_date">{{ __('employee/loans/common.labels.duration') }} *</label>
                     <select id="repayment_duration" name="repayment_duration" required>
-                        <option value="">Select Repayment Duration</option>
-                        <option value="6_months" {{ old('repayment_duration') === '6_months' ? 'selected' : '' }}>6 Months</option>
-                        <option value="9_months" {{ old('repayment_duration') === '9_months' ? 'selected' : '' }}>9 Months</option>
-                        <option value="12_months" {{ old('repayment_duration') === '12_months' ? 'selected' : '' }}>12 Months</option>
-                        <option value="24_months" {{ old('repayment_duration') === '24_months' ? 'selected' : '' }}>24 Months</option>
+                        <option value="">{{ __('employee/loans/create.placeholders.select_duration') }}</option>
+                        <option value="6_months" {{ old('repayment_duration') === '6_months' ? 'selected' : '' }}>{{ __('employee/loans/common.durations.6_months') }}</option>
+                        <option value="9_months" {{ old('repayment_duration') === '9_months' ? 'selected' : '' }}>{{ __('employee/loans/common.durations.9_months') }}</option>
+                        <option value="12_months" {{ old('repayment_duration') === '12_months' ? 'selected' : '' }}>{{ __('employee/loans/common.durations.12_months') }}</option>
+                        <option value="24_months" {{ old('repayment_duration') === '24_months' ? 'selected' : '' }}>{{ __('employee/loans/common.durations.24_months') }}</option>
                     </select>
                 </div>
 
@@ -79,22 +83,22 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Loan Details
+                {{ __('employee/loans/create.sections.details') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="reason">Reason for taking Loan *</label>
-                    <textarea id="reason" name="reason" rows="4" required placeholder="Please provide detailed reason for taking loan">{{ old('reason') }}</textarea>
+                    <label for="reason">{{ __('employee/loans/common.labels.reason') }} *</label>
+                    <textarea id="reason" name="reason" rows="4" required placeholder="{{ __('employee/loans/create.placeholders.reason') }}">{{ old('reason') }}</textarea>
                     @error('reason')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="documents">Supporting Documents (Optional)</label>
+                    <label for="documents">{{ __('employee/loans/common.labels.documents') }}</label>
                     <input type="file" id="supporting_document" name="supporting_document[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                    <small class="form-help">Upload salary slip, ID Proof etc. Max 5MB per file.</small>
+                    <small class="form-help">{{ __('employee/loans/common.labels.doc_help') }}</small>
                     @error('documents.*')
                         <span class="error">{{ $message }}</span>
                     @enderror
@@ -109,10 +113,10 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">send</i>
-                Submit Loan Request
+                {{ __('employee/loans/common.actions.submit') }}
             </button>
             <a href="{{ route('employee.loans.index') }}" class="btn-cancel">
-                Cancel
+                {{ __('employee/loans/common.actions.cancel') }}
             </a>
         </div>
     </form>

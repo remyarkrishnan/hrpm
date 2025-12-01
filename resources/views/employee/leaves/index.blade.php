@@ -1,23 +1,26 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Leave Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Employee Dashboard')
+@section('title', __('employee/leaves/index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/leaves/index.title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h2>Leave Management</h2>
-        <p>Manage leave requests </p>
+        <h2>{{ __('employee/leaves/index.title') }}</h2>
+        <p>{{ __('employee/leaves/index.subtitle') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('employee.leaves.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Apply for Leave
+            {{ __('employee/leaves/index.apply_btn') }}
         </a>
     </div>
 </div>
 
-<!-- Leave Stats -->
 <div class="stats-grid">
     <div class="stat-card pending">
         <div class="stat-icon">
@@ -25,7 +28,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalPendingLeaves }}</h3>
-            <p>Pending Requests</p>
+            <p>{{ __('employee/leaves/index.stats.pending') }}</p>
         </div>
     </div>
 
@@ -35,11 +38,9 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalApprovedLeaves }}</h3>
-            <p>Approved </p>
+            <p>{{ __('employee/leaves/index.stats.approved') }}</p>
         </div>
     </div>
-
- 
 
     <div class="stat-card balance">
         <div class="stat-icon">
@@ -47,42 +48,40 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalRejectedLeaves }}</h3>
-            <p>Rejected</p>
+            <p>{{ __('employee/leaves/index.stats.rejected') }}</p>
         </div>
     </div>
 </div>
 
-<!-- Leave Requests Table -->
 <div class="leave-table-card">
-    <h3>Leave Requests</h3>
+    <h3>{{ __('employee/leaves/index.title') }}</h3>
     <div class="table-responsive">
         <table class="leave-table">
             <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Duration</th>
-                    <th>Applied Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('employee/leaves/index.table.type') }}</th>
+                    <th>{{ __('employee/leaves/index.table.duration') }}</th>
+                    <th>{{ __('employee/leaves/index.table.applied_date') }}</th>
+                    <th>{{ __('employee/leaves/index.table.status') }}</th>
+                    <th>{{ __('employee/leaves/index.table.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($leaves as $leave)
                 <tr>
-                   
                     <td>
-                        <span class="leave-type">{{ ucfirst(str_replace('_', ' ', $leave->leave_type)) }}</span>
+                        <span class="leave-type">{{ __('employee/leaves/common.types.'.$leave->leave_type) }}</span>
                     </td>
                     <td>
                         <div class="leave-duration">
-                            <strong>{{ round($leave->total_days) }} days</strong>
-                            <small>{{ $leave->from_date->format('d-m-Y') }} to {{ $leave->to_date->format('d-m-Y') }}</small>
+                            <strong>{{ round($leave->total_days) }} {{ __('employee/leaves/common.labels.days') }}</strong>
+                            <small>{{ $leave->from_date->format('d-m-Y') }} {{ __('employee/leaves/index.table.to') }} {{ $leave->to_date->format('d-m-Y') }}</small>
                         </div>
                     </td>
                     <td>{{ $leave->created_at->format('d-m-Y') }}</td>
                     <td>
                         <span class="status-badge status-{{ $leave->status }}">
-                            {{ ucfirst($leave->status) }}
+                            {{ __('employee/leaves/common.status.'.$leave->status) }}
                         </span>
                     </td>
                     <td>
@@ -91,7 +90,6 @@
                                 <i class="material-icons">visibility</i>
                             </a>
                             @if($leave->status === 'pending')
-                       
                                 <button class="btn-action btn-reject" onclick="deleteLeave({{ $leave->id }})">
                                     <i class="material-icons">close</i>
                                 </button>
@@ -101,7 +99,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center">No leave requests found</td>
+                    <td colspan="6" class="text-center">{{ __('employee/leaves/index.table.empty') }}</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -111,6 +109,7 @@
 @endsection
 
 @push('styles')
+{{-- Styles remain exactly as provided --}}
 <style>
     .page-header {
         display: flex;
@@ -309,7 +308,7 @@
 @push('scripts')
 <script>
 function approveLeave(id) {
-    if (confirm('Are you sure you want to approve this leave request?')) {
+    if (confirm("{{ __('employee/leaves/common.messages.approve_confirm') }}")) {
         fetch(`/admin/leaves/${id}/approve`, {
             method: 'POST',
             headers: {
@@ -322,14 +321,14 @@ function approveLeave(id) {
             if (data.success) {
                 location.reload();
             } else {
-                alert('Error approving leave request');
+                alert("{{ __('employee/leaves/common.messages.approve_error') }}");
             }
         });
     }
 }
 
 function rejectLeave(id) {
-    const reason = prompt('Please enter rejection reason:');
+    const reason = prompt("{{ __('employee/leaves/common.messages.reject_prompt') }}");
     if (reason) {
         fetch(`/admin/leaves/${id}/reject`, {
             method: 'POST',
@@ -344,15 +343,15 @@ function rejectLeave(id) {
             if (data.success) {
                 location.reload();
             } else {
-                alert('Error rejecting leave request');
+                alert("{{ __('employee/leaves/common.messages.reject_error') }}");
             }
         });
     }
 }
 
-function deleteLeave() {
-    if (confirm('Are you sure you want to delete this leave request?\n\nThis action cannot be undone.')) {
-        fetch(`/employee/leaves/{{ $leave->id }}/destroy`, {
+function deleteLeave(id) {
+    if (confirm("{{ __('employee/leaves/common.messages.delete_confirm') }}")) {
+        fetch(`/employee/leaves/${id}/destroy`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -362,15 +361,15 @@ function deleteLeave() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Leave request deleted successfully');
+                alert("{{ __('employee/leaves/common.messages.delete_success') }}");
                 window.location.href = '/employee/leaves';
             } else {
-                alert('Error deleting leave request');
+                alert("{{ __('employee/leaves/common.messages.delete_error') }}");
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error deleting leave request');
+            alert("{{ __('employee/leaves/common.messages.delete_error') }}");
         });
     }
 }

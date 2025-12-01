@@ -1,6 +1,10 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Apply for Leave - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('title', __('employee/leaves/create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
 @section('page-title', 'Employee Dashboard')
 
 @section('content')
@@ -8,11 +12,11 @@
     <div class="page-nav">
         <a href="{{ route('employee.leaves.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Leaves
+            {{ __('employee/leaves/common.actions.back') }}
         </a>
     </div>
-    <h2>Apply for Leave</h2>
-    <p>Submit a leave request for approval</p>
+    <h2>{{ __('employee/leaves/create.title') }}</h2>
+    <p>{{ __('employee/leaves/create.subtitle') }}</p>
 </div>
 
 <div class="form-container">
@@ -22,21 +26,21 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">person</i>
-                Leave Type
+                {{ __('employee/leaves/create.sections.type') }}
             </h3>
 
             <div class="form-grid">
                 
 
                 <div class="form-group">
-                    <label for="type">Leave Type *</label>
+                    <label for="type">{{ __('employee/leaves/common.labels.leave_type') }} *</label>
                     <select id="leave_type" name="leave_type" required>
-                        <option value="">Select Leave Type</option>
-                        <option value="sick_leave" {{ old('leave_type') === 'sick_leave' ? 'selected' : '' }}>Sick Leave</option>
-                        <option value="casual_leave" {{ old('leave_type') === 'casual_leave' ? 'selected' : '' }}>Casual Leave</option>
-                        <option value="annual_leave" {{ old('leave_type') === 'annual_leave' ? 'selected' : '' }}>Annual Leave</option>
-                        <option value="maternity_leave" {{ old('leave_type') === 'maternity_leave' ? 'selected' : '' }}>Maternity Leave</option>
-                        <option value="emergency_leave" {{ old('leave_type') === 'emergency_leave' ? 'selected' : '' }}>Emergency Leave</option>
+                        <option value="">{{ __('employee/leaves/create.form.select_type') }}</option>
+                        <option value="sick_leave" {{ old('leave_type') === 'sick_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.sick_leave') }}</option>
+                        <option value="casual_leave" {{ old('leave_type') === 'casual_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.casual_leave') }}</option>
+                        <option value="annual_leave" {{ old('leave_type') === 'annual_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.annual_leave') }}</option>
+                        <option value="maternity_leave" {{ old('leave_type') === 'maternity_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.maternity_leave') }}</option>
+                        <option value="emergency_leave" {{ old('leave_type') === 'emergency_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.emergency_leave') }}</option>
                     </select>
                     @error('type')
                         <span class="error">{{ $message }}</span>
@@ -48,12 +52,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">date_range</i>
-                Leave Duration
+                {{ __('employee/leaves/create.sections.duration') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="start_date">Start Date *</label>
+                    <label for="start_date">{{ __('employee/leaves/common.labels.start_date') }} *</label>
                     <input type="date" id="from_date" name="from_date" value="{{ old('from_date') }}" required>
                     @error('from_date')
                         <span class="error">{{ $message }}</span>
@@ -61,7 +65,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">End Date *</label>
+                    <label for="end_date">{{ __('employee/leaves/common.labels.end_date') }} *</label>
                     <input type="date" id="to_date" name="to_date" value="{{ old('to_date') }}" required>
                     @error('to_date')
                         <span class="error">{{ $message }}</span>
@@ -69,7 +73,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="calculated_days">Total Days</label>
+                    <label for="calculated_days">{{ __('employee/leaves/common.labels.total_days') }}</label>
                     <input type="text" id="calculated_days" readonly class="calculated-field">
                 </div>
             </div>
@@ -78,22 +82,22 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Leave Details
+                {{ __('employee/leaves/create.sections.details') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="reason">Reason for Leave *</label>
-                    <textarea id="reason" name="reason" rows="4" required placeholder="Please provide detailed reason for leave">{{ old('reason') }}</textarea>
+                    <label for="reason">{{ __('employee/leaves/common.labels.reason') }} *</label>
+                    <textarea id="reason" name="reason" rows="4" required placeholder="{{ __('employee/leaves/create.form.reason_placeholder') }}">{{ old('reason') }}</textarea>
                     @error('reason')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="documents">Supporting Documents (Optional)</label>
+                    <label for="documents">{{ __('employee/leaves/create.form.docs_optional') }}</label>
                     <input type="file" id="supporting_document" name="supporting_document[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                    <small class="form-help">Upload medical certificates, documents etc. Max 5MB per file.</small>
+                    <small class="form-help">{{ __('employee/leaves/create.form.docs_help') }}</small>
                     @error('documents.*')
                         <span class="error">{{ $message }}</span>
                     @enderror
@@ -103,43 +107,42 @@
             </div>
         </div>
 
-        <!-- Leave Balance Info -->
         <div class="balance-section">
             <h3 class="section-title">
                 <i class="material-icons">account_balance_wallet</i>
-                Leave Balance Information
+                {{ __('employee/leaves/create.sections.balance') }}
             </h3>
 
             <div class="balance-grid">
                 <div class="balance-card">
-                    <h4>Sick Leave</h4>
+                    <h4>{{ __('employee/leaves/common.types.sick_leave') }}</h4>
                     <div class="balance-info">
                         <span class="available">8</span> / <span class="total">12</span>
-                        <small>Available</small>
+                        <small>{{ __('employee/leaves/create.balance.available') }}</small>
                     </div>
                 </div>
 
                 <div class="balance-card">
-                    <h4>Casual Leave</h4>
+                    <h4>{{ __('employee/leaves/common.types.casual_leave') }}</h4>
                     <div class="balance-info">
                         <span class="available">5</span> / <span class="total">7</span>
-                        <small>Available</small>
+                        <small>{{ __('employee/leaves/create.balance.available') }}</small>
                     </div>
                 </div>
 
                 <div class="balance-card">
-                    <h4>Annual Leave</h4>
+                    <h4>{{ __('employee/leaves/common.types.annual_leave') }}</h4>
                     <div class="balance-info">
                         <span class="available">18</span> / <span class="total">21</span>
-                        <small>Available</small>
+                        <small>{{ __('employee/leaves/create.balance.available') }}</small>
                     </div>
                 </div>
 
                 <div class="balance-card">
-                    <h4>Emergency Leave</h4>
+                    <h4>{{ __('employee/leaves/common.types.emergency_leave') }}</h4>
                     <div class="balance-info">
                         <span class="available">3</span> / <span class="total">3</span>
-                        <small>Available</small>
+                        <small>{{ __('employee/leaves/create.balance.available') }}</small>
                     </div>
                 </div>
             </div>
@@ -148,10 +151,10 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">send</i>
-                Submit Leave Request
+                {{ __('employee/leaves/create.form.submit_btn') }}
             </button>
             <a href="{{ route('employee.leaves.index') }}" class="btn-cancel">
-                Cancel
+                {{ __('employee/leaves/common.actions.cancel') }}
             </a>
         </div>
     </form>
@@ -159,6 +162,7 @@
 @endsection
 
 @push('styles')
+{{-- Styles remain exactly as provided --}}
 <style>
     .page-header { margin-bottom: 32px; }
 
@@ -358,6 +362,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const startDateInput = document.getElementById('from_date');
     const endDateInput = document.getElementById('to_date');
     const calculatedDaysInput = document.getElementById('calculated_days');
+    // Localized label for JS
+    const daysLabel = "{{ __('employee/leaves/common.labels.days') }}";
 
     function calculateDays() {
         if (startDateInput.value && endDateInput.value) {
@@ -367,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (endDate >= startDate) {
                 const diffTime = Math.abs(endDate - startDate);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                calculatedDaysInput.value = diffDays + ' days';
+                calculatedDaysInput.value = diffDays + ' ' + daysLabel;
             } else {
                 calculatedDaysInput.value = '';
             }

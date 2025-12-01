@@ -1,18 +1,22 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Create Project Plan - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Create Project Plan')
+@section('title', __('employee/planning/create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/planning/create.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.planning.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Planning
+            {{ __('employee/planning/common.actions.back') }}
         </a>
     </div>
-    <h2>Create New Project Plan</h2>
-    <p>Set up planning phases and milestones for construction project</p>
+    <h2>{{ __('employee/planning/create.title') }}</h2>
+    <p>{{ __('employee/planning/create.subtitle') }}</p>
 </div>
 
 <div class="form-container">
@@ -22,14 +26,14 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">engineering</i>
-                Project Information
+                {{ __('employee/planning/create.sections.info') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="project_id">Select Project *</label>
+                    <label for="project_id">{{ __('employee/planning/create.form.select_project') }} *</label>
                     <select id="project_id" name="project_id" required>
-                        <option value="">Choose Project</option>
+                        <option value="">{{ __('employee/planning/create.form.choose') }}</option>
                         <option value="1">Residential Complex - Phase 2</option>
                         <option value="2">Commercial Mall Construction</option>
                         <option value="3">Highway Bridge Project</option>
@@ -40,16 +44,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="plan_name">Plan Name *</label>
+                    <label for="plan_name">{{ __('employee/planning/create.form.plan_name') }} *</label>
                     <input type="text" id="plan_name" name="plan_name" value="{{ old('plan_name') }}" required 
-                           placeholder="e.g. Foundation Phase Plan">
+                           placeholder="{{ __('employee/planning/create.form.plan_placeholder') }}">
                     @error('plan_name')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="start_date">Project Start Date *</label>
+                    <label for="start_date">{{ __('employee/planning/create.form.start_date') }} *</label>
                     <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
                     @error('start_date')
                         <span class="error">{{ $message }}</span>
@@ -57,7 +61,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">Expected End Date *</label>
+                    <label for="end_date">{{ __('employee/planning/create.form.end_date') }} *</label>
                     <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
                     @error('end_date')
                         <span class="error">{{ $message }}</span>
@@ -69,23 +73,23 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">timeline</i>
-                Construction Phases
+                {{ __('employee/planning/create.sections.phases') }}
             </h3>
 
             <div class="phases-container">
                 <div class="phase-item">
                     <div class="phase-header">
-                        <h4>Phase 1: Foundation</h4>
+                        <h4>Phase 1: {{ __('employee/planning/common.phases.foundation') }}</h4>
                         <input type="checkbox" name="phases[]" value="foundation" checked>
                     </div>
                     <div class="phase-content">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Duration (days)</label>
+                                <label>{{ __('employee/planning/common.labels.duration') }}</label>
                                 <input type="number" name="foundation_duration" value="45" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Budget Allocation (%)</label>
+                                <label>{{ __('employee/planning/common.labels.budget_alloc') }}</label>
                                 <input type="number" name="foundation_budget" value="30" min="1" max="100">
                             </div>
                         </div>
@@ -96,17 +100,17 @@
 
                 <div class="phase-item">
                     <div class="phase-header">
-                        <h4>Phase 2: Structure</h4>
+                        <h4>Phase 2: {{ __('employee/planning/common.phases.structure') }}</h4>
                         <input type="checkbox" name="phases[]" value="structure" checked>
                     </div>
                     <div class="phase-content">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Duration (days)</label>
+                                <label>{{ __('employee/planning/common.labels.duration') }}</label>
                                 <input type="number" name="structure_duration" value="90" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Budget Allocation (%)</label>
+                                <label>{{ __('employee/planning/common.labels.budget_alloc') }}</label>
                                 <input type="number" name="structure_budget" value="45" min="1" max="100">
                             </div>
                         </div>
@@ -117,17 +121,17 @@
 
                 <div class="phase-item">
                     <div class="phase-header">
-                        <h4>Phase 3: Finishing</h4>
+                        <h4>Phase 3: {{ __('employee/planning/common.phases.finishing') }}</h4>
                         <input type="checkbox" name="phases[]" value="finishing" checked>
                     </div>
                     <div class="phase-content">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Duration (days)</label>
+                                <label>{{ __('employee/planning/common.labels.duration') }}</label>
                                 <input type="number" name="finishing_duration" value="60" min="1">
                             </div>
                             <div class="form-group">
-                                <label>Budget Allocation (%)</label>
+                                <label>{{ __('employee/planning/common.labels.budget_alloc') }}</label>
                                 <input type="number" name="finishing_budget" value="25" min="1" max="100">
                             </div>
                         </div>
@@ -141,26 +145,26 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">flag</i>
-                Key Milestones
+                {{ __('employee/planning/create.sections.milestones') }}
             </h3>
 
             <div class="milestones-container">
                 <div class="milestone-item">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Milestone Name</label>
+                            <label>{{ __('employee/planning/common.labels.milestone_name') }}</label>
                             <input type="text" name="milestone_1_name" value="Foundation Inspection" placeholder="e.g. Foundation Inspection">
                         </div>
                         <div class="form-group">
-                            <label>Target Date</label>
+                            <label>{{ __('employee/planning/common.labels.target_date') }}</label>
                             <input type="date" name="milestone_1_date">
                         </div>
                         <div class="form-group">
-                            <label>Phase</label>
+                            <label>{{ __('employee/planning/common.labels.phase') }}</label>
                             <select name="milestone_1_phase">
-                                <option value="foundation" selected>Foundation</option>
-                                <option value="structure">Structure</option>
-                                <option value="finishing">Finishing</option>
+                                <option value="foundation" selected>{{ __('employee/planning/common.phases.foundation') }}</option>
+                                <option value="structure">{{ __('employee/planning/common.phases.structure') }}</option>
+                                <option value="finishing">{{ __('employee/planning/common.phases.finishing') }}</option>
                             </select>
                         </div>
                     </div>
@@ -169,19 +173,19 @@
                 <div class="milestone-item">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Milestone Name</label>
+                            <label>{{ __('employee/planning/common.labels.milestone_name') }}</label>
                             <input type="text" name="milestone_2_name" value="Structural Framework Complete" placeholder="e.g. Structural Framework">
                         </div>
                         <div class="form-group">
-                            <label>Target Date</label>
+                            <label>{{ __('employee/planning/common.labels.target_date') }}</label>
                             <input type="date" name="milestone_2_date">
                         </div>
                         <div class="form-group">
-                            <label>Phase</label>
+                            <label>{{ __('employee/planning/common.labels.phase') }}</label>
                             <select name="milestone_2_phase">
-                                <option value="foundation">Foundation</option>
-                                <option value="structure" selected>Structure</option>
-                                <option value="finishing">Finishing</option>
+                                <option value="foundation">{{ __('employee/planning/common.phases.foundation') }}</option>
+                                <option value="structure" selected>{{ __('employee/planning/common.phases.structure') }}</option>
+                                <option value="finishing">{{ __('employee/planning/common.phases.finishing') }}</option>
                             </select>
                         </div>
                     </div>
@@ -190,19 +194,19 @@
                 <div class="milestone-item">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Milestone Name</label>
+                            <label>{{ __('employee/planning/common.labels.milestone_name') }}</label>
                             <input type="text" name="milestone_3_name" value="Final Quality Check" placeholder="e.g. Final Quality Check">
                         </div>
                         <div class="form-group">
-                            <label>Target Date</label>
+                            <label>{{ __('employee/planning/common.labels.target_date') }}</label>
                             <input type="date" name="milestone_3_date">
                         </div>
                         <div class="form-group">
-                            <label>Phase</label>
+                            <label>{{ __('employee/planning/common.labels.phase') }}</label>
                             <select name="milestone_3_phase">
-                                <option value="foundation">Foundation</option>
-                                <option value="structure">Structure</option>
-                                <option value="finishing" selected>Finishing</option>
+                                <option value="foundation">{{ __('employee/planning/common.phases.foundation') }}</option>
+                                <option value="structure">{{ __('employee/planning/common.phases.structure') }}</option>
+                                <option value="finishing" selected>{{ __('employee/planning/common.phases.finishing') }}</option>
                             </select>
                         </div>
                     </div>
@@ -211,21 +215,21 @@
 
             <button type="button" class="btn-secondary" onclick="addMilestone()">
                 <i class="material-icons">add</i>
-                Add Another Milestone
+                {{ __('employee/planning/common.actions.add_milestone') }}
             </button>
         </div>
 
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">groups</i>
-                Resource Planning
+                {{ __('employee/planning/create.sections.resources') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="project_manager">Project Manager</label>
+                    <label for="project_manager">{{ __('employee/planning/create.form.manager') }}</label>
                     <select id="project_manager" name="project_manager">
-                        <option value="">Select Manager</option>
+                        <option value="">{{ __('employee/planning/create.form.select_manager') }}</option>
                         <option value="1">Rajesh Kumar - Senior PM</option>
                         <option value="2">Priya Singh - Construction Manager</option>
                         <option value="3">Amit Sharma - Site Engineer</option>
@@ -233,17 +237,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="team_size">Estimated Team Size</label>
+                    <label for="team_size">{{ __('employee/planning/create.form.est_team') }}</label>
                     <input type="number" id="team_size" name="team_size" value="25" min="1" max="200">
                 </div>
 
                 <div class="form-group">
-                    <label for="budget">Total Budget (₹)</label>
+                    <label for="budget">{{ __('employee/planning/create.form.total_budget') }} (₹)</label>
                     <input type="number" id="budget" name="budget" value="5000000" min="0" step="10000">
                 </div>
 
                 <div class="form-group">
-                    <label for="priority">Project Priority</label>
+                    <label for="priority">{{ __('employee/planning/create.form.priority') }}</label>
                     <select id="priority" name="priority">
                         <option value="low">Low</option>
                         <option value="medium" selected>Medium</option>
@@ -257,26 +261,26 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Additional Details
+                {{ __('employee/planning/create.sections.details') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="description">Project Description</label>
+                    <label for="description">{{ __('employee/planning/create.form.desc') }}</label>
                     <textarea id="description" name="description" rows="4" 
-                              placeholder="Detailed description of the construction project">{{ old('description') }}</textarea>
+                              placeholder="{{ __('employee/planning/create.form.desc_ph') }}">{{ old('description') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="risks">Key Risks</label>
+                    <label for="risks">{{ __('employee/planning/create.form.risks') }}</label>
                     <textarea id="risks" name="risks" rows="3" 
-                              placeholder="Identify potential risks and challenges">{{ old('risks') }}</textarea>
+                              placeholder="{{ __('employee/planning/create.form.risks_ph') }}">{{ old('risks') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="success_criteria">Success Criteria</label>
+                    <label for="success_criteria">{{ __('employee/planning/create.form.criteria') }}</label>
                     <textarea id="success_criteria" name="success_criteria" rows="3" 
-                              placeholder="Define what success looks like">{{ old('success_criteria') }}</textarea>
+                              placeholder="{{ __('employee/planning/create.form.criteria_ph') }}">{{ old('success_criteria') }}</textarea>
                 </div>
             </div>
         </div>
@@ -284,10 +288,10 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Create Project Plan
+                {{ __('employee/planning/common.actions.create') }}
             </button>
             <a href="{{ route('admin.planning.index') }}" class="btn-cancel">
-                Cancel
+                {{ __('employee/planning/common.actions.cancel') }}
             </a>
         </div>
     </form>
@@ -498,25 +502,25 @@ function addMilestone() {
         <div class="milestone-item">
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Milestone Name</label>
+                    <label>{{ __('employee/planning/common.labels.milestone_name') }}</label>
                     <input type="text" name="milestone_${milestoneCounter}_name" placeholder="e.g. Quality Inspection">
                 </div>
                 <div class="form-group">
-                    <label>Target Date</label>
+                    <label>{{ __('employee/planning/common.labels.target_date') }}</label>
                     <input type="date" name="milestone_${milestoneCounter}_date">
                 </div>
                 <div class="form-group">
-                    <label>Phase</label>
+                    <label>{{ __('employee/planning/common.labels.phase') }}</label>
                     <select name="milestone_${milestoneCounter}_phase">
-                        <option value="foundation">Foundation</option>
-                        <option value="structure">Structure</option>
-                        <option value="finishing">Finishing</option>
+                        <option value="foundation">{{ __('employee/planning/common.phases.foundation') }}</option>
+                        <option value="structure">{{ __('employee/planning/common.phases.structure') }}</option>
+                        <option value="finishing">{{ __('employee/planning/common.phases.finishing') }}</option>
                     </select>
                 </div>
             </div>
             <button type="button" class="btn-remove" onclick="removeMilestone(this)">
                 <i class="material-icons">delete</i>
-                Remove
+                {{ __('employee/planning/common.actions.remove') }}
             </button>
         </div>
     `;
@@ -536,8 +540,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function validateBudgetTotal() {
         let total = 0;
         budgetInputs.forEach(input => {
-            if (input.closest('.phase-item').querySelector('input[type="checkbox"]').checked) {
+            // Check if user has checkbox checked (if logic exists) or just sum inputs
+            const checkbox = input.closest('.phase-item').querySelector('input[type="checkbox"]');
+            if (checkbox && checkbox.checked) {
                 total += parseInt(input.value) || 0;
+            } else if (!checkbox) {
+                 total += parseInt(input.value) || 0;
             }
         });
 

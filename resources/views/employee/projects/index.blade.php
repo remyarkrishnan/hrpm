@@ -1,31 +1,34 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Project Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Project Management')
+@section('title', __('employee/projects/index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/projects/index.title'))
 
 @section('content')
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
     <div>
-        <h2 style="margin: 0; font-size: 24px; font-weight: 500;">Construction Projects</h2>
-        <p style="margin: 4px 0 0 0; color: #666;">Manage construction projects with 12-step approval workflow</p>
+        <h2 style="margin: 0; font-size: 24px; font-weight: 500;">{{ __('employee/projects/index.title') }}</h2>
+        <p style="margin: 4px 0 0 0; color: #666;">{{ __('employee/projects/index.subtitle') }}</p>
     </div>
     <a href="{{ route('admin.projects.create') }}" class="btn-primary">
         <i class="material-icons">add</i>
-        New Project
+        {{ __('employee/projects/common.actions.create') }}
     </a>
 </div>
 
-<!-- Filters -->
 <div class="filters-card">
     <form method="GET" class="filters-form">
         <div class="filter-group">
-            <input type="text" name="search" placeholder="Search projects..." 
+            <input type="text" name="search" placeholder="{{ __('employee/projects/index.filters.search') }}" 
                    value="{{ request('search') }}" class="filter-input">
         </div>
 
         <div class="filter-group">
             <select name="status" class="filter-select">
-                <option value="">All Status</option>
+                <option value="">{{ __('employee/projects/index.filters.all_status') }}</option>
                 @foreach(App\Models\Project::getStatuses() as $key => $label)
                     <option value="{{ $key }}" {{ request('status') === $key ? 'selected' : '' }}>
                         {{ $label }}
@@ -36,7 +39,7 @@
 
         <div class="filter-group">
             <select name="type" class="filter-select">
-                <option value="">All Types</option>
+                <option value="">{{ __('employee/projects/index.filters.all_types') }}</option>
                 @foreach(App\Models\Project::getTypes() as $key => $label)
                     <option value="{{ $key }}" {{ request('type') === $key ? 'selected' : '' }}>
                         {{ $label }}
@@ -47,7 +50,7 @@
 
         <div class="filter-group">
             <select name="project_manager" class="filter-select">
-                <option value="">All Managers</option>
+                <option value="">{{ __('employee/projects/index.filters.all_managers') }}</option>
                 @foreach($projectManagers as $manager)
                     <option value="{{ $manager->id }}" {{ request('project_manager') == $manager->id ? 'selected' : '' }}>
                         {{ $manager->name }}
@@ -58,19 +61,18 @@
 
         <button type="submit" class="btn-filter">
             <i class="material-icons">search</i>
-            Filter
+            {{ __('employee/projects/common.actions.filter') }}
         </button>
 
         @if(request()->hasAny(['search', 'status', 'type', 'project_manager']))
             <a href="{{ route('admin.projects.index') }}" class="btn-clear">
                 <i class="material-icons">clear</i>
-                Clear
+                {{ __('employee/projects/common.actions.clear') }}
             </a>
         @endif
     </form>
 </div>
 
-<!-- Projects Grid -->
 <div class="projects-grid">
     @if($projects->count() > 0)
         @foreach($projects as $project)
@@ -89,15 +91,15 @@
                             <div class="dropdown-menu">
                                 <a href="{{ route('admin.projects.show', $project) }}">
                                     <i class="material-icons">visibility</i>
-                                    View Details
+                                    {{ __('employee/projects/common.actions.view') }}
                                 </a>
                                 <a href="{{ route('admin.projects.edit', $project) }}">
                                     <i class="material-icons">edit</i>
-                                    Edit Project
+                                    {{ __('employee/projects/common.actions.edit') }}
                                 </a>
                                 <a href="#" onclick="deleteProject({{ $project->id }})">
                                     <i class="material-icons">delete</i>
-                                    Delete
+                                    {{ __('employee/projects/common.actions.delete') }}
                                 </a>
                             </div>
                         </div>
@@ -106,22 +108,22 @@
 
                 <div class="project-meta">
                     <div class="meta-item">
-                        <span class="meta-label">Type</span>
+                        <span class="meta-label">{{ __('employee/projects/common.labels.type') }}</span>
                         <span class="type-badge type-{{ $project->type }}">{{ $project->type_label }}</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">Priority</span>
+                        <span class="meta-label">{{ __('employee/projects/common.labels.priority') }}</span>
                         <span class="priority-badge priority-{{ $project->priority }}">{{ $project->priority_label }}</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">Status</span>
+                        <span class="meta-label">{{ __('employee/projects/common.labels.status') }}</span>
                         <span class="status-badge status-{{ $project->status }}">{{ $project->status_label }}</span>
                     </div>
                 </div>
 
                 <div class="project-progress">
                     <div class="progress-header">
-                        <span>Progress</span>
+                        <span>{{ __('employee/projects/common.labels.progress') }}</span>
                         <span class="progress-percentage">{{ number_format($project->progress_percentage, 1) }}%</span>
                     </div>
                     <div class="progress-bar">
@@ -132,7 +134,7 @@
                 <div class="project-details">
                     <div class="detail-item">
                         <i class="material-icons">person</i>
-                        <span>{{ $project->projectManager->name ?? 'Not Assigned' }}</span>
+                        <span>{{ $project->projectManager->name ?? __('employee/projects/common.status.not_assigned') }}</span>
                     </div>
                     <div class="detail-item">
                         <i class="material-icons">account_balance_wallet</i>
@@ -145,12 +147,12 @@
                     @if($project->is_overdue)
                         <div class="detail-item overdue">
                             <i class="material-icons">warning</i>
-                            <span>{{ abs($project->days_remaining) }} days overdue</span>
+                            <span>{{ abs($project->days_remaining) }} {{ __('employee/projects/common.status.overdue') }}</span>
                         </div>
                     @elseif($project->days_remaining !== null)
                         <div class="detail-item">
                             <i class="material-icons">schedule</i>
-                            <span>{{ $project->days_remaining }} days left</span>
+                            <span>{{ $project->days_remaining }} {{ __('employee/projects/common.status.left') }}</span>
                         </div>
                     @endif
                 </div>
@@ -167,25 +169,24 @@
                             $approvedSteps = $project->approvalSteps->where('status', 'approved')->count();
                             $totalSteps = $project->approvalSteps->count();
                         @endphp
-                        <span class="approval-count">{{ $approvedSteps }}/{{ $totalSteps }} Approved</span>
+                        <span class="approval-count">{{ $approvedSteps }}/{{ $totalSteps }} {{ __('employee/projects/index.cards.approved') }}</span>
                     </div>
                 </div>
             </div>
         @endforeach
 
-        <!-- Pagination -->
         <div class="pagination-wrapper">
             {{ $projects->withQueryString()->links() }}
         </div>
     @else
         <div class="empty-state">
             <i class="material-icons">engineering</i>
-            <h3>No Projects Found</h3>
-            <p>{{ request()->hasAny(['search', 'status', 'type', 'project_manager']) ? 'No projects match your filters.' : 'Start by creating your first construction project.' }}</p>
+            <h3>{{ __('employee/projects/index.empty.title') }}</h3>
+            <p>{{ request()->hasAny(['search', 'status', 'type', 'project_manager']) ? __('employee/projects/index.empty.text_filter') : __('employee/projects/index.empty.text_new') }}</p>
             @if(!request()->hasAny(['search', 'status', 'type', 'project_manager']))
                 <a href="{{ route('admin.projects.create') }}" class="btn-primary">
                     <i class="material-icons">add</i>
-                    Create First Project
+                    {{ __('employee/projects/index.empty.btn_create') }}
                 </a>
             @endif
         </div>

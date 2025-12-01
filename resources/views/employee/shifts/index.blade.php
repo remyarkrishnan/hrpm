@@ -5,24 +5,23 @@
 
 @extends('layouts.employee')
 
-@section('title', __('shifts.index1.title', ['company' => env('COMPANY_NAME', 'Teqin Vally')]))
-@section('page-title', __('shifts.index1.page_title'))
+@section('title', __('employee/shifts/index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/shifts/index.title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h2>{{ __('shifts.index1.page_title') }}</h2>
-        <p>{{ __('shifts.index1.description') }}</p>
+        <h2>{{ __('employee/shifts/index.title') }}</h2>
+        <p>{{ __('employee/shifts/index.subtitle') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('admin.shifts.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            {{ __('shifts.index1.create_shift') }}
+            {{ __('employee/shifts/common.actions.create') }}
         </a>
     </div>
 </div>
 
-<!-- Shift Stats -->
 <div class="stats-grid">
     <div class="stat-card morning">
         <div class="stat-icon">
@@ -30,8 +29,8 @@
         </div>
         <div class="stat-info">
             <h3>{{ $stats['morning'] ?? 25 }}</h3>
-            <p>{{ __('shifts.index1.morning_workers') }}</p>
-            <small>{{ __('shifts.index1.morning_time') }}</small>
+            <p>{{ __('employee/shifts/index.stats.morning') }}</p>
+            <small>07:00 AM - 03:00 PM</small>
         </div>
     </div>
 
@@ -41,8 +40,8 @@
         </div>
         <div class="stat-info">
             <h3>{{ $stats['evening'] ?? 18 }}</h3>
-            <p>{{ __('shifts.index1.evening_workers') }}</p>
-            <small>{{ __('shifts.index1.evening_time') }}</small>
+            <p>{{ __('employee/shifts/index.stats.evening') }}</p>
+            <small>03:00 PM - 11:00 PM</small>
         </div>
     </div>
 
@@ -52,8 +51,8 @@
         </div>
         <div class="stat-info">
             <h3>{{ $stats['night'] ?? 8 }}</h3>
-            <p>{{ __('shifts.index1.night_workers') }}</p>
-            <small>{{ __('shifts.index1.night_time') }}</small>
+            <p>{{ __('employee/shifts/index.stats.night') }}</p>
+            <small>11:00 PM - 07:00 AM</small>
         </div>
     </div>
 
@@ -63,26 +62,25 @@
         </div>
         <div class="stat-info">
             <h3>{{ $stats['total'] ?? 51 }}</h3>
-            <p>{{ __('shifts.index1.total_active') }}</p>
-            <small>{{ __('shifts.index1.all_combined') }}</small>
+            <p>{{ __('employee/shifts/index.stats.total') }}</p>
+            <small>{{ __('employee/shifts/index.stats.combined') }}</small>
         </div>
     </div>
 </div>
 
-<!-- Shift Schedule Table -->
 <div class="shifts-table-card">
-    <h3>{{ __('shifts.index1.current_schedule') }}</h3>
+    <h3>{{ __('employee/shifts/index.table.title') }}</h3>
     <div class="table-responsive">
         <table class="shifts-table">
             <thead>
                 <tr>
-                    <th>{{ __('shifts.index1.shift_name') }}</th>
-                    <th>{{ __('shifts.index1.shift_type') }}</th>
-                    <th>{{ __('shifts.index1.time') }}</th>
-                    <th>{{ __('shifts.index1.location') }}</th>
-                    <th>{{ __('shifts.index1.employees') }}</th>
-                    <th>{{ __('shifts.index1.status') }}</th>
-                    <th>{{ __('shifts.index1.actions') }}</th>
+                    <th>{{ __('employee/shifts/common.labels.name') }}</th>
+                    <th>{{ __('employee/shifts/common.labels.type') }}</th>
+                    <th>{{ __('employee/shifts/index.table.time') }}</th>
+                    <th>{{ __('employee/shifts/common.labels.location') }}</th>
+                    <th>{{ __('employee/shifts/common.labels.employees') }}</th>
+                    <th>{{ __('employee/shifts/common.labels.status') }}</th>
+                    <th>{{ __('employee/shifts/common.actions.view') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -91,12 +89,12 @@
                     <td>
                         <div class="shift-info">
                             <strong>{{ $shift->name }}</strong>
-                            <small>{{ $shift->location ?? __('shifts.index1.multiple_sites') }}</small>
+                            <small>{{ $shift->location }}</small>
                         </div>
                     </td>
                     <td>
                         <span class="shift-type shift-{{ $shift->type }}">
-                            {{ __('shifts.index1.shift_types.' . $shift->type) }}
+                            {{ __('employee/shifts/common.types.' . $shift->type) }}
                         </span>
                     </td>
                     <td>
@@ -105,22 +103,22 @@
                             <small>{{ \Carbon\Carbon::parse($shift->start_time)->diffForHumans(\Carbon\Carbon::parse($shift->end_time), true) }}</small>
                         </div>
                     </td>
-                    <td>{{ $shift->location ?? __('shifts.index1.site_a') }}</td>
+                    <td>{{ $shift->location }}</td>
                     <td>
-                        <span class="employee-count">{{ $shift->employees_count }} {{ __('shifts.index1.workers') }}</span>
+                        <span class="employee-count">{{ $shift->employees_count }} {{ __('employee/shifts/common.units.workers') }}</span>
                     </td>
                     <td>
-                        <span class="status-badge status-active">{{ __('shifts.index1.active') }}</span>
+                        <span class="status-badge status-active">Active</span>
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a href="{{ route('admin.shifts.show', $shift->id) }}" class="btn-action" title="{{ __('shifts.index1.view') }}">
+                            <a href="{{ route('admin.shifts.show', $shift->id) }}" class="btn-action" title="{{ __('employee/shifts/common.actions.view') }}">
                                 <i class="material-icons">visibility</i>
                             </a>
-                            <a href="{{ route('admin.shifts.edit', $shift->id) }}" class="btn-action" title="{{ __('shifts.index1.edit') }}">
+                            <a href="{{ route('admin.shifts.edit', $shift->id) }}" class="btn-action" title="{{ __('employee/shifts/common.actions.edit') }}">
                                 <i class="material-icons">edit</i>
                             </a>
-                            <button class="btn-action btn-assign" onclick="assignEmployees({{ $shift->id }})" title="{{ __('shifts.index1.assign_employees') }}">
+                            <button class="btn-action btn-assign" onclick="assignEmployees({{ $shift->id }})" title="{{ __('employee/shifts/common.actions.assign') }}">
                                 <i class="material-icons">group_add</i>
                             </button>
                         </div>
@@ -128,7 +126,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center">{{ __('shifts.index1.no_shifts') }}</td>
+                    <td colspan="7" class="text-center">{{ __('employee/shifts/index.table.empty') }}</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -136,51 +134,39 @@
     </div>
 </div>
 
-<!-- Weekly Schedule View -->
 <div class="schedule-card">
-    <h3>{{ __('shifts.index1.weekly_schedule') }}</h3>
+    <h3>{{ __('employee/shifts/index.schedule.title') }}</h3>
     <div class="schedule-grid">
         <div class="schedule-header">
-            <div class="time-slot">{{ __('shifts.index1.time') }}</div>
-            @foreach(config('shifts.days', [['label' => 'Mon'], ['label' => 'Tue'], ['label' => 'Wed'], ['label' => 'Thu'], ['label' => 'Fri'], ['label' => 'Sat'], ['label' => 'Sun']]) as $day)
-            <div class="day-slot">{{ $day['label'] }}</div>
+            <div class="time-slot">{{ __('employee/shifts/index.schedule.time') }}</div>
+            @foreach(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as $day)
+            <div class="day-slot">{{ $day }}</div>
             @endforeach
         </div>
 
-        <!-- Morning Shift -->
         <div class="schedule-row">
-            <div class="time-slot">{{ __('shifts.index1.morning_time_full') }}</div>
-            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot morning-shift">{{ $stats['morning_sat'] ?? 22 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot off">{{ __('shifts.index1.off') }}</div>
+            <div class="time-slot">07:00 - 15:00</div>
+            @for($i=0; $i<6; $i++)
+                <div class="shift-slot morning-shift">{{ $stats['morning'] ?? 25 }} {{ __('employee/shifts/common.units.workers') }}</div>
+            @endfor
+            <div class="shift-slot off">{{ __('employee/shifts/index.schedule.off') }}</div>
         </div>
 
-        <!-- Evening Shift -->
         <div class="schedule-row">
-            <div class="time-slot">{{ __('shifts.index1.evening_time_full') }}</div>
-            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot evening-shift">{{ $stats['evening_sat'] ?? 15 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot off">{{ __('shifts.index1.off') }}</div>
+            <div class="time-slot">15:00 - 23:00</div>
+            @for($i=0; $i<6; $i++)
+                <div class="shift-slot evening-shift">{{ $stats['evening'] ?? 18 }} {{ __('employee/shifts/common.units.workers') }}</div>
+            @endfor
+            <div class="shift-slot off">{{ __('employee/shifts/index.schedule.off') }}</div>
         </div>
 
-        <!-- Night Shift -->
         <div class="schedule-row">
-            <div class="time-slot">{{ __('shifts.index1.night_time_full') }}</div>
-            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('shifts.index1.workers') }}</div>
-            <div class="shift-slot off">{{ __('shifts.index1.off') }}</div>
-            <div class="shift-slot off">{{ __('shifts.index1.off') }}</div>
+            <div class="time-slot">23:00 - 07:00</div>
+            @for($i=0; $i<5; $i++)
+                <div class="shift-slot night-shift">{{ $stats['night'] ?? 8 }} {{ __('employee/shifts/common.units.workers') }}</div>
+            @endfor
+            <div class="shift-slot off">{{ __('employee/shifts/index.schedule.off') }}</div>
+            <div class="shift-slot off">{{ __('employee/shifts/index.schedule.off') }}</div>
         </div>
     </div>
 </div>
@@ -501,7 +487,7 @@
 @push('scripts')
 <script>
 function assignEmployees(shiftId) {
-    alert('{{ __("shifts.index1.assignment_todo") }}');
+    alert("{{ __('employee/shifts/common.messages.assign_todo') }}");
 }
 </script>
 @endpush

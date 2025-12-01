@@ -1,158 +1,159 @@
-@extends('layouts.admin')
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 
-@section('title', 'Shift Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Shift Details')
+@extends('layouts.employee')
+
+@section('title', __('employee/shifts/show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/shifts/show.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.shifts.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Shifts
+            {{ __('employee/shifts/common.actions.back') }}
         </a>
     </div>
     <div class="shift-header">
         <div class="shift-info">
             <h2>{{ $shift->name ?? 'Morning Shift' }}</h2>
-            <p>{{ $shift->location ?? 'Site A' }} • {{ $shift->employees_count ?? 15 }} employees assigned</p>
+            <p>{{ $shift->location ?? 'Site A' }} • {{ $shift->employees_count ?? 15 }} {{ __('employee/shifts/common.labels.employees') }}</p>
             <div class="shift-timing">
                 <i class="material-icons">schedule</i>
                 <span>{{ $shift->start_time ?? '07:00' }} - {{ $shift->end_time ?? '15:00' }}</span>
-                <strong>(8 hours)</strong>
+                <strong>(8 {{ __('employee/shifts/common.units.hours') }})</strong>
             </div>
         </div>
         <div class="shift-status">
             <span class="shift-type shift-{{ $shift->type ?? 'morning' }}">
-                {{ ucfirst($shift->type ?? 'Morning') }} Shift
+                {{ __('employee/shifts/common.types.' . ($shift->type ?? 'morning')) }}
             </span>
             <div class="shift-capacity">
                 <strong>{{ $shift->employees_count ?? 15 }}/{{ $shift->max_employees ?? 25 }}</strong>
-                <small>Capacity</small>
+                <small>{{ __('employee/shifts/common.labels.capacity') }}</small>
             </div>
         </div>
     </div>
 </div>
 
 <div class="shift-details">
-    <!-- Shift Information -->
     <div class="detail-grid">
         <div class="detail-card">
-            <h3>Shift Information</h3>
+            <h3>{{ __('employee/shifts/show.info_card') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Shift Name:</strong>
+                    <strong>{{ __('employee/shifts/common.labels.name') }}:</strong>
                     <span>{{ $shift->name ?? 'Morning Shift' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Type:</strong>
+                    <strong>{{ __('employee/shifts/common.labels.type') }}:</strong>
                     <span class="shift-type shift-{{ $shift->type ?? 'morning' }}">
-                        {{ ucfirst($shift->type ?? 'morning') }} Shift
+                        {{ __('employee/shifts/common.types.' . ($shift->type ?? 'morning')) }}
                     </span>
                 </div>
                 <div class="info-item">
-                    <strong>Start Time:</strong>
+                    <strong>{{ __('employee/shifts/common.labels.start_time') }}:</strong>
                     <span>{{ $shift->start_time ?? '07:00 AM' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>End Time:</strong>
+                    <strong>{{ __('employee/shifts/common.labels.end_time') }}:</strong>
                     <span>{{ $shift->end_time ?? '15:00 PM' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Break Duration:</strong>
-                    <span>{{ $shift->break_duration ?? 60 }} minutes</span>
+                    <strong>{{ __('employee/shifts/common.labels.break_duration') }}:</strong>
+                    <span>{{ $shift->break_duration ?? 60 }} {{ __('employee/shifts/common.units.minutes') }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Working Hours:</strong>
-                    <span>{{ $shift->working_hours ?? 8 }} hours</span>
+                    <strong>{{ __('employee/shifts/common.labels.total_hours') }}:</strong>
+                    <span>{{ $shift->working_hours ?? 8 }} {{ __('employee/shifts/common.units.hours') }}</span>
                 </div>
             </div>
         </div>
 
         <div class="detail-card">
-            <h3>Location & Assignment</h3>
+            <h3>{{ __('employee/shifts/show.location_card') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Work Location:</strong>
+                    <strong>{{ __('employee/shifts/common.labels.location') }}:</strong>
                     <span>{{ $shift->location ?? 'Site A - Gurgaon' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Supervisor:</strong>
+                    <strong>{{ __('employee/shifts/common.labels.supervisor') }}:</strong>
                     <span>{{ $shift->supervisor ?? 'Rajesh Kumar' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Project:</strong>
+                    <strong>{{ __('employee/shifts/common.labels.project') }}:</strong>
                     <span>{{ $shift->project ?? 'Residential Complex - Phase 2' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Max Capacity:</strong>
-                    <span>{{ $shift->max_employees ?? 25 }} employees</span>
+                    <strong>{{ __('employee/shifts/common.labels.max_employees') }}:</strong>
+                    <span>{{ $shift->max_employees ?? 25 }} {{ __('employee/shifts/common.units.employees') }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Currently Assigned:</strong>
-                    <span class="employee-count">{{ $shift->employees_count ?? 15 }} employees</span>
+                    <strong>{{ __('employee/shifts/show.labels.current_assigned') }}:</strong>
+                    <span class="employee-count">{{ $shift->employees_count ?? 15 }} {{ __('employee/shifts/common.units.employees') }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Overtime Allowed:</strong>
-                    <span class="overtime-status">{{ $shift->overtime_allowed ? 'Yes' : 'No' }}</span>
+                    <strong>{{ __('employee/shifts/show.labels.overtime') }}:</strong>
+                    <span class="overtime-status">{{ $shift->overtime_allowed ? __('employee/shifts/show.labels.yes') : __('employee/shifts/show.labels.no') }}</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Working Days Schedule -->
     <div class="schedule-section">
-        <h3>Working Days Schedule</h3>
+        <h3>{{ __('employee/shifts/show.schedule_card') }}</h3>
         <div class="days-grid">
             <div class="day-item active">
                 <div class="day-name">Mon</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('employee/shifts/show.labels.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Tue</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('employee/shifts/show.labels.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Wed</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('employee/shifts/show.labels.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Thu</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('employee/shifts/show.labels.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Fri</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('employee/shifts/show.labels.working') }}</div>
                 <div class="day-hours">8h</div>
             </div>
             <div class="day-item active">
                 <div class="day-name">Sat</div>
-                <div class="day-status">Working</div>
+                <div class="day-status">{{ __('employee/shifts/show.labels.working') }}</div>
                 <div class="day-hours">6h</div>
             </div>
             <div class="day-item off">
                 <div class="day-name">Sun</div>
-                <div class="day-status">Off</div>
+                <div class="day-status">{{ __('employee/shifts/show.labels.off') }}</div>
                 <div class="day-hours">-</div>
             </div>
         </div>
     </div>
 
-    <!-- Assigned Employees -->
     <div class="employees-section">
         <div class="employees-header">
-            <h3>Assigned Employees ({{ $shift->employees_count ?? 15 }})</h3>
+            <h3>{{ __('employee/shifts/show.employees_card', ['count' => $shift->employees_count ?? 15]) }}</h3>
             <button class="btn-primary" onclick="assignMoreEmployees()">
                 <i class="material-icons">person_add</i>
-                Assign More
+                {{ __('employee/shifts/show.assign_more') }}
             </button>
         </div>
 
         <div class="employees-grid">
-            <!-- Sample employee data -->
             <div class="employee-card">
                 <div class="employee-avatar">RK</div>
                 <div class="employee-info">
@@ -198,12 +199,11 @@
                 </div>
             </div>
 
-            <!-- Show more placeholder -->
             <div class="employee-card placeholder">
                 <div class="employee-avatar">+</div>
                 <div class="employee-info">
-                    <h4>12 more employees...</h4>
-                    <p>Click "View All" to see complete list</p>
+                    <h4>{{ __('employee/shifts/show.more_employees', ['count' => 12]) }}</h4>
+                    <p>{{ __('employee/shifts/show.click_view') }}</p>
                 </div>
                 <div class="employee-actions">
                     <button class="btn-action" onclick="viewAllEmployees()">
@@ -214,37 +214,35 @@
         </div>
     </div>
 
-    <!-- Shift Description -->
     @if(isset($shift->description))
     <div class="description-section">
-        <h3>Shift Description</h3>
+        <h3>{{ __('employee/shifts/show.desc_card') }}</h3>
         <div class="description-content">
             <p>{{ $shift->description ?? 'This shift handles primary construction activities including foundation work, structural assembly, and site preparation. All safety protocols must be followed strictly.' }}</p>
         </div>
     </div>
     @endif
 
-    <!-- Action Buttons -->
     <div class="action-section">
         <div class="shift-actions">
             <a href="{{ route('admin.shifts.edit', $shift->id ?? 1) }}" class="btn-primary">
                 <i class="material-icons">edit</i>
-                Edit Shift
+                {{ __('employee/shifts/common.actions.edit') }}
             </a>
             <button class="btn-secondary" onclick="duplicateShift()">
                 <i class="material-icons">content_copy</i>
-                Duplicate Shift
+                {{ __('employee/shifts/common.actions.duplicate') }}
             </button>
         </div>
 
         <div class="other-actions">
             <button class="btn-success" onclick="activateShift()">
                 <i class="material-icons">play_arrow</i>
-                Activate Shift
+                {{ __('employee/shifts/common.actions.activate') }}
             </button>
             <button class="btn-danger" onclick="deleteShift()">
                 <i class="material-icons">delete</i>
-                Delete Shift
+                {{ __('employee/shifts/common.actions.delete') }}
             </button>
         </div>
     </div>

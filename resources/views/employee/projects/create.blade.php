@@ -1,53 +1,56 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Create Project - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Create New Project')
+@section('title', __('employee/projects/form.create_title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/projects/form.create_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.projects.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Projects
+            {{ __('employee/projects/common.actions.back') }}
         </a>
     </div>
-    <h2>Create New Construction Project</h2>
-    <p>Add a new project with 12-step approval workflow for {{ env('COMPANY_NAME', 'Teqin Vally') }}</p>
+    <h2>{{ __('employee/projects/form.create_title') }}</h2>
+    <p>{{ __('employee/projects/form.create_subtitle') }}</p>
 </div>
 
 <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data" class="project-form">
     @csrf
 
-    <!-- Basic Project Information -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">info</i>
-            Project Information
+            {{ __('employee/projects/form.sections.info') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="name">Project Name *</label>
+                <label for="name">{{ __('employee/projects/common.labels.name') }} *</label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" required 
-                       placeholder="e.g. Residential Complex Phase 2">
+                       placeholder="{{ __('employee/projects/form.placeholders.name') }}">
                 @error('name')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="project_code">Project Code *</label>
+                <label for="project_code">{{ __('employee/projects/common.labels.code') }} *</label>
                 <input type="text" id="project_code" name="project_code" value="{{ old('project_code') }}" required
-                       placeholder="e.g. PROJ-RES-2024-001">
+                       placeholder="{{ __('employee/projects/form.placeholders.code') }}">
                 @error('project_code')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="type">Project Type *</label>
+                <label for="type">{{ __('employee/projects/common.labels.type') }} *</label>
                 <select id="type" name="type" required>
-                    <option value="">Select Project Type</option>
+                    <option value="">{{ __('employee/projects/form.options.select_type') }}</option>
                     @foreach(App\Models\Project::getTypes() as $key => $label)
                         <option value="{{ $key }}" {{ old('type') === $key ? 'selected' : '' }}>
                             {{ $label }}
@@ -60,9 +63,9 @@
             </div>
 
             <div class="form-group">
-                <label for="priority">Priority *</label>
+                <label for="priority">{{ __('employee/projects/common.labels.priority') }} *</label>
                 <select id="priority" name="priority" required>
-                    <option value="">Select Priority</option>
+                    <option value="">{{ __('employee/projects/form.options.select_priority') }}</option>
                     @foreach(App\Models\Project::getPriorities() as $key => $label)
                         <option value="{{ $key }}" {{ old('priority', 'medium') === $key ? 'selected' : '' }}>
                             {{ $label }}
@@ -75,18 +78,18 @@
             </div>
 
             <div class="form-group full-width">
-                <label for="description">Project Description *</label>
+                <label for="description">{{ __('employee/projects/common.labels.description') }} *</label>
                 <textarea id="description" name="description" rows="4" required 
-                          placeholder="Detailed project description, scope, and objectives">{{ old('description') }}</textarea>
+                          placeholder="{{ __('employee/projects/form.placeholders.desc') }}">{{ old('description') }}</textarea>
                 @error('description')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="location">Location *</label>
+                <label for="location">{{ __('employee/projects/common.labels.location') }} *</label>
                 <input type="text" id="location" name="location" value="{{ old('location') }}" required
-                       placeholder="e.g. Sector 15, Gurgaon">
+                       placeholder="{{ __('employee/projects/form.placeholders.location') }}">
                 @error('location')
                     <span class="error">{{ $message }}</span>
                 @enderror
@@ -94,27 +97,26 @@
         </div>
     </div>
 
-    <!-- Client Information -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">business</i>
-            Client Information
+            {{ __('employee/projects/form.sections.client') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="client_name">Client Name *</label>
+                <label for="client_name">{{ __('employee/projects/common.labels.client_name') }} *</label>
                 <input type="text" id="client_name" name="client_name" value="{{ old('client_name') }}" required
-                       placeholder="e.g. ABC Developers Pvt Ltd">
+                       placeholder="{{ __('employee/projects/form.placeholders.client_name') }}">
                 @error('client_name')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="client_contact">Client Contact</label>
+                <label for="client_contact">{{ __('employee/projects/common.labels.client_contact') }}</label>
                 <input type="text" id="client_contact" name="client_contact" value="{{ old('client_contact') }}"
-                       placeholder="Phone/Email/Contact Person">
+                       placeholder="{{ __('employee/projects/form.placeholders.client_contact') }}">
                 @error('client_contact')
                     <span class="error">{{ $message }}</span>
                 @enderror
@@ -122,25 +124,24 @@
         </div>
     </div>
 
-    <!-- Project Planning -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">schedule</i>
-            Project Planning
+            {{ __('employee/projects/form.sections.planning') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="budget">Project Budget (₹) *</label>
+                <label for="budget">{{ __('employee/projects/common.labels.budget') }} (₹) *</label>
                 <input type="number" id="budget" name="budget" value="{{ old('budget') }}" required
-                       min="0" step="0.01" placeholder="e.g. 5000000">
+                       min="0" step="0.01" placeholder="{{ __('employee/projects/form.placeholders.budget') }}">
                 @error('budget')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
             <div class="form-group">
-                <label for="start_date">Start Date *</label>
+                <label for="start_date">{{ __('employee/projects/common.labels.start_date') }} *</label>
                 <input type="date" id="start_date" name="start_date" 
                        value="{{ old('start_date', date('Y-m-d')) }}" required>
                 @error('start_date')
@@ -149,7 +150,7 @@
             </div>
 
             <div class="form-group">
-                <label for="expected_end_date">Expected Completion Date *</label>
+                <label for="expected_end_date">{{ __('employee/projects/common.labels.end_date') }} *</label>
                 <input type="date" id="expected_end_date" name="expected_end_date" 
                        value="{{ old('expected_end_date') }}" required>
                 @error('expected_end_date')
@@ -158,9 +159,9 @@
             </div>
 
             <div class="form-group">
-                <label for="project_manager_id">Project Manager *</label>
+                <label for="project_manager_id">{{ __('employee/projects/common.labels.manager') }} *</label>
                 <select id="project_manager_id" name="project_manager_id" required>
-                    <option value="">Select Project Manager</option>
+                    <option value="">{{ __('employee/projects/form.options.select_manager') }}</option>
                     @foreach($projectManagers as $manager)
                         <option value="{{ $manager->id }}" {{ old('project_manager_id') == $manager->id ? 'selected' : '' }}>
                             {{ $manager->name }} - {{ $manager->designation ?? 'Project Manager' }}
@@ -174,19 +175,18 @@
         </div>
     </div>
 
-    <!-- Document Upload -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">attachment</i>
-            Project Documents
+            {{ __('employee/projects/form.sections.documents') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group full-width">
-                <label for="documents">Upload Documents (Optional)</label>
+                <label for="documents">{{ __('employee/projects/form.labels.upload_optional') }}</label>
                 <input type="file" id="documents" name="documents[]" multiple
                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                <small class="form-help">Accepted formats: PDF, DOC, DOCX, JPG, PNG. Max 5MB per file.</small>
+                <small class="form-help">{{ __('employee/projects/form.help.formats') }}</small>
                 @error('documents.*')
                     <span class="error">{{ $message }}</span>
                 @enderror
@@ -194,46 +194,34 @@
         </div>
     </div>
 
-    <!-- 12-Step Approval Workflow Info -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">approval</i>
-            Approval Workflow
+            {{ __('employee/projects/form.sections.workflow') }}
         </h3>
 
         <div class="workflow-info">
             <p class="workflow-description">
-                <strong>12-Step Approval Process:</strong> This project will automatically generate a 12-step approval workflow 
-                with the following consultancy stages:
+                <strong>{{ __('employee/projects/form.workflow_info') }}</strong>
             </p>
 
             <div class="workflow-steps">
                 <div class="workflow-grid">
-                    <div class="workflow-step">1. Design Review</div>
-                    <div class="workflow-step">2. Environmental Assessment</div>
-                    <div class="workflow-step">3. Safety Planning</div>
-                    <div class="workflow-step">4. Structural Analysis</div>
-                    <div class="workflow-step">5. Electrical Planning</div>
-                    <div class="workflow-step">6. Plumbing & HVAC</div>
-                    <div class="workflow-step">7. Financial Approval</div>
-                    <div class="workflow-step">8. Legal Compliance</div>
-                    <div class="workflow-step">9. Municipal Permits</div>
-                    <div class="workflow-step">10. Fire Safety Clearance</div>
-                    <div class="workflow-step">11. Quality Assurance</div>
-                    <div class="workflow-step">12. Final Approval</div>
+                    @foreach(__('employee/projects/form.steps') as $step)
+                        <div class="workflow-step">{{ $step }}</div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Submit Buttons -->
     <div class="form-actions">
         <button type="submit" class="btn-primary">
             <i class="material-icons">save</i>
-            Create Project
+            {{ __('employee/projects/common.actions.create') }}
         </button>
         <a href="{{ route('admin.projects.index') }}" class="btn-cancel">
-            Cancel
+            {{ __('employee/projects/common.actions.cancel') }}
         </a>
     </div>
 </form>

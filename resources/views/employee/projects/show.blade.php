@@ -1,14 +1,18 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Project: ' . $project->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Project Details')
+@section('title', __('employee/projects/common.labels.name') . ': ' . $project->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/projects/show.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.projects.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Projects
+            {{ __('employee/projects/common.actions.back') }}
         </a>
     </div>
     <div class="project-header">
@@ -27,17 +31,16 @@
         <div class="project-actions">
             <a href="{{ route('admin.projects.edit', $project) }}" class="btn-primary">
                 <i class="material-icons">edit</i>
-                Edit Project
+                {{ __('employee/projects/common.actions.edit') }}
             </a>
         </div>
     </div>
 </div>
 
 <div class="project-content">
-    <!-- Project Overview -->
     <div class="overview-grid">
         <div class="overview-card">
-            <h3>Project Progress</h3>
+            <h3>{{ __('employee/projects/show.sections.progress') }}</h3>
             <div class="progress-display">
                 <div class="progress-circle">
                     <span class="progress-value">{{ number_format($project->progress_percentage, 1) }}%</span>
@@ -49,30 +52,30 @@
         </div>
 
         <div class="overview-card">
-            <h3>Project Timeline</h3>
+            <h3>{{ __('employee/projects/show.sections.timeline') }}</h3>
             <div class="timeline-info">
                 <div class="timeline-item">
-                    <strong>Start Date:</strong>
-                    <span>{{ $project->start_date?->format('M d, Y') ?? 'Not set' }}</span>
+                    <strong>{{ __('employee/projects/common.labels.start_date') }}:</strong>
+                    <span>{{ $project->start_date?->format('M d, Y') ?? __('employee/projects/common.status.not_set') }}</span>
                 </div>
                 <div class="timeline-item">
-                    <strong>Expected End:</strong>
-                    <span>{{ $project->expected_end_date?->format('M d, Y') ?? 'Not set' }}</span>
+                    <strong>{{ __('employee/projects/common.labels.end_date') }}:</strong>
+                    <span>{{ $project->expected_end_date?->format('M d, Y') ?? __('employee/projects/common.status.not_set') }}</span>
                 </div>
                 @if($project->actual_end_date)
                     <div class="timeline-item">
-                        <strong>Actual End:</strong>
+                        <strong>{{ __('employee/projects/common.labels.actual_end') }}:</strong>
                         <span>{{ $project->actual_end_date->format('M d, Y') }}</span>
                     </div>
                 @endif
                 @if($project->days_remaining !== null)
                     <div class="timeline-item {{ $project->is_overdue ? 'overdue' : '' }}">
-                        <strong>Status:</strong>
+                        <strong>{{ __('employee/projects/common.labels.status') }}:</strong>
                         <span>
                             @if($project->is_overdue)
-                                {{ abs($project->days_remaining) }} days overdue
+                                {{ abs($project->days_remaining) }} {{ __('employee/projects/common.status.overdue') }}
                             @else
-                                {{ $project->days_remaining }} days remaining
+                                {{ $project->days_remaining }} {{ __('employee/projects/common.status.remaining') }}
                             @endif
                         </span>
                     </div>
@@ -81,28 +84,27 @@
         </div>
 
         <div class="overview-card">
-            <h3>Budget Information</h3>
+            <h3>{{ __('employee/projects/show.sections.budget') }}</h3>
             <div class="budget-info">
                 <div class="budget-amount">₹{{ number_format($project->budget) }}</div>
-                <div class="budget-label">Total Project Budget</div>
+                <div class="budget-label">{{ __('employee/projects/show.labels.total_budget') }}</div>
             </div>
         </div>
     </div>
 
-    <!-- Project Details -->
     <div class="details-grid">
         <div class="details-card">
-            <h3>Project Information</h3>
+            <h3>{{ __('employee/projects/show.sections.info') }}</h3>
             <div class="detail-item">
-                <strong>Description:</strong>
+                <strong>{{ __('employee/projects/common.labels.description') }}:</strong>
                 <p>{{ $project->description }}</p>
             </div>
             <div class="detail-item">
-                <strong>Location:</strong>
+                <strong>{{ __('employee/projects/common.labels.location') }}:</strong>
                 <span>{{ $project->location }}</span>
             </div>
             <div class="detail-item">
-                <strong>Client:</strong>
+                <strong>{{ __('employee/projects/common.labels.client_name') }}:</strong>
                 <span>{{ $project->client_name }}</span>
                 @if($project->client_contact)
                     <small>({{ $project->client_contact }})</small>
@@ -111,25 +113,24 @@
         </div>
 
         <div class="details-card">
-            <h3>Team Information</h3>
+            <h3>{{ __('employee/projects/show.sections.team') }}</h3>
             <div class="detail-item">
-                <strong>Project Manager:</strong>
-                <span>{{ $project->projectManager?->name ?? 'Not assigned' }}</span>
+                <strong>{{ __('employee/projects/common.labels.manager') }}:</strong>
+                <span>{{ $project->projectManager?->name ?? __('employee/projects/common.status.not_assigned') }}</span>
             </div>
             <div class="detail-item">
-                <strong>Created By:</strong>
-                <span>{{ $project->creator?->name ?? 'Unknown' }}</span>
+                <strong>{{ __('employee/projects/common.labels.created_by') }}:</strong>
+                <span>{{ $project->creator?->name ?? __('employee/projects/common.status.unknown') }}</span>
             </div>
             <div class="detail-item">
-                <strong>Created On:</strong>
+                <strong>{{ __('employee/projects/common.labels.created_on') }}:</strong>
                 <span>{{ $project->created_at->format('M d, Y \a\t g:i A') }}</span>
             </div>
         </div>
     </div>
 
-    <!-- 12-Step Approval Workflow -->
     <div class="approval-workflow">
-        <h3>12-Step Approval Workflow</h3>
+        <h3>{{ __('employee/projects/show.sections.workflow') }}</h3>
         <div class="workflow-steps">
             @foreach($project->approvalSteps as $step)
                 <div class="workflow-step step-{{ $step->status }}">
@@ -148,22 +149,22 @@
 
                     @if($step->due_date)
                         <div class="step-timeline">
-                            <strong>Due:</strong> {{ $step->due_date->format('M d, Y') }}
+                            <strong>{{ __('employee/projects/show.workflow.due') }}:</strong> {{ $step->due_date->format('M d, Y') }}
                             @if($step->approved_at)
-                                <br><strong>Approved:</strong> {{ $step->approved_at->format('M d, Y \a\t g:i A') }}
+                                <br><strong>{{ __('employee/projects/show.workflow.approved') }}:</strong> {{ $step->approved_at->format('M d, Y \a\t g:i A') }}
                             @endif
                         </div>
                     @endif
 
                     @if($step->responsible_person)
                         <div class="step-responsible">
-                            <strong>Responsible:</strong> {{ $step->responsible_person->name }}
+                            <strong>{{ __('employee/projects/show.workflow.responsible') }}:</strong> {{ $step->responsible_person->name }}
                         </div>
                     @endif
 
                     @if($step->remarks)
                         <div class="step-remarks">
-                            <strong>Remarks:</strong> {{ $step->remarks }}
+                            <strong>{{ __('employee/projects/show.workflow.remarks') }}:</strong> {{ $step->remarks }}
                         </div>
                     @endif
                 </div>
@@ -171,10 +172,9 @@
         </div>
     </div>
 
-    <!-- Project Documents -->
     @if($project->documents && count($project->documents) > 0)
         <div class="documents-section">
-            <h3>Project Documents</h3>
+            <h3>{{ __('employee/projects/show.sections.documents') }}</h3>
             <div class="documents-grid">
                 @foreach($project->documents as $document)
                     <div class="document-item">
@@ -183,7 +183,7 @@
                         </div>
                         <div class="document-info">
                             <strong>{{ $document }}</strong>
-                            <p>Project Document</p>
+                            <p>{{ __('employee/projects/show.labels.doc_type') }}</p>
                         </div>
                         <div class="document-actions">
                             <a href="{{ Storage::url('project-documents/' . $document) }}" 

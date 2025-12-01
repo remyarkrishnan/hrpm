@@ -1,22 +1,26 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Edit Overtime Request - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Overtime Request')
+@section('title', __('employee/overtime/edit.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/overtime/edit.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.overtime.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Overtime
+            {{ __('employee/overtime/common.actions.back') }}
         </a>
         <a href="{{ route('admin.overtime.show', $overtime->id ?? 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('employee/overtime/common.actions.view') }}
         </a>
     </div>
-    <h2>Edit Overtime Request</h2>
-    <p>Update overtime request for {{ $overtime->employee_name ?? 'Rajesh Kumar' }}</p>
+    <h2>{{ __('employee/overtime/edit.title') }}</h2>
+    <p>{{ __('employee/overtime/edit.subtitle', ['name' => $overtime->employee_name ?? 'Rajesh Kumar']) }}</p>
 </div>
 
 <div class="form-container">
@@ -24,18 +28,17 @@
         @csrf
         @method('PUT')
 
-        <!-- Current Status Display -->
         <div class="current-status">
             <div class="status-info">
                 <div class="employee-avatar">{{ strtoupper(substr($overtime->employee_name ?? 'Rajesh Kumar', 0, 1)) }}</div>
                 <div>
                     <h3>{{ $overtime->employee_name ?? 'Rajesh Kumar' }}</h3>
-                    <p>{{ $overtime->employee_code ?? 'EMP-001' }} • Requested on {{ $overtime->date ?? '2025-10-07' }}</p>
+                    <p>{{ $overtime->employee_code ?? 'EMP-001' }} • {{ __('employee/overtime/edit.requested_on') }} {{ $overtime->date ?? '2025-10-07' }}</p>
                 </div>
             </div>
             <div class="current-status-badge">
                 <span class="status-badge status-{{ $overtime->status ?? 'approved' }}">
-                    {{ ucfirst($overtime->status ?? 'Approved') }}
+                    {{ __('employee/overtime/common.status.' . ($overtime->status ?? 'approved')) }}
                 </span>
             </div>
         </div>
@@ -43,12 +46,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">edit</i>
-                Update Overtime Information
+                {{ __('employee/overtime/edit.sections.update_info') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="date">Overtime Date *</label>
+                    <label for="date">{{ __('employee/overtime/common.labels.date') }} *</label>
                     <input type="date" id="date" name="date" value="{{ old('date', $overtime->date ?? '2025-10-07') }}" required>
                     @error('date')
                         <span class="error">{{ $message }}</span>
@@ -56,7 +59,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="hours">Overtime Hours *</label>
+                    <label for="hours">{{ __('employee/overtime/common.labels.hours') }} *</label>
                     <input type="number" id="hours" name="hours" step="0.5" min="0.5" max="8" 
                            value="{{ old('hours', $overtime->hours ?? '2.5') }}" required>
                     @error('hours')
@@ -65,13 +68,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="start_time">Start Time</label>
+                    <label for="start_time">{{ __('employee/overtime/common.labels.start_time') }}</label>
                     <input type="time" id="start_time" name="start_time" 
                            value="{{ old('start_time', $overtime->start_time ?? '18:00') }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="end_time">End Time</label>
+                    <label for="end_time">{{ __('employee/overtime/common.labels.end_time') }}</label>
                     <input type="time" id="end_time" name="end_time" 
                            value="{{ old('end_time', $overtime->end_time ?? '20:30') }}">
                 </div>
@@ -81,12 +84,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Update Reason & Details
+                {{ __('employee/overtime/edit.sections.update_reason') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="reason">Reason for Overtime *</label>
+                    <label for="reason">{{ __('employee/overtime/common.labels.reason') }} *</label>
                     <textarea id="reason" name="reason" rows="4" required>{{ old('reason', $overtime->reason ?? 'Project deadline approaching. Additional foundation work required to meet construction schedule. Critical phase completion needed.') }}</textarea>
                     @error('reason')
                         <span class="error">{{ $message }}</span>
@@ -94,122 +97,119 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="project_id">Project Assignment</label>
+                    <label for="project_id">{{ __('employee/overtime/common.labels.project') }}</label>
                     <select id="project_id" name="project_id">
-                        <option value="">Select Project (Optional)</option>
-                        <option value="1" {{ ($overtime->project_id ?? 1) == 1 ? 'selected' : '' }}>Residential Complex - Phase 2</option>
-                        <option value="2" {{ ($overtime->project_id ?? '') == 2 ? 'selected' : '' }}>Commercial Mall Construction</option>
-                        <option value="3" {{ ($overtime->project_id ?? '') == 3 ? 'selected' : '' }}>Highway Bridge Project</option>
+                        <option value="">{{ __('employee/overtime/common.projects.select') }}</option>
+                        <option value="1" {{ ($overtime->project_id ?? 1) == 1 ? 'selected' : '' }}>{{ __('employee/overtime/common.projects.residential') }}</option>
+                        <option value="2" {{ ($overtime->project_id ?? '') == 2 ? 'selected' : '' }}>{{ __('employee/overtime/common.projects.commercial') }}</option>
+                        <option value="3" {{ ($overtime->project_id ?? '') == 3 ? 'selected' : '' }}>{{ __('employee/overtime/common.projects.highway') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="urgency_level">Urgency Level</label>
+                    <label for="urgency_level">{{ __('employee/overtime/common.labels.urgency') }}</label>
                     <select id="urgency_level" name="urgency_level">
-                        <option value="normal" {{ ($overtime->urgency_level ?? 'urgent') === 'normal' ? 'selected' : '' }}>Normal</option>
-                        <option value="urgent" {{ ($overtime->urgency_level ?? 'urgent') === 'urgent' ? 'selected' : '' }}>Urgent</option>
-                        <option value="critical" {{ ($overtime->urgency_level ?? '') === 'critical' ? 'selected' : '' }}>Critical</option>
+                        <option value="normal" {{ ($overtime->urgency_level ?? 'urgent') === 'normal' ? 'selected' : '' }}>{{ __('employee/overtime/common.urgency.normal') }}</option>
+                        <option value="urgent" {{ ($overtime->urgency_level ?? 'urgent') === 'urgent' ? 'selected' : '' }}>{{ __('employee/overtime/common.urgency.urgent') }}</option>
+                        <option value="critical" {{ ($overtime->urgency_level ?? '') === 'critical' ? 'selected' : '' }}>{{ __('employee/overtime/common.urgency.critical') }}</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- Payment Calculation (Updated) -->
         <div class="calculation-section">
             <h3 class="section-title">
                 <i class="material-icons">calculate</i>
-                Updated Rate Calculation
+                {{ __('employee/overtime/edit.sections.update_calc') }}
             </h3>
 
             <div class="calculation-grid">
                 <div class="calc-item">
-                    <h4>Base Hourly Rate</h4>
+                    <h4>{{ __('employee/overtime/create.calc.base_rate') }}</h4>
                     <div class="calc-value">₹500.00</div>
                 </div>
 
                 <div class="calc-item">
-                    <h4>Overtime Multiplier</h4>
+                    <h4>{{ __('employee/overtime/create.calc.multiplier') }}</h4>
                     <div class="calc-value">1.5x</div>
                 </div>
 
                 <div class="calc-item">
-                    <h4>Overtime Rate</h4>
+                    <h4>{{ __('employee/overtime/create.calc.overtime_rate') }}</h4>
                     <div class="calc-value">₹750.00/hr</div>
                 </div>
 
                 <div class="calc-item total">
-                    <h4>Updated Total</h4>
+                    <h4>{{ __('employee/overtime/edit.calc.updated_total') }}</h4>
                     <div class="calc-value" id="total-amount">₹{{ number_format(($overtime->hours ?? 2.5) * 750, 2) }}</div>
                 </div>
             </div>
         </div>
 
-        <!-- Admin Actions -->
         @if(auth()->user()->hasRole(['super-admin', 'admin', 'project-manager']))
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">admin_panel_settings</i>
-                Administrative Actions
+                {{ __('employee/overtime/edit.sections.admin_actions') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="admin_status">Update Status</label>
+                    <label for="admin_status">{{ __('employee/overtime/edit.admin.update_status') }}</label>
                     <select id="admin_status" name="status">
-                        <option value="pending" {{ ($overtime->status ?? 'approved') === 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="approved" {{ ($overtime->status ?? 'approved') === 'approved' ? 'selected' : '' }}>Approved</option>
-                        <option value="rejected" {{ ($overtime->status ?? '') === 'rejected' ? 'selected' : '' }}>Rejected</option>
-                        <option value="cancelled" {{ ($overtime->status ?? '') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        <option value="pending" {{ ($overtime->status ?? 'approved') === 'pending' ? 'selected' : '' }}>{{ __('employee/overtime/common.status.pending') }}</option>
+                        <option value="approved" {{ ($overtime->status ?? 'approved') === 'approved' ? 'selected' : '' }}>{{ __('employee/overtime/common.status.approved') }}</option>
+                        <option value="rejected" {{ ($overtime->status ?? '') === 'rejected' ? 'selected' : '' }}>{{ __('employee/overtime/common.status.rejected') }}</option>
+                        <option value="cancelled" {{ ($overtime->status ?? '') === 'cancelled' ? 'selected' : '' }}>{{ __('employee/overtime/common.status.cancelled') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="approved_by">Approved/Handled By</label>
+                    <label for="approved_by">{{ __('employee/overtime/edit.admin.handled_by') }}</label>
                     <input type="text" id="approved_by" name="approved_by" 
                            value="{{ old('approved_by', $overtime->approved_by ?? auth()->user()->name) }}" readonly>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="admin_remarks">Admin Remarks</label>
+                    <label for="admin_remarks">{{ __('employee/overtime/edit.admin.remarks') }}</label>
                     <textarea id="admin_remarks" name="admin_remarks" rows="3" 
-                              placeholder="Add administrative notes or approval remarks">{{ old('admin_remarks', $overtime->admin_remarks ?? '') }}</textarea>
+                              placeholder="{{ __('employee/overtime/edit.admin.remarks_placeholder') }}">{{ old('admin_remarks', $overtime->admin_remarks ?? '') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="rejection_reason">Rejection Reason (if rejected)</label>
+                    <label for="rejection_reason">{{ __('employee/overtime/edit.admin.rejection_reason') }}</label>
                     <input type="text" id="rejection_reason" name="rejection_reason" 
                            value="{{ old('rejection_reason', $overtime->rejection_reason ?? '') }}"
-                           placeholder="Enter reason if rejecting the overtime">
+                           placeholder="{{ __('employee/overtime/edit.admin.rejection_placeholder') }}">
                 </div>
             </div>
         </div>
         @endif
 
-        <!-- Audit Trail -->
         <div class="audit-section">
             <h3 class="section-title">
                 <i class="material-icons">history</i>
-                Change History
+                {{ __('employee/overtime/edit.sections.history') }}
             </h3>
 
             <div class="audit-trail">
                 <div class="audit-item">
                     <div class="audit-time">Oct 07, 2025 - 06:30 PM</div>
-                    <div class="audit-action">Overtime request submitted</div>
+                    <div class="audit-action">{{ __('employee/overtime/edit.audit.submitted') }}</div>
                     <div class="audit-user">{{ $overtime->employee_name ?? 'Rajesh Kumar' }}</div>
                 </div>
 
                 @if(($overtime->status ?? '') === 'approved')
                 <div class="audit-item">
                     <div class="audit-time">Oct 08, 2025 - 09:30 AM</div>
-                    <div class="audit-action">Overtime request approved</div>
+                    <div class="audit-action">{{ __('employee/overtime/edit.audit.approved') }}</div>
                     <div class="audit-user">{{ $overtime->approved_by ?? 'Project Manager Singh' }}</div>
                 </div>
                 @endif
 
                 <div class="audit-item current">
                     <div class="audit-time">{{ now()->format('M d, Y - h:i A') }}</div>
-                    <div class="audit-action">Overtime request being modified</div>
+                    <div class="audit-action">{{ __('employee/overtime/edit.audit.modified') }}</div>
                     <div class="audit-user">{{ auth()->user()->name }}</div>
                 </div>
             </div>
@@ -218,14 +218,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Overtime Request
+                {{ __('employee/overtime/common.actions.update') }}
             </button>
             <a href="{{ route('admin.overtime.show', $overtime->id ?? 1) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('employee/overtime/common.actions.cancel_changes') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteOvertime()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('employee/overtime/common.actions.delete') }}
             </button>
         </div>
     </form>

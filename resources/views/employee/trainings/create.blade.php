@@ -1,6 +1,10 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Apply For Training - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('title', __('employee/trainings/create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
 @section('page-title', 'Employee Dashboard')
 
 @section('content')
@@ -8,11 +12,11 @@
     <div class="page-nav">
         <a href="{{ route('employee.trainings.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Trainings
+            {{ __('employee/trainings/common.actions.back') }}
         </a>
     </div>
-    <h2>Apply for Training</h2>
-    <p>Submit a training request for approval</p>
+    <h2>{{ __('employee/trainings/create.title') }}</h2>
+    <p>{{ __('employee/trainings/create.subtitle') }}</p>
 </div>
 
 <div class="form-container">
@@ -22,45 +26,41 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">person</i>
-                Training Details
+                {{ __('employee/trainings/create.sections.details') }}
             </h3>
 
             <div class="form-grid">
-                
-
                 <div class="form-group">
-                    <label for="type">Training Name *</label>
+                    <label for="name">{{ __('employee/trainings/common.labels.name') }} *</label>
                     <input type="text" id="name" name="name" value="{{ old('name') }}" 
-                           placeholder="Training Name">
+                           placeholder="{{ __('employee/trainings/create.placeholders.name') }}">
                     @error('name')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
-
                 <div class="form-group">
-                    <label for="loan_amount">Location *</label>
-                     <input type="text" id="location" name="location" value="{{ old('location') }}" 
-                           placeholder="Location">
+                    <label for="location">{{ __('employee/trainings/common.labels.location') }} *</label>
+                    <input type="text" id="location" name="location" value="{{ old('location') }}" 
+                           placeholder="{{ __('employee/trainings/create.placeholders.location') }}">
                     @error('location')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
-
-                 <div class="form-group">
-                    <label for="loan_amount">Duration *</label>
-                     <input type="text" id="duration" name="duration" value="{{ old('duration') }}" 
-                           placeholder="Duration">
+                <div class="form-group">
+                    <label for="duration">{{ __('employee/trainings/common.labels.duration') }} *</label>
+                    <input type="text" id="duration" name="duration" value="{{ old('duration') }}" 
+                           placeholder="{{ __('employee/trainings/create.placeholders.duration') }}">
                     @error('duration')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
-                 <div class="form-group">
-                    <label for="loan_amount">Benefit *</label>
-                     <input type="text" id="benefit" name="benefit" value="{{ old('benefit') }}" 
-                           placeholder="Benefit">
+                <div class="form-group">
+                    <label for="benefit">{{ __('employee/trainings/common.labels.benefit') }} *</label>
+                    <input type="text" id="benefit" name="benefit" value="{{ old('benefit') }}" 
+                           placeholder="{{ __('employee/trainings/create.placeholders.benefit') }}">
                     @error('benefit')
                         <span class="error">{{ $message }}</span>
                     @enderror
@@ -68,37 +68,29 @@
             </div>
         </div>
 
-     
-
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Documents 
+                {{ __('employee/trainings/common.labels.documents') }}
             </h3>
 
-
-                <div class="form-group">
-                    <label for="documents">Supporting Documents (Optional)</label>
-                    <input type="file" id="supporting_document" name="supporting_document[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                    <small class="form-help">Upload training invite letter if available. Max 5MB per file.</small>
-                    @error('supporting_document.*')
-                        <span class="error">{{ $message }}</span>
-                    @enderror
-                </div>
-
-               
+            <div class="form-group">
+                <label for="supporting_document">{{ __('employee/trainings/common.labels.supporting_docs') }}</label>
+                <input type="file" id="supporting_document" name="supporting_document[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                <small class="form-help">{{ __('employee/trainings/common.labels.doc_help') }}</small>
+                @error('supporting_document.*')
+                    <span class="error">{{ $message }}</span>
+                @enderror
             </div>
         </div>
-
-       
 
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">send</i>
-                Submit Training Request
+                {{ __('employee/trainings/common.actions.submit') }}
             </button>
             <a href="{{ route('employee.trainings.index') }}" class="btn-cancel">
-                Cancel
+                {{ __('employee/trainings/common.actions.cancel') }}
             </a>
         </div>
     </form>

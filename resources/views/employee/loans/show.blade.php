@@ -1,39 +1,42 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Loan Request Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Employee dashboard')
+@section('title', __('employee/loans/show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/loans/show.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.loans.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Loans List
+            {{ __('employee/loans/common.actions.back') }}
         </a>
     </div>
 
 </div>
 
 <div class="leave-details">
-    <!-- Leave Information -->
     <div class="detail-grid">
         <div class="detail-card">
-            <h3>Loan Information</h3>
+            <h3>{{ __('employee/loans/show.sections.info') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Amount:</strong>
+                    <strong>{{ __('employee/loans/common.labels.amount') }}:</strong>
                     <span>₹{{ $loan->amount }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Purpose:</strong>
-                    <span>{{ ucwords(str_replace('_', ' ', $loan->purpose)) }}</span>
+                    <strong>{{ __('employee/loans/common.labels.purpose') }}:</strong>
+                    <span>{{ __('employee/loans/common.purposes.' . $loan->purpose) }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Repayment Duration:</strong>
-                    <span>{{ ucwords(str_replace('_', ' ', $loan->repayment_duration)) }}</span>
+                    <strong>{{ __('employee/loans/common.labels.duration') }}:</strong>
+                    <span>{{ __('employee/loans/common.durations.' . $loan->repayment_duration) }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Applied Date:</strong>
+                    <strong>{{ __('employee/loans/common.labels.applied_date') }}:</strong>
                     <span>{{ $loan->created_at->format('d-m-Y') }}</span>
                 </div>
                
@@ -41,29 +44,41 @@
         </div>
 
         <div class="detail-card">
-            <h3>Approval Information</h3>
+            <h3>{{ __('employee/loans/show.sections.approval') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Current Status:</strong>
+                    <strong>{{ __('employee/loans/show.info.current_status') }}:</strong>
                     <span class="status-badge status-{{ $loan->status ?? 'pending' }}">
-                        {{ ucfirst($loan->status ?? 'Pending') }}
+                        {{ __('employee/loans/common.status.' . ($loan->status ?? 'pending')) }}
                     </span>
                 </div>
                 @if(isset($loan->approved_by))
                 <div class="info-item">
-                    <strong>@if($loan->status == 'approved') Approved @else Rejected @endif By:</strong>
+                    <strong>
+                        @if($loan->status == 'approved') 
+                            {{ __('employee/loans/show.info.approved_by') }}
+                        @else 
+                            {{ __('employee/loans/show.info.rejected_by') }}
+                        @endif:
+                    </strong>
                     <span>{{ $loan->approver->name }}</span>
                 </div>
                 @endif
                 @if(isset($loan->approved_at))
                 <div class="info-item">
-                    <strong>@if($loan->status == 'approved') Approved @else Rejected @endif  Date:</strong>
+                    <strong>
+                        @if($loan->status == 'approved') 
+                            {{ __('employee/loans/show.info.approved_date') }}
+                        @else 
+                            {{ __('employee/loans/show.info.rejected_date') }}
+                        @endif:
+                    </strong>
                     <span>{{ $loan->approved_at->format('d-m-Y') }}</span>
                 </div>
                 @endif
                 @if(isset($loan->remarks)&&$loan->status == 'rejected')
                 <div class="info-item">
-                    <strong>Rejection Reason:</strong>
+                    <strong>{{ __('employee/loans/show.info.rejection_reason') }}:</strong>
                     <span class="rejection-reason">{{ $loan->remarks }}</span>
                 </div>
                 @endif
@@ -71,21 +86,19 @@
         </div>
     </div>
 
-    <!-- Leave Reason -->
     <div class="reason-section">
-        <h3>Reason for taking loan</h3>
+        <h3>{{ __('employee/loans/show.sections.reason') }}</h3>
         <div class="reason-content">
             <p>{{ $loan->reason ?? '.' }}</p>
         </div>
     </div>
 
-    <!-- Supporting Documents -->
     @php
     $documents = json_decode($loan->supporting_document ?? '[]', true);
     @endphp
     @if(isset($documents) && count($documents) > 0)
     <div class="documents-section">
-        <h3>Supporting Documents</h3>
+        <h3>{{ __('employee/loans/common.labels.documents') }}</h3>
         <div class="documents-grid">
             @foreach($documents as $document)
             <div class="document-item">
@@ -94,7 +107,7 @@
                 </div>
                 <div class="document-info">
                    
-                    <small>Supporting Document</small>
+                    <small>{{ __('employee/loans/common.labels.supporting_doc') }}</small>
                 </div>
                 <div class="document-actions">
                     <a href="{{ asset('storage/'.$document) }}" class="btn-action" target="_blank">
@@ -112,7 +125,6 @@
 
   
 
-    <!-- Action Buttons -->
     @if(($loan->status ?? 'pending') === 'pending')
     <div class="action-section">
       
@@ -120,11 +132,11 @@
         <div class="other-actions">
             <a href="{{ route('employee.loans.edit', $loan->id) }}" class="btn-secondary">
                 <i class="material-icons">edit</i>
-                Edit Request
+                {{ __('employee/loans/common.actions.edit') }}
             </a>
             <button class="btn-danger" onclick="deleteLoan()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('employee/loans/common.actions.delete') }}
             </button>
         </div>
     </div>

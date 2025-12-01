@@ -1,23 +1,26 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Loan Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Employee Dashboard')
+@section('title', __('employee/loans/index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/loans/index.title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h2>Loan Management</h2>
-        <p>Manage loan requests </p>
+        <h2>{{ __('employee/loans/index.title') }}</h2>
+        <p>{{ __('employee/loans/index.subtitle') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('employee.loans.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Apply Loan
+            {{ __('employee/loans/common.actions.apply') }}
         </a>
     </div>
 </div>
 
-<!-- Leave Stats -->
 <div class="stats-grid">
     <div class="stat-card pending">
         <div class="stat-icon">
@@ -25,7 +28,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalPendingLoans }}</h3>
-            <p>Pending Requests</p>
+            <p>{{ __('employee/loans/index.stats.pending') }}</p>
         </div>
     </div>
 
@@ -35,7 +38,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalApprovedLoans }}</h3>
-            <p>Approved</p>
+            <p>{{ __('employee/loans/index.stats.approved') }}</p>
         </div>
     </div>
  <div class="stat-card balance">
@@ -44,7 +47,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalRejectedLoans }}</h3>
-            <p>Rejected</p>
+            <p>{{ __('employee/loans/index.stats.rejected') }}</p>
         </div>
     </div>
  
@@ -52,19 +55,18 @@
   
 </div>
 
-<!-- Leave Requests Table -->
 <div class="leave-table-card">
-    <h3>Loan Requests</h3>
+    <h3>{{ __('employee/loans/index.title') }}</h3>
     <div class="table-responsive">
         <table class="leave-table">
             <thead>
                 <tr>
-                    <th>Amount</th>
-                    <th>Purpose</th>
-                    <th>Repayment Duration</th>
-                    <th>Applied Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('employee/loans/common.labels.amount') }}</th>
+                    <th>{{ __('employee/loans/common.labels.purpose') }}</th>
+                    <th>{{ __('employee/loans/common.labels.duration') }}</th>
+                    <th>{{ __('employee/loans/common.labels.applied_date') }}</th>
+                    <th>{{ __('employee/loans/common.labels.status') }}</th>
+                    <th>{{ __('employee/loans/common.labels.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,16 +78,17 @@
                     </td>
                     <td>
                         <div class="leave-duration">
-                            <strong>{{ ucwords(str_replace('_', ' ', $loan->purpose)) }}</strong>
+                            {{-- Dynamic translation for purpose --}}
+                            <strong>{{ __('employee/loans/common.purposes.' . $loan->purpose) }}</strong>
                      </td>
                     <td>
-                            <small>{{ ucwords(str_replace('_', ' ', $loan->repayment_duration)) }}</small>
+                            <small>{{ __('employee/loans/common.durations.' . $loan->repayment_duration) }}</small>
                         </div>
                     </td>
                     <td>{{ $loan->created_at->format('d-m-Y') }}</td>
                     <td>
                         <span class="status-badge status-{{ $loan->status }}">
-                            {{ ucfirst($loan->status) }}
+                            {{ __('employee/loans/common.status.' . $loan->status) }}
                         </span>
                     </td>
                     <td>
@@ -104,7 +107,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center">No loan requests found</td>
+                    <td colspan="6" class="text-center">{{ __('employee/loans/index.empty') }}</td>
                 </tr>
                 @endforelse
             </tbody>

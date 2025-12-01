@@ -1,22 +1,27 @@
-@extends('layouts.admin')
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 
-@section('title', 'Edit Shift - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Shift')
+@extends('layouts.employee')
+
+@section('title', __('employee/shifts/edit.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/shifts/edit.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.shifts.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Shifts
+            {{ __('employee/shifts/common.actions.back') }}
         </a>
         <a href="{{ route('admin.shifts.show', $shift->id ?? 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('employee/shifts/common.actions.view') }}
         </a>
     </div>
-    <h2>Edit Shift</h2>
-    <p>Update shift configuration for {{ $shift->name ?? 'Morning Shift' }}</p>
+    <h2>{{ __('employee/shifts/edit.title') }}</h2>
+    <p>{{ __('employee/shifts/edit.subtitle', ['name' => $shift->name ?? 'Morning Shift']) }}</p>
 </div>
 
 <div class="form-container">
@@ -24,7 +29,6 @@
         @csrf
         @method('PUT')
 
-        <!-- Current Status Display -->
         <div class="current-status">
             <div class="status-info">
                 <div class="shift-icon">
@@ -32,12 +36,12 @@
                 </div>
                 <div>
                     <h3>{{ $shift->name ?? 'Morning Shift' }}</h3>
-                    <p>{{ $shift->location ?? 'Site A' }} • {{ $shift->employees_count ?? 15 }} employees assigned</p>
+                    <p>{{ $shift->location ?? 'Site A' }} • {{ $shift->employees_count ?? 15 }} {{ __('employee/shifts/edit.assigned') }}</p>
                 </div>
             </div>
             <div class="current-status-badge">
                 <span class="shift-type shift-{{ $shift->type ?? 'morning' }}">
-                    {{ ucfirst($shift->type ?? 'Morning') }} Shift
+                    {{ __('employee/shifts/common.types.' . ($shift->type ?? 'morning')) }}
                 </span>
             </div>
         </div>
@@ -45,12 +49,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">edit</i>
-                Update Shift Information
+                {{ __('employee/shifts/edit.sections.info') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="name">Shift Name *</label>
+                    <label for="name">{{ __('employee/shifts/common.labels.name') }} *</label>
                     <input type="text" id="name" name="name" 
                            value="{{ old('name', $shift->name ?? 'Morning Shift') }}" required>
                     @error('name')
@@ -59,12 +63,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="type">Shift Type *</label>
+                    <label for="type">{{ __('employee/shifts/common.labels.type') }} *</label>
                     <select id="type" name="type" required>
-                        <option value="morning" {{ ($shift->type ?? 'morning') === 'morning' ? 'selected' : '' }}>Morning Shift</option>
-                        <option value="evening" {{ ($shift->type ?? '') === 'evening' ? 'selected' : '' }}>Evening Shift</option>
-                        <option value="night" {{ ($shift->type ?? '') === 'night' ? 'selected' : '' }}>Night Shift</option>
-                        <option value="flexible" {{ ($shift->type ?? '') === 'flexible' ? 'selected' : '' }}>Flexible Shift</option>
+                        <option value="morning" {{ ($shift->type ?? 'morning') === 'morning' ? 'selected' : '' }}>{{ __('employee/shifts/common.types.morning') }}</option>
+                        <option value="evening" {{ ($shift->type ?? '') === 'evening' ? 'selected' : '' }}>{{ __('employee/shifts/common.types.evening') }}</option>
+                        <option value="night" {{ ($shift->type ?? '') === 'night' ? 'selected' : '' }}>{{ __('employee/shifts/common.types.night') }}</option>
+                        <option value="flexible" {{ ($shift->type ?? '') === 'flexible' ? 'selected' : '' }}>{{ __('employee/shifts/common.types.flexible') }}</option>
                     </select>
                     @error('type')
                         <span class="error">{{ $message }}</span>
@@ -76,12 +80,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">access_time</i>
-                Update Shift Timing
+                {{ __('employee/shifts/edit.sections.timing') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="start_time">Start Time *</label>
+                    <label for="start_time">{{ __('employee/shifts/common.labels.start_time') }} *</label>
                     <input type="time" id="start_time" name="start_time" 
                            value="{{ old('start_time', $shift->start_time ?? '07:00') }}" required>
                     @error('start_time')
@@ -90,7 +94,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_time">End Time *</label>
+                    <label for="end_time">{{ __('employee/shifts/common.labels.end_time') }} *</label>
                     <input type="time" id="end_time" name="end_time" 
                            value="{{ old('end_time', $shift->end_time ?? '15:00') }}" required>
                     @error('end_time')
@@ -99,15 +103,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="break_duration">Break Duration (minutes)</label>
+                    <label for="break_duration">{{ __('employee/shifts/common.labels.break_duration') }} ({{ __('employee/shifts/common.units.minutes') }})</label>
                     <input type="number" id="break_duration" name="break_duration" 
                            value="{{ old('break_duration', $shift->break_duration ?? 60) }}" 
                            min="0" max="120">
                 </div>
 
                 <div class="form-group">
-                    <label for="total_hours">Total Working Hours</label>
-                    <input type="text" id="total_hours" readonly class="calculated-field" value="8.0 hours">
+                    <label for="total_hours">{{ __('employee/shifts/common.labels.total_hours') }}</label>
+                    <input type="text" id="total_hours" readonly class="calculated-field" value="8.0 {{ __('employee/shifts/common.units.hours') }}">
                 </div>
             </div>
         </div>
@@ -115,14 +119,14 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">location_on</i>
-                Location & Assignment Updates
+                {{ __('employee/shifts/edit.sections.location') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="location">Work Location</label>
+                    <label for="location">{{ __('employee/shifts/common.labels.location') }}</label>
                     <select id="location" name="location">
-                        <option value="">Select Location</option>
+                        <option value="">{{ __('employee/shifts/create.options.select_location') }}</option>
                         <option value="Site A - Gurgaon" {{ ($shift->location ?? 'Site A - Gurgaon') === 'Site A - Gurgaon' ? 'selected' : '' }}>Site A - Gurgaon</option>
                         <option value="Site B - Noida" {{ ($shift->location ?? '') === 'Site B - Noida' ? 'selected' : '' }}>Site B - Noida</option>
                         <option value="Site C - Faridabad" {{ ($shift->location ?? '') === 'Site C - Faridabad' ? 'selected' : '' }}>Site C - Faridabad</option>
@@ -131,15 +135,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="max_employees">Maximum Employees</label>
+                    <label for="max_employees">{{ __('employee/shifts/common.labels.max_employees') }}</label>
                     <input type="number" id="max_employees" name="max_employees" 
                            value="{{ old('max_employees', $shift->max_employees ?? 25) }}" min="1" max="100">
                 </div>
 
                 <div class="form-group">
-                    <label for="supervisor">Shift Supervisor</label>
+                    <label for="supervisor">{{ __('employee/shifts/common.labels.supervisor') }}</label>
                     <select id="supervisor" name="supervisor">
-                        <option value="">Select Supervisor</option>
+                        <option value="">{{ __('employee/shifts/create.options.select_supervisor') }}</option>
                         <option value="1" {{ ($shift->supervisor_id ?? 1) == 1 ? 'selected' : '' }}>Rajesh Kumar - Site Engineer</option>
                         <option value="2" {{ ($shift->supervisor_id ?? '') == 2 ? 'selected' : '' }}>Priya Singh - Construction Manager</option>
                         <option value="3" {{ ($shift->supervisor_id ?? '') == 3 ? 'selected' : '' }}>Amit Sharma - Safety Officer</option>
@@ -147,9 +151,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="project_id">Associated Project</label>
+                    <label for="project_id">{{ __('employee/shifts/common.labels.project') }}</label>
                     <select id="project_id" name="project_id">
-                        <option value="">Select Project (Optional)</option>
+                        <option value="">{{ __('employee/shifts/create.options.select_project') }}</option>
                         <option value="1" {{ ($shift->project_id ?? 1) == 1 ? 'selected' : '' }}>Residential Complex - Phase 2</option>
                         <option value="2" {{ ($shift->project_id ?? '') == 2 ? 'selected' : '' }}>Commercial Mall Construction</option>
                         <option value="3" {{ ($shift->project_id ?? '') == 3 ? 'selected' : '' }}>Highway Bridge Project</option>
@@ -158,11 +162,10 @@
             </div>
         </div>
 
-        <!-- Current Employee Assignments -->
         <div class="assignments-section">
             <h3 class="section-title">
                 <i class="material-icons">groups</i>
-                Current Employee Assignments
+                {{ __('employee/shifts/edit.sections.assignments') }}
             </h3>
 
             <div class="assignments-summary">
@@ -172,7 +175,7 @@
                     </div>
                     <div class="summary-info">
                         <h4>{{ $shift->employees_count ?? 15 }} / {{ $shift->max_employees ?? 25 }}</h4>
-                        <p>Employees Assigned</p>
+                        <p>{{ __('employee/shifts/edit.cards.assigned') }}</p>
                     </div>
                 </div>
 
@@ -182,7 +185,7 @@
                     </div>
                     <div class="summary-info">
                         <h4>{{ $shift->supervisor ?? 'Rajesh Kumar' }}</h4>
-                        <p>Shift Supervisor</p>
+                        <p>{{ __('employee/shifts/edit.cards.supervisor') }}</p>
                     </div>
                 </div>
 
@@ -192,7 +195,7 @@
                     </div>
                     <div class="summary-info">
                         <h4>{{ $shift->skill_distribution ?? '8 Skilled, 7 General' }}</h4>
-                        <p>Skill Distribution</p>
+                        <p>{{ __('employee/shifts/edit.cards.skills') }}</p>
                     </div>
                 </div>
             </div>
@@ -200,85 +203,61 @@
             <div class="assignment-actions">
                 <button type="button" class="btn-secondary" onclick="manageAssignments()">
                     <i class="material-icons">manage_accounts</i>
-                    Manage Assignments
+                    {{ __('employee/shifts/edit.actions.manage') }}
                 </button>
                 <button type="button" class="btn-success" onclick="addEmployees()">
                     <i class="material-icons">person_add</i>
-                    Add Employees
+                    {{ __('employee/shifts/edit.actions.add') }}
                 </button>
             </div>
         </div>
 
-        <!-- Configuration Updates -->
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">settings</i>
-                Shift Configuration Updates
+                {{ __('employee/shifts/edit.sections.config') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="working_days">Working Days</label>
+                    <label for="working_days">{{ __('employee/shifts/common.labels.working_days') }}</label>
                     <div class="checkbox-group">
+                        @foreach(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day)
                         <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="monday" checked>
-                            <span>Monday</span>
+                            <input type="checkbox" name="working_days[]" value="{{ $day }}" {{ $day != 'sunday' ? 'checked' : '' }}>
+                            <span>{{ ucfirst(substr($day, 0, 3)) }}</span>
                         </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="tuesday" checked>
-                            <span>Tuesday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="wednesday" checked>
-                            <span>Wednesday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="thursday" checked>
-                            <span>Thursday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="friday" checked>
-                            <span>Friday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="saturday" checked>
-                            <span>Saturday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="sunday">
-                            <span>Sunday</span>
-                        </label>
+                        @endforeach
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="overtime_allowed">Overtime Settings</label>
+                    <label for="overtime_allowed">{{ __('employee/shifts/common.labels.overtime') }}</label>
                     <div class="radio-group">
                         <label class="radio-item">
                             <input type="radio" name="overtime_allowed" value="1" 
                                    {{ ($shift->overtime_allowed ?? true) ? 'checked' : '' }}>
-                            <span>Overtime Allowed</span>
+                            <span>{{ __('employee/shifts/create.options.overtime_yes') }}</span>
                         </label>
                         <label class="radio-item">
                             <input type="radio" name="overtime_allowed" value="0" 
                                    {{ !($shift->overtime_allowed ?? true) ? 'checked' : '' }}>
-                            <span>No Overtime</span>
+                            <span>{{ __('employee/shifts/create.options.overtime_no') }}</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="description">Shift Description</label>
+                    <label for="description">{{ __('employee/shifts/common.labels.description') }}</label>
                     <textarea id="description" name="description" rows="3">{{ old('description', $shift->description ?? 'This shift handles primary construction activities including foundation work, structural assembly, and site preparation. All safety protocols must be followed strictly.') }}</textarea>
                 </div>
             </div>
         </div>
 
-        <!-- Change Log -->
         <div class="audit-section">
             <h3 class="section-title">
                 <i class="material-icons">history</i>
-                Recent Changes
+                {{ __('employee/shifts/edit.sections.history') }}
             </h3>
 
             <div class="audit-trail">
@@ -305,20 +284,19 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Shift
+                {{ __('employee/shifts/common.actions.update') }}
             </button>
             <a href="{{ route('admin.shifts.show', $shift->id ?? 1) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('employee/shifts/common.actions.cancel_changes') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteShift()">
                 <i class="material-icons">delete</i>
-                Delete Shift
+                {{ __('employee/shifts/common.actions.delete') }}
             </button>
         </div>
     </form>
 </div>
 @endsection
-
 @push('styles')
 <style>
     .page-header { margin-bottom: 32px; }
@@ -678,13 +656,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function manageAssignments() {
-    // TODO: Open assignment management modal
-    alert('Assignment management functionality will be implemented');
+    alert('{{ __('employee/shifts/common.messages.assign_todo') }}');
 }
 
 function addEmployees() {
-    // TODO: Open employee selection modal
-    alert('Employee addition functionality will be implemented');
+    alert('{{ __('employee/shifts/common.messages.assign_todo') }}');
 }
 
 function deleteShift() {

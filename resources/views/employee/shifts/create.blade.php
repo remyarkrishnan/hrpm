@@ -1,18 +1,23 @@
-@extends('layouts.admin')
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 
-@section('title', 'Create Shift - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Create Shift')
+@extends('layouts.employee')
+
+@section('title', __('employee/shifts/create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/shifts/create.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.shifts.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Shifts
+            {{ __('employee/shifts/common.actions.back') }}
         </a>
     </div>
-    <h2>Create New Shift</h2>
-    <p>Set up a new shift schedule for construction teams</p>
+    <h2>{{ __('employee/shifts/create.title') }}</h2>
+    <p>{{ __('employee/shifts/create.subtitle') }}</p>
 </div>
 
 <div class="form-container">
@@ -22,27 +27,27 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">schedule</i>
-                Shift Information
+                {{ __('employee/shifts/create.sections.info') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="name">Shift Name *</label>
+                    <label for="name">{{ __('employee/shifts/common.labels.name') }} *</label>
                     <input type="text" id="name" name="name" value="{{ old('name') }}" required 
-                           placeholder="e.g. Morning Construction Shift">
+                           placeholder="{{ __('employee/shifts/create.placeholders.name') }}">
                     @error('name')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="type">Shift Type *</label>
+                    <label for="type">{{ __('employee/shifts/common.labels.type') }} *</label>
                     <select id="type" name="type" required>
-                        <option value="">Select Shift Type</option>
-                        <option value="morning" {{ old('type') === 'morning' ? 'selected' : '' }}>Morning Shift</option>
-                        <option value="evening" {{ old('type') === 'evening' ? 'selected' : '' }}>Evening Shift</option>
-                        <option value="night" {{ old('type') === 'night' ? 'selected' : '' }}>Night Shift</option>
-                        <option value="flexible" {{ old('type') === 'flexible' ? 'selected' : '' }}>Flexible Shift</option>
+                        <option value="">{{ __('employee/shifts/create.options.select_type') }}</option>
+                        <option value="morning" {{ old('type') === 'morning' ? 'selected' : '' }}>{{ __('employee/shifts/common.types.morning') }}</option>
+                        <option value="evening" {{ old('type') === 'evening' ? 'selected' : '' }}>{{ __('employee/shifts/common.types.evening') }}</option>
+                        <option value="night" {{ old('type') === 'night' ? 'selected' : '' }}>{{ __('employee/shifts/common.types.night') }}</option>
+                        <option value="flexible" {{ old('type') === 'flexible' ? 'selected' : '' }}>{{ __('employee/shifts/common.types.flexible') }}</option>
                     </select>
                     @error('type')
                         <span class="error">{{ $message }}</span>
@@ -54,12 +59,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">access_time</i>
-                Shift Timing
+                {{ __('employee/shifts/create.sections.timing') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="start_time">Start Time *</label>
+                    <label for="start_time">{{ __('employee/shifts/common.labels.start_time') }} *</label>
                     <input type="time" id="start_time" name="start_time" value="{{ old('start_time') }}" required>
                     @error('start_time')
                         <span class="error">{{ $message }}</span>
@@ -67,7 +72,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_time">End Time *</label>
+                    <label for="end_time">{{ __('employee/shifts/common.labels.end_time') }} *</label>
                     <input type="time" id="end_time" name="end_time" value="{{ old('end_time') }}" required>
                     @error('end_time')
                         <span class="error">{{ $message }}</span>
@@ -75,14 +80,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="break_duration">Break Duration (minutes)</label>
+                    <label for="break_duration">{{ __('employee/shifts/common.labels.break_duration') }} ({{ __('employee/shifts/common.units.minutes') }})</label>
                     <input type="number" id="break_duration" name="break_duration" 
                            value="{{ old('break_duration', 60) }}" min="0" max="120" 
-                           placeholder="60">
+                           placeholder="{{ __('employee/shifts/create.placeholders.break') }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="total_hours">Total Working Hours</label>
+                    <label for="total_hours">{{ __('employee/shifts/common.labels.total_hours') }}</label>
                     <input type="text" id="total_hours" readonly class="calculated-field">
                 </div>
             </div>
@@ -91,14 +96,14 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">location_on</i>
-                Location & Assignment
+                {{ __('employee/shifts/create.sections.location') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="location">Work Location</label>
+                    <label for="location">{{ __('employee/shifts/common.labels.location') }}</label>
                     <select id="location" name="location">
-                        <option value="">Select Location</option>
+                        <option value="">{{ __('employee/shifts/create.options.select_location') }}</option>
                         <option value="Site A - Gurgaon">Site A - Gurgaon</option>
                         <option value="Site B - Noida">Site B - Noida</option>
                         <option value="Site C - Faridabad">Site C - Faridabad</option>
@@ -107,16 +112,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="max_employees">Maximum Employees</label>
+                    <label for="max_employees">{{ __('employee/shifts/common.labels.max_employees') }}</label>
                     <input type="number" id="max_employees" name="max_employees" 
                            value="{{ old('max_employees') }}" min="1" max="100" 
-                           placeholder="e.g. 25">
+                           placeholder="{{ __('employee/shifts/create.placeholders.max') }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="supervisor">Shift Supervisor</label>
+                    <label for="supervisor">{{ __('employee/shifts/common.labels.supervisor') }}</label>
                     <select id="supervisor" name="supervisor">
-                        <option value="">Select Supervisor</option>
+                        <option value="">{{ __('employee/shifts/create.options.select_supervisor') }}</option>
                         <option value="1">Rajesh Kumar - Site Engineer</option>
                         <option value="2">Priya Singh - Construction Manager</option>
                         <option value="3">Amit Sharma - Safety Officer</option>
@@ -124,9 +129,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="project_id">Associated Project</label>
+                    <label for="project_id">{{ __('employee/shifts/common.labels.project') }}</label>
                     <select id="project_id" name="project_id">
-                        <option value="">Select Project (Optional)</option>
+                        <option value="">{{ __('employee/shifts/create.options.select_project') }}</option>
                         <option value="1">Residential Complex - Phase 2</option>
                         <option value="2">Commercial Mall Construction</option>
                         <option value="3">Highway Bridge Project</option>
@@ -138,76 +143,53 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">settings</i>
-                Shift Configuration
+                {{ __('employee/shifts/create.sections.config') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="working_days">Working Days</label>
+                    <label for="working_days">{{ __('employee/shifts/common.labels.working_days') }}</label>
                     <div class="checkbox-group">
+                        @foreach(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day)
                         <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="monday" checked>
-                            <span>Monday</span>
+                            <input type="checkbox" name="working_days[]" value="{{ $day }}" {{ $day != 'sunday' ? 'checked' : '' }}>
+                            <span>{{ ucfirst(substr($day, 0, 3)) }}</span>
                         </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="tuesday" checked>
-                            <span>Tuesday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="wednesday" checked>
-                            <span>Wednesday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="thursday" checked>
-                            <span>Thursday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="friday" checked>
-                            <span>Friday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="saturday" checked>
-                            <span>Saturday</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="working_days[]" value="sunday">
-                            <span>Sunday</span>
-                        </label>
+                        @endforeach
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="overtime_allowed">Overtime Settings</label>
+                    <label for="overtime_allowed">{{ __('employee/shifts/common.labels.overtime') }}</label>
                     <div class="radio-group">
                         <label class="radio-item">
                             <input type="radio" name="overtime_allowed" value="1" checked>
-                            <span>Overtime Allowed</span>
+                            <span>{{ __('employee/shifts/create.options.overtime_yes') }}</span>
                         </label>
                         <label class="radio-item">
                             <input type="radio" name="overtime_allowed" value="0">
-                            <span>No Overtime</span>
+                            <span>{{ __('employee/shifts/create.options.overtime_no') }}</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="description">Shift Description</label>
+                    <label for="description">{{ __('employee/shifts/common.labels.description') }}</label>
                     <textarea id="description" name="description" rows="3" 
-                              placeholder="Describe the shift duties, requirements, or special instructions">{{ old('description') }}</textarea>
+                              placeholder="{{ __('employee/shifts/create.placeholders.description') }}">{{ old('description') }}</textarea>
                 </div>
             </div>
         </div>
 
-        <!-- Shift Preview -->
         <div class="preview-section">
             <h3 class="section-title">
                 <i class="material-icons">preview</i>
-                Shift Preview
+                {{ __('employee/shifts/create.sections.preview') }}
             </h3>
 
             <div class="preview-card">
                 <div class="preview-header">
-                    <h4 id="preview-name">New Shift</h4>
+                    <h4 id="preview-name">{{ __('employee/shifts/create.preview.new') }}</h4>
                     <span class="preview-type" id="preview-type">morning</span>
                 </div>
 
@@ -219,12 +201,12 @@
 
                     <div class="preview-location">
                         <i class="material-icons">location_on</i>
-                        <span id="preview-location">No location selected</span>
+                        <span id="preview-location">{{ __('employee/shifts/create.preview.no_location') }}</span>
                     </div>
 
                     <div class="preview-capacity">
                         <i class="material-icons">groups</i>
-                        <span id="preview-capacity">No limit set</span>
+                        <span id="preview-capacity">{{ __('employee/shifts/create.preview.no_limit') }}</span>
                     </div>
                 </div>
             </div>
@@ -233,10 +215,10 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">add</i>
-                Create Shift
+                {{ __('employee/shifts/common.actions.create') }}
             </button>
             <a href="{{ route('admin.shifts.index') }}" class="btn-cancel">
-                Cancel
+                {{ __('employee/shifts/common.actions.cancel') }}
             </a>
         </div>
     </form>

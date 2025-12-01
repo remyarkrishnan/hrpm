@@ -1,0 +1,20 @@
+<?php
+return [
+    'title' => 'Edit Document Request',
+    'page_title' => 'Employee Dashboard',
+    'back_to_documents' => 'Back to Documents',
+    'view_details' => 'View Details',
+    'header_title' => 'Edit Document Request',
+    'header_description' => 'Update document request',
+    'update_document_info' => 'Update Document Information',
+    'document_type_label' => 'Document Type',
+    'id_letter' => 'ID Letter',
+    'experience_certificate' => 'Experience Certificate',
+    'salary_slip' => 'Salary Slip',
+    'update_button' => 'Update Document Request',
+    'cancel_button' => 'Cancel Changes',
+    'delete_request' => 'Delete Request',
+    'delete_confirm' => 'Are you sure you want to delete this document request? This action cannot be undone.',
+    'delete_success' => 'Document request deleted successfully',
+    'delete_error' => 'Error deleting document request',
+];

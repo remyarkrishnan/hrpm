@@ -1,154 +1,155 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Overtime Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Overtime Details')
+@section('title', __('employee/overtime/show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/overtime/show.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.overtime.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Overtime
+            {{ __('employee/overtime/common.actions.back') }}
         </a>
     </div>
     <div class="overtime-header">
         <div class="overtime-info">
             <h2>{{ $overtime->employee_name ?? 'Rajesh Kumar' }}</h2>
-            <p>{{ $overtime->employee_code ?? 'EMP-001' }} • Overtime Request</p>
+            <p>{{ $overtime->employee_code ?? 'EMP-001' }} • {{ __('employee/overtime/show.header') }}</p>
             <div class="overtime-date">
                 <i class="material-icons">date_range</i>
                 <span>{{ $overtime->date ?? '2025-10-07' }}</span>
-                <strong>{{ $overtime->hours ?? '2.5' }} hours</strong>
+                <strong>{{ $overtime->hours ?? '2.5' }} {{ __('employee/overtime/common.labels.hours_suffix') }}</strong>
             </div>
         </div>
         <div class="overtime-status">
             <span class="status-badge status-{{ $overtime->status ?? 'approved' }}">
-                {{ ucfirst($overtime->status ?? 'Approved') }}
+                {{ __('employee/overtime/common.status.' . ($overtime->status ?? 'approved')) }}
             </span>
             <div class="overtime-amount">
                 <strong>₹{{ number_format(($overtime->hours ?? 2.5) * 750, 2) }}</strong>
-                <small>Estimated Pay</small>
+                <small>{{ __('employee/overtime/show.estimated_pay') }}</small>
             </div>
         </div>
     </div>
 </div>
 
 <div class="overtime-details">
-    <!-- Overtime Information -->
     <div class="detail-grid">
         <div class="detail-card">
-            <h3>Overtime Information</h3>
+            <h3>{{ __('employee/overtime/show.sections.info') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Date:</strong>
+                    <strong>{{ __('employee/overtime/common.labels.date') }}:</strong>
                     <span>{{ $overtime->date ?? '2025-10-07' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Hours:</strong>
-                    <span>{{ $overtime->hours ?? '2.5' }} hours</span>
+                    <strong>{{ __('employee/overtime/common.labels.hours') }}:</strong>
+                    <span>{{ $overtime->hours ?? '2.5' }} {{ __('employee/overtime/common.labels.hours_suffix') }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Start Time:</strong>
+                    <strong>{{ __('employee/overtime/common.labels.start_time') }}:</strong>
                     <span>{{ $overtime->start_time ?? '18:00' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>End Time:</strong>
+                    <strong>{{ __('employee/overtime/common.labels.end_time') }}:</strong>
                     <span>{{ $overtime->end_time ?? '20:30' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Project:</strong>
-                    <span>{{ $overtime->project ?? 'Residential Complex - Phase 2' }}</span>
+                    <strong>{{ __('employee/overtime/common.labels.project') }}:</strong>
+                    <span>{{ $overtime->project ?? __('employee/overtime/common.projects.residential') }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Urgency Level:</strong>
+                    <strong>{{ __('employee/overtime/common.labels.urgency') }}:</strong>
                     <span class="urgency-badge urgency-{{ $overtime->urgency_level ?? 'urgent' }}">
-                        {{ ucfirst($overtime->urgency_level ?? 'Urgent') }}
+                        {{ __('employee/overtime/common.urgency.' . ($overtime->urgency_level ?? 'urgent')) }}
                     </span>
                 </div>
             </div>
         </div>
 
         <div class="detail-card">
-            <h3>Payment Calculation</h3>
+            <h3>{{ __('employee/overtime/show.sections.payment') }}</h3>
             <div class="payment-breakdown">
                 <div class="payment-item">
-                    <span>Base Hourly Rate:</span>
+                    <span>{{ __('employee/overtime/create.calc.base_rate') }}:</span>
                     <strong>₹500.00</strong>
                 </div>
                 <div class="payment-item">
-                    <span>Overtime Multiplier:</span>
+                    <span>{{ __('employee/overtime/create.calc.multiplier') }}:</span>
                     <strong>1.5x</strong>
                 </div>
                 <div class="payment-item">
-                    <span>Overtime Rate:</span>
+                    <span>{{ __('employee/overtime/create.calc.overtime_rate') }}:</span>
                     <strong>₹750.00/hr</strong>
                 </div>
                 <div class="payment-item">
-                    <span>Total Hours:</span>
+                    <span>{{ __('employee/overtime/show.payment.total_hours') }}:</span>
                     <strong>{{ $overtime->hours ?? '2.5' }} hrs</strong>
                 </div>
                 <div class="payment-item total">
-                    <span>Total Amount:</span>
+                    <span>{{ __('employee/overtime/show.payment.total_amount') }}:</span>
                     <strong>₹{{ number_format(($overtime->hours ?? 2.5) * 750, 2) }}</strong>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Work Description -->
     <div class="description-section">
-        <h3>Reason & Work Description</h3>
+        <h3>{{ __('employee/overtime/show.sections.description') }}</h3>
         <div class="description-content">
             <div class="reason-card">
-                <h4>Reason for Overtime</h4>
+                <h4>{{ __('employee/overtime/common.labels.reason') }}</h4>
                 <p>{{ $overtime->reason ?? 'Project deadline approaching. Additional foundation work required to meet construction schedule. Critical phase completion needed.' }}</p>
             </div>
 
             @if(isset($overtime->work_description))
             <div class="work-card">
-                <h4>Work Description</h4>
+                <h4>{{ __('employee/overtime/common.labels.description') }}</h4>
                 <p>{{ $overtime->work_description }}</p>
             </div>
             @endif
         </div>
     </div>
 
-    <!-- Approval Information -->
     @if(isset($overtime->approved_by) || ($overtime->status ?? 'pending') !== 'pending')
     <div class="approval-section">
-        <h3>Approval Information</h3>
+        <h3>{{ __('employee/overtime/show.sections.approval') }}</h3>
         <div class="approval-details">
             <div class="approval-item">
-                <strong>Status:</strong>
+                <strong>{{ __('employee/overtime/common.labels.status') }}:</strong>
                 <span class="status-badge status-{{ $overtime->status ?? 'approved' }}">
-                    {{ ucfirst($overtime->status ?? 'Approved') }}
+                    {{ __('employee/overtime/common.status.' . ($overtime->status ?? 'approved')) }}
                 </span>
             </div>
 
             @if(isset($overtime->approved_by))
             <div class="approval-item">
-                <strong>Approved By:</strong>
+                <strong>{{ __('employee/overtime/edit.admin.handled_by') }}:</strong>
                 <span>{{ $overtime->approved_by ?? 'Project Manager Singh' }}</span>
             </div>
             @endif
 
             @if(isset($overtime->approved_at))
             <div class="approval-item">
-                <strong>Approved Date:</strong>
+                <strong>{{ __('employee/overtime/show.approval.approved_date') }}:</strong>
                 <span>{{ $overtime->approved_at ?? '2025-10-08 09:30 AM' }}</span>
             </div>
             @endif
 
             @if(isset($overtime->remarks))
             <div class="approval-item full-width">
-                <strong>Remarks:</strong>
+                <strong>{{ __('employee/overtime/show.approval.remarks') }}:</strong>
                 <p>{{ $overtime->remarks }}</p>
             </div>
             @endif
 
             @if(isset($overtime->rejection_reason))
             <div class="approval-item full-width">
-                <strong>Rejection Reason:</strong>
+                <strong>{{ __('employee/overtime/show.approval.rejection_reason') }}:</strong>
                 <p class="rejection-reason">{{ $overtime->rejection_reason }}</p>
             </div>
             @endif
@@ -156,16 +157,15 @@
     </div>
     @endif
 
-    <!-- Time Tracking -->
     <div class="tracking-section">
-        <h3>Time Tracking Details</h3>
+        <h3>{{ __('employee/overtime/show.sections.tracking') }}</h3>
         <div class="tracking-grid">
             <div class="tracking-card">
                 <div class="tracking-icon">
                     <i class="material-icons">schedule</i>
                 </div>
                 <div class="tracking-info">
-                    <h4>Regular Hours</h4>
+                    <h4>{{ __('employee/overtime/show.tracking.regular') }}</h4>
                     <div class="tracking-value">8h 00m</div>
                     <small>09:00 AM - 06:00 PM</small>
                 </div>
@@ -176,7 +176,7 @@
                     <i class="material-icons">more_time</i>
                 </div>
                 <div class="tracking-info">
-                    <h4>Overtime Hours</h4>
+                    <h4>{{ __('employee/overtime/show.tracking.overtime') }}</h4>
                     <div class="tracking-value">{{ $overtime->hours ?? '2.5' }}h</div>
                     <small>{{ $overtime->start_time ?? '18:00' }} - {{ $overtime->end_time ?? '20:30' }}</small>
                 </div>
@@ -187,36 +187,35 @@
                     <i class="material-icons">today</i>
                 </div>
                 <div class="tracking-info">
-                    <h4>Total Working</h4>
+                    <h4>{{ __('employee/overtime/show.tracking.total') }}</h4>
                     <div class="tracking-value">{{ 8 + ($overtime->hours ?? 2.5) }}h</div>
-                    <small>Including overtime</small>
+                    <small>{{ __('employee/overtime/show.tracking.including') }}</small>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Action Buttons -->
     @if(($overtime->status ?? 'pending') === 'pending')
     <div class="action-section">
         <div class="approval-actions">
             <button class="btn-approve" onclick="approveOvertime()">
                 <i class="material-icons">check_circle</i>
-                Approve Overtime
+                {{ __('employee/overtime/common.actions.approve') }}
             </button>
             <button class="btn-reject" onclick="rejectOvertime()">
                 <i class="material-icons">cancel</i>
-                Reject Overtime
+                {{ __('employee/overtime/common.actions.reject') }}
             </button>
         </div>
 
         <div class="other-actions">
             <a href="{{ route('admin.overtime.edit', $overtime->id ?? 1) }}" class="btn-secondary">
                 <i class="material-icons">edit</i>
-                Edit Request
+                {{ __('employee/overtime/common.actions.edit') }}
             </a>
             <button class="btn-danger" onclick="deleteOvertime()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('employee/overtime/common.actions.delete') }}
             </button>
         </div>
     </div>

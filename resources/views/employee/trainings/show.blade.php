@@ -1,6 +1,10 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Training Request Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('title', __('employee/trainings/show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
 @section('page-title', 'Employee dashboard')
 
 @section('content')
@@ -8,65 +12,63 @@
     <div class="page-nav">
         <a href="{{ route('employee.trainings.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Trainings
+            {{ __('employee/trainings/common.actions.back') }}
         </a>
     </div>
- 
 </div>
 
 <div class="leave-details">
-    <!-- Leave Information -->
     <div class="detail-grid">
         <div class="detail-card">
-            <h3>Training Information</h3>
+            <h3>{{ __('employee/trainings/show.sections.info') }}</h3>
             <div class="info-list">
-             <div class="info-item">
-                    <strong>Name:</strong>
+                <div class="info-item">
+                    <strong>{{ __('employee/trainings/show.fields.name') }}:</strong>
                     <span>{{ $training->name }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Location:</strong>
+                    <strong>{{ __('employee/trainings/show.fields.location') }}:</strong>
                     <span>{{ $training->location }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Duration:</strong>
+                    <strong>{{ __('employee/trainings/show.fields.duration') }}:</strong>
                     <span>{{ $training->duration }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Benefit:</strong>
+                    <strong>{{ __('employee/trainings/show.fields.benefit') }}:</strong>
                     <span>{{ $training->benefit }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Applied Date:</strong>
-                    <span>{{ $training->created_at }} </span>
+                    <strong>{{ __('employee/trainings/show.fields.applied_date') }}:</strong>
+                    <span>{{ $training->created_at }}</span>
                 </div>
             </div>
         </div>
 
         <div class="detail-card">
-            <h3>Approval Information</h3>
+            <h3>{{ __('employee/trainings/show.sections.approval') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Current Status:</strong>
+                    <strong>{{ __('employee/trainings/show.fields.current_status') }}:</strong>
                     <span class="status-badge status-{{ $training->status ?? 'pending' }}">
                         {{ ucfirst($training->status ?? 'Pending') }}
                     </span>
                 </div>
                 @if(isset($training->approved_by))
                 <div class="info-item">
-                    <strong>Approved By:</strong>
+                    <strong>{{ __('employee/trainings/show.fields.approved_by') }}:</strong>
                     <span>{{ $training->approved_by }}</span>
                 </div>
                 @endif
                 @if(isset($training->approved_at))
                 <div class="info-item">
-                    <strong>Approved Date:</strong>
+                    <strong>{{ __('employee/trainings/show.fields.approved_date') }}:</strong>
                     <span>{{ $training->approved_at }}</span>
                 </div>
                 @endif
                 @if(isset($training->rejection_reason))
                 <div class="info-item">
-                    <strong>Rejection Reason:</strong>
+                    <strong>{{ __('employee/trainings/show.fields.rejection_reason') }}:</strong>
                     <span class="rejection-reason">{{ $training->rejection_reason }}</span>
                 </div>
                 @endif
@@ -74,12 +76,9 @@
         </div>
     </div>
 
-   
-
-    <!-- Supporting Documents -->
     @if(isset($leave->documents) && count($leave->documents) > 0)
     <div class="documents-section">
-        <h3>Supporting Documents</h3>
+        <h3>{{ __('employee/trainings/common.labels.supporting_docs') }}</h3>
         <div class="documents-grid">
             @foreach($leave->documents as $document)
             <div class="document-item">
@@ -88,13 +87,13 @@
                 </div>
                 <div class="document-info">
                     <strong>{{ $document }}</strong>
-                    <small>Supporting Document</small>
+                    <small>{{ __('employee/trainings/common.labels.supporting_doc_label') }}</small>
                 </div>
                 <div class="document-actions">
-                    <a href="#" class="btn-action" target="_blank">
+                    <a href="#" class="btn-action" target="_blank" title="{{ __('employee/trainings/common.actions.open_new') }}">
                         <i class="material-icons">open_in_new</i>
                     </a>
-                    <a href="#" class="btn-action" download>
+                    <a href="#" class="btn-action" download title="{{ __('employee/trainings/common.actions.download') }}">
                         <i class="material-icons">download</i>
                     </a>
                 </div>
@@ -104,21 +103,16 @@
     </div>
     @endif
 
-   
-
-    <!-- Action Buttons -->
     @if(($leave->status ?? 'pending') === 'pending')
     <div class="action-section">
-      
-
         <div class="other-actions">
             <a href="{{ route('employee.trainings.edit', $training->id ?? 1) }}" class="btn-secondary">
                 <i class="material-icons">edit</i>
-                Edit Request
+                {{ __('employee/trainings/common.actions.edit') }}
             </a>
             <button class="btn-danger" onclick="deleteTraining()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('employee/trainings/common.actions.delete') }}
             </button>
         </div>
     </div>

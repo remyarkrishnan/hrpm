@@ -1,6 +1,10 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Leave Request Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('title', __('employee/leaves/show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
 @section('page-title', 'Employee dashboard')
 
 @section('content')
@@ -8,65 +12,77 @@
     <div class="page-nav">
         <a href="{{ route('employee.leaves.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Leaves
+            {{ __('employee/leaves/common.actions.back') }}
         </a>
     </div>
   
 </div>
 
 <div class="leave-details">
-    <!-- Leave Information -->
     <div class="detail-grid">
         <div class="detail-card">
-            <h3>Leave Information</h3>
+            <h3>{{ __('employee/leaves/show.sections.info') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Leave Type:</strong>
-                    <span>{{ ucfirst(str_replace('_', ' ', $leave->leave_type ?? 'sick_leave')) }}</span>
+                    <strong>{{ __('employee/leaves/common.labels.leave_type') }}:</strong>
+                    {{-- Dynamically translate type using key from DB --}}
+                    <span>{{ __('employee/leaves/common.types.' . ($leave->leave_type ?? 'sick_leave')) }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Applied Date:</strong>
+                    <strong>{{ __('employee/leaves/show.info.applied_date') }}:</strong>
                     <span>{{ $leave->created_at->format('d-m-Y') ?? '' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Start Date:</strong>
+                    <strong>{{ __('employee/leaves/common.labels.start_date') }}:</strong>
                     <span>{{ $leave->from_date->format('d-m-Y') ?? '' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>End Date:</strong>
+                    <strong>{{ __('employee/leaves/common.labels.end_date') }}:</strong>
                     <span>{{ $leave->to_date->format('d-m-Y') ?? '' }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>Total Days:</strong>
-                    <span>{{ round($leave->total_days) ?? 0}} days</span>
+                    <strong>{{ __('employee/leaves/common.labels.total_days') }}:</strong>
+                    <span>{{ round($leave->total_days) ?? 0}} {{ __('employee/leaves/common.labels.days') }}</span>
                 </div>
             </div>
         </div>
 
         <div class="detail-card">
-            <h3>Approval Information</h3>
+            <h3>{{ __('employee/leaves/show.sections.approval') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>Current Status:</strong>
+                    <strong>{{ __('employee/leaves/show.info.current_status') }}:</strong>
                     <span class="status-badge status-{{ $leave->status ?? 'pending' }}">
-                        {{ ucfirst($leave->status ?? 'Pending') }}
+                        {{ __('employee/leaves/common.status.' . ($leave->status ?? 'pending')) }}
                     </span>
                 </div>
                 @if(isset($leave->approved_by))
                 <div class="info-item">
-                    <strong>@if($leave->status == 'approved') Approved @else Rejected @endif By:</strong>
+                    <strong>
+                        @if($leave->status == 'approved') 
+                            {{ __('employee/leaves/show.info.approved_by') }}
+                        @else 
+                            {{ __('employee/leaves/show.info.rejected_by') }}
+                        @endif:
+                    </strong>
                     <span>{{ $leave->approver->name }}</span>
                 </div>
                 @endif
                 @if(isset($leave->approved_at))
                 <div class="info-item">
-                    <strong>@if($leave->status == 'approved') Approved @else Rejected @endif Date:</strong>
+                    <strong>
+                        @if($leave->status == 'approved') 
+                            {{ __('employee/leaves/show.info.approved_date') }}
+                        @else 
+                            {{ __('employee/leaves/show.info.rejected_date') }}
+                        @endif:
+                    </strong>
                     <span>{{ $leave->approved_at->format('d-m-Y') }}</span>
                 </div>
                 @endif
                  @if(isset($leave->remarks)&&$leave->status == 'rejected')
                 <div class="info-item">
-                    <strong>Rejection Reason:</strong>
+                    <strong>{{ __('employee/leaves/show.info.rejection_reason') }}:</strong>
                     <span class="rejection-reason">{{ $leave->remarks}}</span>
                 </div>
                 @endif
@@ -74,21 +90,19 @@
         </div>
     </div>
 
-    <!-- Leave Reason -->
     <div class="reason-section">
-        <h3>Leave Reason</h3>
+        <h3>{{ __('employee/leaves/show.sections.reason') }}</h3>
         <div class="reason-content">
             <p>{{ $leave->reason ?? '' }}</p>
         </div>
     </div>
 
-    <!-- Supporting Documents -->
     @php
     $documents = json_decode($leave->supporting_document ?? '[]', true);
     @endphp
     @if(isset($documents) && count($documents) > 0)
     <div class="documents-section">
-        <h3>Supporting Documents</h3>
+        <h3>{{ __('employee/leaves/show.sections.documents') }}</h3>
         <div class="documents-grid">
             @foreach($documents as $document)
             <div class="document-item">
@@ -97,13 +111,13 @@
                 </div>
                 <div class="document-info">
                    
-                    <small>Supporting Document</small>
+                    <small>{{ __('employee/leaves/show.documents.supporting_doc') }}</small>
                 </div>
                 <div class="document-actions">
-                    <a href="{{ asset('storage/'.$document) }}" class="btn-action" target="_blank">
+                    <a href="{{ asset('storage/'.$document) }}" class="btn-action" target="_blank" title="{{ __('employee/leaves/common.actions.open_new') }}">
                         <i class="material-icons">open_in_new</i>
                     </a>
-                    <a href="{{ asset('storage/'.$document) }}" class="btn-action" download>
+                    <a href="{{ asset('storage/'.$document) }}" class="btn-action" download title="{{ __('employee/leaves/common.actions.download') }}">
                         <i class="material-icons">download</i>
                     </a>
                 </div>
@@ -113,27 +127,25 @@
     </div>
     @endif
 
-    <!-- Leave Balance Impact -->
     <div class="balance-impact">
-        <h3>Leave Balance Impact</h3>
+        <h3>{{ __('employee/leaves/show.sections.balance_impact') }}</h3>
         <div class="balance-grid">
             <div class="balance-item">
-                <h4>Before Leave</h4>
-                <div class="balance-value">8 days</div>
-                <small>Available Balance</small>
+                <h4>{{ __('employee/leaves/show.impact.before') }}</h4>
+                <div class="balance-value">8 {{ __('employee/leaves/common.labels.days') }}</div>
+                <small>{{ __('employee/leaves/show.impact.available_bal') }}</small>
             </div>
             <div class="balance-arrow">
                 <i class="material-icons">arrow_forward</i>
             </div>
             <div class="balance-item">
-                <h4>After Leave</h4>
-                <div class="balance-value">5 days</div>
-                <small>Remaining Balance</small>
+                <h4>{{ __('employee/leaves/show.impact.after') }}</h4>
+                <div class="balance-value">5 {{ __('employee/leaves/common.labels.days') }}</div>
+                <small>{{ __('employee/leaves/show.impact.remaining_bal') }}</small>
             </div>
         </div>
     </div>
 
-    <!-- Action Buttons -->
     @if(($leave->status ?? 'pending') === 'pending')
     <div class="action-section">
       
@@ -141,11 +153,11 @@
         <div class="other-actions">
             <a href="{{ route('employee.leaves.edit', $leave->id ) }}" class="btn-secondary">
                 <i class="material-icons">edit</i>
-                Edit Request
+                {{ __('employee/leaves/common.actions.edit') }}
             </a>
             <button class="btn-danger" onclick="deleteLeave()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('employee/leaves/common.actions.delete') }}
             </button>
         </div>
     </div>
@@ -154,6 +166,7 @@
 @endsection
 
 @push('styles')
+{{-- Styles remain exactly as provided --}}
 <style>
     .page-header { margin-bottom: 32px; }
 
@@ -442,7 +455,8 @@
 @push('scripts')
 <script>
 function approveLeave() {
-    const remarks = prompt('Add approval remarks (optional):');
+    // Localized prompt not needed for employee side usually, but if this is shared:
+    const remarks = prompt("{{ __('employee/leaves/common.messages.approval_remarks_prompt') }}");
 
     fetch(`/employee/leaves/{{ $leave->id ?? 1 }}/approve`, {
         method: 'POST',
@@ -455,22 +469,22 @@ function approveLeave() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Leave request approved successfully');
+            alert("{{ __('employee/leaves/common.messages.approve_success') }}");
             location.reload();
         } else {
-            alert('Error approving leave request');
+            alert("{{ __('employee/leaves/common.messages.approve_error') }}");
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error approving leave request');
+        alert("{{ __('employee/leaves/common.messages.approve_error') }}");
     });
 }
 
 function rejectLeave() {
-    const reason = prompt('Please enter rejection reason:');
+    const reason = prompt("{{ __('employee/leaves/common.messages.reject_prompt') }}");
     if (!reason || reason.trim() === '') {
-        alert('Rejection reason is required');
+        alert("{{ __('employee/leaves/common.messages.reject_required') }}");
         return;
     }
 
@@ -485,20 +499,20 @@ function rejectLeave() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Leave request rejected');
+            alert("{{ __('employee/leaves/common.messages.reject_success') }}");
             location.reload();
         } else {
-            alert('Error rejecting leave request');
+            alert("{{ __('employee/leaves/common.messages.reject_error') }}");
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error rejecting leave request');
+        alert("{{ __('employee/leaves/common.messages.reject_error') }}");
     });
 }
 
 function deleteLeave() {
-    if (confirm('Are you sure you want to delete this leave request?\n\nThis action cannot be undone.')) {
+    if (confirm("{{ __('employee/leaves/common.messages.delete_confirm') }}")) {
         fetch(`/employee/leaves/{{ $leave->id }}`, {
             method: 'DELETE',
             headers: {
@@ -509,15 +523,15 @@ function deleteLeave() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Leave request deleted successfully');
+                alert("{{ __('employee/leaves/common.messages.delete_success') }}");
                 window.location.href = '/employee/leaves';
             } else {
-                alert('Error deleting leave request');
+                alert("{{ __('employee/leaves/common.messages.delete_error') }}");
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error deleting leave request');
+            alert("{{ __('employee/leaves/common.messages.delete_error') }}");
         });
     }
 }

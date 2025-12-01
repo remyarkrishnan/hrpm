@@ -1,38 +1,41 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Edit Project - ' . $project->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Project')
+@section('title', __('employee/projects/form.edit_title') . ' - ' . $project->name . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/projects/form.edit_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.projects.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Projects
+            {{ __('employee/projects/common.actions.back') }}
         </a>
         <a href="{{ route('admin.projects.show', $project) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Project
+            {{ __('employee/projects/common.actions.view') }}
         </a>
     </div>
-    <h2>Edit Project: {{ $project->name }}</h2>
-    <p>Update project information and settings</p>
+    <h2>{{ __('employee/projects/form.edit_title') }}: {{ $project->name }}</h2>
+    <p>{{ __('employee/projects/form.edit_subtitle') }}</p>
 </div>
 
 <form action="{{ route('admin.projects.update', $project) }}" method="POST" enctype="multipart/form-data" class="project-form">
     @csrf
     @method('PUT')
 
-    <!-- Basic Project Information -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">info</i>
-            Project Information
+            {{ __('employee/projects/form.sections.info') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="name">Project Name *</label>
+                <label for="name">{{ __('employee/projects/common.labels.name') }} *</label>
                 <input type="text" id="name" name="name" value="{{ old('name', $project->name) }}" required>
                 @error('name')
                     <span class="error">{{ $message }}</span>
@@ -40,7 +43,7 @@
             </div>
 
             <div class="form-group">
-                <label for="project_code">Project Code *</label>
+                <label for="project_code">{{ __('employee/projects/common.labels.code') }} *</label>
                 <input type="text" id="project_code" name="project_code" 
                        value="{{ old('project_code', $project->project_code) }}" required>
                 @error('project_code')
@@ -49,7 +52,7 @@
             </div>
 
             <div class="form-group">
-                <label for="type">Project Type *</label>
+                <label for="type">{{ __('employee/projects/common.labels.type') }} *</label>
                 <select id="type" name="type" required>
                     @foreach(App\Models\Project::getTypes() as $key => $label)
                         <option value="{{ $key }}" {{ old('type', $project->type) === $key ? 'selected' : '' }}>
@@ -63,7 +66,7 @@
             </div>
 
             <div class="form-group">
-                <label for="priority">Priority *</label>
+                <label for="priority">{{ __('employee/projects/common.labels.priority') }} *</label>
                 <select id="priority" name="priority" required>
                     @foreach(App\Models\Project::getPriorities() as $key => $label)
                         <option value="{{ $key }}" {{ old('priority', $project->priority) === $key ? 'selected' : '' }}>
@@ -77,7 +80,7 @@
             </div>
 
             <div class="form-group">
-                <label for="status">Project Status *</label>
+                <label for="status">{{ __('employee/projects/common.labels.status') }} *</label>
                 <select id="status" name="status" required>
                     @foreach(App\Models\Project::getStatuses() as $key => $label)
                         <option value="{{ $key }}" {{ old('status', $project->status) === $key ? 'selected' : '' }}>
@@ -91,7 +94,7 @@
             </div>
 
             <div class="form-group">
-                <label for="progress_percentage">Progress Percentage</label>
+                <label for="progress_percentage">{{ __('employee/projects/form.labels.percent') }}</label>
                 <input type="number" id="progress_percentage" name="progress_percentage" 
                        value="{{ old('progress_percentage', $project->progress_percentage) }}" 
                        min="0" max="100" step="0.1">
@@ -101,7 +104,7 @@
             </div>
 
             <div class="form-group full-width">
-                <label for="description">Project Description *</label>
+                <label for="description">{{ __('employee/projects/common.labels.description') }} *</label>
                 <textarea id="description" name="description" rows="4" required>{{ old('description', $project->description) }}</textarea>
                 @error('description')
                     <span class="error">{{ $message }}</span>
@@ -109,7 +112,7 @@
             </div>
 
             <div class="form-group">
-                <label for="location">Location *</label>
+                <label for="location">{{ __('employee/projects/common.labels.location') }} *</label>
                 <input type="text" id="location" name="location" value="{{ old('location', $project->location) }}" required>
                 @error('location')
                     <span class="error">{{ $message }}</span>
@@ -118,16 +121,15 @@
         </div>
     </div>
 
-    <!-- Client Information -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">business</i>
-            Client Information
+            {{ __('employee/projects/form.sections.client') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="client_name">Client Name *</label>
+                <label for="client_name">{{ __('employee/projects/common.labels.client_name') }} *</label>
                 <input type="text" id="client_name" name="client_name" 
                        value="{{ old('client_name', $project->client_name) }}" required>
                 @error('client_name')
@@ -136,7 +138,7 @@
             </div>
 
             <div class="form-group">
-                <label for="client_contact">Client Contact</label>
+                <label for="client_contact">{{ __('employee/projects/common.labels.client_contact') }}</label>
                 <input type="text" id="client_contact" name="client_contact" 
                        value="{{ old('client_contact', $project->client_contact) }}">
                 @error('client_contact')
@@ -146,16 +148,15 @@
         </div>
     </div>
 
-    <!-- Project Planning -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">schedule</i>
-            Project Planning
+            {{ __('employee/projects/form.sections.planning') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="budget">Project Budget (₹) *</label>
+                <label for="budget">{{ __('employee/projects/common.labels.budget') }} (₹) *</label>
                 <input type="number" id="budget" name="budget" value="{{ old('budget', $project->budget) }}" 
                        required min="0" step="0.01">
                 @error('budget')
@@ -164,7 +165,7 @@
             </div>
 
             <div class="form-group">
-                <label for="start_date">Start Date *</label>
+                <label for="start_date">{{ __('employee/projects/common.labels.start_date') }} *</label>
                 <input type="date" id="start_date" name="start_date" 
                        value="{{ old('start_date', $project->start_date?->format('Y-m-d')) }}" required>
                 @error('start_date')
@@ -173,7 +174,7 @@
             </div>
 
             <div class="form-group">
-                <label for="expected_end_date">Expected Completion Date *</label>
+                <label for="expected_end_date">{{ __('employee/projects/common.labels.end_date') }} *</label>
                 <input type="date" id="expected_end_date" name="expected_end_date" 
                        value="{{ old('expected_end_date', $project->expected_end_date?->format('Y-m-d')) }}" required>
                 @error('expected_end_date')
@@ -182,7 +183,7 @@
             </div>
 
             <div class="form-group">
-                <label for="actual_end_date">Actual Completion Date</label>
+                <label for="actual_end_date">{{ __('employee/projects/common.labels.actual_end') }}</label>
                 <input type="date" id="actual_end_date" name="actual_end_date" 
                        value="{{ old('actual_end_date', $project->actual_end_date?->format('Y-m-d')) }}">
                 @error('actual_end_date')
@@ -191,9 +192,9 @@
             </div>
 
             <div class="form-group">
-                <label for="project_manager_id">Project Manager *</label>
+                <label for="project_manager_id">{{ __('employee/projects/common.labels.manager') }} *</label>
                 <select id="project_manager_id" name="project_manager_id" required>
-                    <option value="">Select Project Manager</option>
+                    <option value="">{{ __('employee/projects/form.options.select_manager') }}</option>
                     @foreach($projectManagers as $manager)
                         <option value="{{ $manager->id }}" 
                                 {{ old('project_manager_id', $project->project_manager_id) == $manager->id ? 'selected' : '' }}>
@@ -208,12 +209,11 @@
         </div>
     </div>
 
-    <!-- Current Documents -->
     @if($project->documents && count($project->documents) > 0)
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">folder</i>
-                Current Documents
+                {{ __('employee/projects/form.sections.current_docs') }}
             </h3>
 
             <div class="document-list">
@@ -226,7 +226,7 @@
                         <a href="{{ Storage::url('project-documents/' . $document) }}" 
                            target="_blank" class="btn-view">
                             <i class="material-icons">open_in_new</i>
-                            View
+                            {{ __('employee/projects/common.actions.view_file') }}
                         </a>
                     </div>
                 @endforeach
@@ -234,19 +234,18 @@
         </div>
     @endif
 
-    <!-- Upload New Documents -->
     <div class="form-section">
         <h3 class="section-title">
             <i class="material-icons">attachment</i>
-            Upload Additional Documents
+            {{ __('employee/projects/form.sections.upload_docs') }}
         </h3>
 
         <div class="form-grid">
             <div class="form-group full-width">
-                <label for="documents">Upload New Documents (Optional)</label>
+                <label for="documents">{{ __('employee/projects/form.labels.upload_new') }}</label>
                 <input type="file" id="documents" name="documents[]" multiple
                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                <small class="form-help">Accepted formats: PDF, DOC, DOCX, JPG, PNG. Max 5MB per file.</small>
+                <small class="form-help">{{ __('employee/projects/form.help.formats') }}</small>
                 @error('documents.*')
                     <span class="error">{{ $message }}</span>
                 @enderror
@@ -254,18 +253,17 @@
         </div>
     </div>
 
-    <!-- Submit Buttons -->
     <div class="form-actions">
         <button type="submit" class="btn-primary">
             <i class="material-icons">save</i>
-            Update Project
+            {{ __('employee/projects/common.actions.update') }}
         </button>
         <a href="{{ route('admin.projects.show', $project) }}" class="btn-cancel">
-            Cancel
+            {{ __('employee/projects/common.actions.cancel') }}
         </a>
         <button type="button" onclick="deleteProject({{ $project->id }})" class="btn-danger">
             <i class="material-icons">delete</i>
-            Delete Project
+            {{ __('employee/projects/common.actions.delete') }}
         </button>
     </div>
 </form>

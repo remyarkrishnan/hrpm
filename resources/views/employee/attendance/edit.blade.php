@@ -1,243 +1,259 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.employee')
 
-@section('title', 'Edit Attendance - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Edit Attendance')
+@section('title', __('employee.attendance.edit.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee.attendance.edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.attendance.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Attendance
+            {{ __('employee.attendance.edit.back_to_attendance') }}
         </a>
-        <a href="{{ route('employee.attendance.show', 1) }}" class="btn-secondary">
+        <a href="{{ route('employee.attendance.show', $attendance->id) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('employee.attendance.edit.view_details') }}
         </a>
     </div>
-    <p>Update attendance information</p>
+    <p>{{ __('employee.attendance.edit.update_info') }}</p>
 </div>
 
 <div class="form-container">
     <form class="attendance-form" action="{{ route('employee.attendance.update', $attendance->id) }}" method="POST">
-            @csrf
-    @method('PUT')
-    <input type="hidden" id="user_id" name="user_id" value="{{ $attendance->user->id }}">
-        <!-- Current Status -->
-       
+        @csrf
+        @method('PUT')
+        <input type="hidden" id="user_id" name="user_id" value="{{ $attendance->user->id }}">
 
+        <!-- Time Information -->
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">schedule</i>
-                Time Information
+                {{ __('employee.attendance.edit.time_section_title') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="date">Attendance Date *</label>
+                    <label for="date">{{ __('employee.attendance.edit.date_label') }} *</label>
                     <input type="date" id="date" name="date" value="{{ $attendance->date->format('Y-m-d') }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="check_in">Check In Time *</label>
+                    <label for="check_in">{{ __('employee.attendance.edit.check_in_label') }} *</label>
                     <input type="time" id="check_in" name="check_in" value="{{ $attendance->check_in ? \Carbon\Carbon::parse($attendance->check_in)->format('H:i') : '' }}" required>
-                    <small class="form-help" style="display:none">Original: 09:15 AM (15 minutes late)</small>
+                    <small class="form-help" style="display:none">{{ __('employee.attendance.edit.check_in_original') }}</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="check_out">Check Out Time</label>
+                    <label for="check_out">{{ __('employee.attendance.edit.check_out_label') }}</label>
                     <input type="time" id="check_out" name="check_out" value="{{ $attendance->check_out ? \Carbon\Carbon::parse($attendance->check_out)->format('H:i') : '' }}">
-                    <small class="form-help" style="display:none">Original: 06:30 PM</small>
+                    <small class="form-help" style="display:none">{{ __('employee.attendance.edit.check_out_original') }}</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="status">Attendance Status *</label>
+                    <label for="status">{{ __('employee.attendance.edit.status_label') }} *</label>
                     <select id="status" name="status" required>
-                        <option value="present"  {{ old('status', $attendance->status) === 'present' ? 'selected' : '' }}>Present</option>
-                        <option value="absent" {{ old('status', $attendance->status) === 'absent' ? 'selected' : '' }}>Absent</option>
-                        <option value="late" {{ old('status', $attendance->status) === 'late' ? 'selected' : '' }}>Late</option>
-                        <option value="half_day" {{ old('status', $attendance->status) === 'half_day' ? 'selected' : '' }}>Half Day</option>
-                        <option value="work_from_home" {{ old('status', $attendance->status) === 'work_from_home' ? 'selected' : '' }}>Work From Home</option>
+                        <option value="present" {{ old('status', $attendance->status) === 'present' ? 'selected' : '' }}>
+                            {{ __('employee.attendance.edit.status.present') }}
+                        </option>
+                        <option value="absent" {{ old('status', $attendance->status) === 'absent' ? 'selected' : '' }}>
+                            {{ __('employee.attendance.edit.status.absent') }}
+                        </option>
+                        <option value="late" {{ old('status', $attendance->status) === 'late' ? 'selected' : '' }}>
+                            {{ __('employee.attendance.edit.status.late') }}
+                        </option>
+                        <option value="half_day" {{ old('status', $attendance->status) === 'half_day' ? 'selected' : '' }}>
+                            {{ __('employee.attendance.edit.status.half_day') }}
+                        </option>
+                        <option value="work_from_home" {{ old('status', $attendance->status) === 'work_from_home' ? 'selected' : '' }}>
+                            {{ __('employee.attendance.edit.status.work_from_home') }}
+                        </option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="break_duration">Break Duration (minutes)</label>
+                    <label for="break_duration">{{ __('employee.attendance.edit.break_duration_label') }}</label>
                     <input type="number" id="break_duration" name="break_duration" value="{{ $attendance->break_duration }}" min="0">
-                    <small class="form-help" style="display:none">Current: 45 minutes</small>
+                    <small class="form-help" style="display:none">{{ __('employee.attendance.edit.break_duration_current') }}</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="overtime_hours">Overtime Hours</label>
+                    <label for="overtime_hours">{{ __('employee.attendance.edit.overtime_label') }}</label>
                     <input type="number" id="overtime_hours" name="overtime_hours" 
-                           step="0.5" min="0" value="0" placeholder="e.g. 2.5" value="{{ $attendance->overtime_hours }}">
+                           step="0.5" min="0" value="{{ $attendance->overtime_hours }}" placeholder="{{ __('employee.attendance.edit.overtime_placeholder') }}">
                 </div>
             </div>
         </div>
 
+        <!-- Location Information -->
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">location_on</i>
-                Location Information
+                {{ __('employee.attendance.edit.location_section_title') }}
             </h3>
 
             <div class="form-grid">
-               <div class="form-group">
-                    <label for="project">Project </label>
+                <div class="form-group">
+                    <label for="project">{{ __('employee.attendance.edit.project_label') }}</label>
                     <select id="project" name="project_id">
-                    <option value="">Select Project</option>
-                    @foreach($projects as $prj)
-                        <option value="{{ $prj->id }}"  {{ old('project_id', $attendance->project_id) ===  $prj->id ? 'selected' : '' }}>
+                        <option value="">{{ __('employee.attendance.edit.project_select') }}</option>
+                        @foreach($projects as $prj)
+                        <option value="{{ $prj->id }}" {{ old('project_id', $attendance->project_id) === $prj->id ? 'selected' : '' }}>
                             {{ $prj->name }}
                         </option>
-                    @endforeach   
+                        @endforeach    
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="location">Project Location</label>
+                    <label for="location">{{ __('employee.attendance.edit.location_label') }}</label>
                     <select id="project_location_id" name="project_location_id">
-                        <option value="">Select Location</option>
+                        <option value="">{{ __('employee.attendance.edit.location_select') }}</option>
                         @foreach($projectLocations as $prjl)
-                        <option value="{{ $prjl->id }}"  {{ old('project_location_id', $attendance->project_location_id) ===  $prjl->id ? 'selected' : '' }}>
+                        <option value="{{ $prjl->id }}" {{ old('project_location_id', $attendance->project_location_id) === $prjl->id ? 'selected' : '' }}>
                             {{ $prjl->location_name }}
                         </option>
-                    @endforeach   
+                        @endforeach    
                     </select>
-                </div>
-<div class="form-group">
-                   <label for="gps">
-        Allow Location Using GPS
-        <button type="button" id="gpsBtn" class="btn btn-primary btn-sm ml-2" onclick="enableGPS()" style="margin-top: 10px;">
-            Enable GPS
-        </button>
-    </label>
-    <input type="hidden" name="latitude" id="latitude">
-    <input type="hidden" name="longitude" id="longitude">
                 </div>
 
                 <div class="form-group">
-                    <label for="project">Upload Photo</label>
+                    <label for="gps">
+                        {{ __('employee.attendance.edit.gps_label') }}
+                        <button type="button" id="gpsBtn" class="btn btn-primary btn-sm ml-2" onclick="enableGPS()" style="margin-top: 10px;">
+                            {{ __('employee.attendance.edit.gps_enable') }}
+                        </button>
+                    </label>
+                    <input type="hidden" name="latitude" id="latitude">
+                    <input type="hidden" name="longitude" id="longitude">
+                </div>
+
+                <div class="form-group">
+                    <label for="location_image">{{ __('employee.attendance.edit.photo_label') }}</label>
                     <input type="file" id="location_image" name="location_image" accept="image/*">
                 </div>
 
-                
-
                 <div class="form-group" style="display:none">
-                    <label for="check_in_coords">Check-in Coordinates</label>
+                    <label for="check_in_coords">{{ __('employee.attendance.edit.check_in_coords_label') }}</label>
                     <input type="text" id="check_in_coords" name="check_in_coordinates" 
                            value="28.4595, 77.0266" readonly>
-                    <small class="form-help">GPS coordinates from mobile app</small>
+                    <small class="form-help">{{ __('employee.attendance.edit.check_in_coords_help') }}</small>
                 </div>
 
                 <div class="form-group" style="display:none">
-                    <label for="check_out_coords">Check-out Coordinates</label>
+                    <label for="check_out_coords">{{ __('employee.attendance.edit.check_out_coords_label') }}</label>
                     <input type="text" id="check_out_coords" name="check_out_coordinates" 
                            value="28.4595, 77.0266" readonly>
-                    <small class="form-help">GPS coordinates from mobile app</small>
+                    <small class="form-help">{{ __('employee.attendance.edit.check_out_coords_help') }}</small>
                 </div>
             </div>
         </div>
 
+        <!-- Approval Information (Hidden) -->
         <div class="form-section" style="display:none">
             <h3 class="section-title">
                 <i class="material-icons">approval</i>
-                Approval Information
+                {{ __('employee.attendance.edit.approval_section_title') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="approved_by">Approved By</label>
+                    <label for="approved_by">{{ __('employee.attendance.edit.approved_by_label') }}</label>
                     <select id="approved_by" name="approved_by">
-                        <option value="1" selected>Neha Gupta - Project Manager</option>
-                        <option value="2">Suresh Patel - HR Manager</option>
-                        <option value="3">Vikram Singh - Site Supervisor</option>
+                        <option value="1">{{ __('employee.attendance.edit.approved_by.neha_gupta') }}</option>
+                        <option value="2">{{ __('employee.attendance.edit.approved_by.suresh_patel') }}</option>
+                        <option value="3">{{ __('employee.attendance.edit.approved_by.vikram_singh') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="approval_status">Approval Status</label>
+                    <label for="approval_status">{{ __('employee.attendance.edit.approval_status_label') }}</label>
                     <select id="approval_status" name="approval_status">
-                        <option value="pending">Pending</option>
-                        <option value="approved" selected>Approved</option>
-                        <option value="rejected">Rejected</option>
+                        <option value="pending">{{ __('employee.attendance.edit.approval_status.pending') }}</option>
+                        <option value="approved">{{ __('employee.attendance.edit.approval_status.approved') }}</option>
+                        <option value="rejected">{{ __('employee.attendance.edit.approval_status.rejected') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="approval_date">Approval Date</label>
+                    <label for="approval_date">{{ __('employee.attendance.edit.approval_date_label') }}</label>
                     <input type="datetime-local" id="approval_date" name="approval_date" 
                            value="2025-10-07T19:00">
                 </div>
             </div>
         </div>
 
+        <!-- Notes & Remarks -->
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">note</i>
-                Notes & Remarks
+                {{ __('employee.attendance.edit.notes_section_title') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="notes">Current Notes</label>
+                    <label for="notes">{{ __('employee.attendance.edit.notes_label') }}</label>
                     <textarea id="notes" name="notes" rows="3">{{ old('notes', $attendance->notes) }}</textarea>
                 </div>
 
                 <div class="form-group full-width" style="display:none">
-                    <label for="admin_notes">Admin Notes (Additional)</label>
+                    <label for="admin_notes">{{ __('employee.attendance.edit.admin_notes_label') }}</label>
                     <textarea id="admin_notes" name="admin_notes" rows="2" 
-                              placeholder="Add any additional administrative notes"></textarea>
+                              placeholder="{{ __('employee.attendance.edit.admin_notes_placeholder') }}"></textarea>
                 </div>
 
                 <div class="form-group" style="display:none">
-                    <label for="late_reason">Late Arrival Reason</label>
+                    <label for="late_reason">{{ __('employee.attendance.edit.late_reason_label') }}</label>
                     <select id="late_reason" name="late_reason">
-                        <option value="">Select Reason</option>
-                        <option value="traffic" selected>Traffic Delay</option>
-                        <option value="transport">Transport Issues</option>
-                        <option value="personal">Personal Emergency</option>
-                        <option value="weather">Weather Conditions</option>
-                        <option value="other">Other</option>
+                        <option value="">{{ __('employee.attendance.edit.late_reason_select') }}</option>
+                        <option value="traffic">{{ __('employee.attendance.edit.late_reason.traffic') }}</option>
+                        <option value="transport">{{ __('employee.attendance.edit.late_reason.transport') }}</option>
+                        <option value="personal">{{ __('employee.attendance.edit.late_reason.personal') }}</option>
+                        <option value="weather">{{ __('employee.attendance.edit.late_reason.weather') }}</option>
+                        <option value="other">{{ __('employee.attendance.edit.late_reason.other') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group" style="display:none">
-                    <label for="penalty">Apply Penalty</label>
+                    <label for="penalty">{{ __('employee.attendance.edit.penalty_label') }}</label>
                     <select id="penalty" name="penalty">
-                        <option value="none" selected>No Penalty</option>
-                        <option value="warning">Warning</option>
-                        <option value="half_day_deduction">Half Day Deduction</option>
-                        <option value="salary_cut">Salary Deduction</option>
+                        <option value="none">{{ __('employee.attendance.edit.penalty.none') }}</option>
+                        <option value="warning">{{ __('employee.attendance.edit.penalty.warning') }}</option>
+                        <option value="half_day_deduction">{{ __('employee.attendance.edit.penalty.half_day') }}</option>
+                        <option value="salary_cut">{{ __('employee.attendance.edit.penalty.salary_cut') }}</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- Audit Trail -->
+        <!-- Audit Trail (Hidden) -->
         <div class="audit-section" style="display:none">
             <h3 class="section-title">
                 <i class="material-icons">history</i>
-                Change History
+                {{ __('employee.attendance.edit.audit_title') }}
             </h3>
 
             <div class="audit-trail">
                 <div class="audit-item">
-                    <div class="audit-time">Oct 07, 2025 - 07:00 PM</div>
-                    <div class="audit-action">Record approved by Neha Gupta</div>
-                    <div class="audit-user">System Admin</div>
+                    <div class="audit-time">{{ __('employee.attendance.edit.audit.approved_neha') }}</div>
+                    <div class="audit-action">{{ __('employee.attendance.edit.audit.record_approved') }}</div>
+                    <div class="audit-user">{{ __('employee.attendance.edit.audit.system_admin') }}</div>
                 </div>
 
                 <div class="audit-item">
-                    <div class="audit-time">Oct 07, 2025 - 06:30 PM</div>
-                    <div class="audit-action">Check-out recorded automatically</div>
-                    <div class="audit-user">Mobile App</div>
+                    <div class="audit-time">{{ __('employee.attendance.edit.audit.checkout_auto') }}</div>
+                    <div class="audit-action">{{ __('employee.attendance.edit.audit.checkout_recorded') }}</div>
+                    <div class="audit-user">{{ __('employee.attendance.edit.audit.mobile_app') }}</div>
                 </div>
 
                 <div class="audit-item">
-                    <div class="audit-time">Oct 07, 2025 - 09:15 AM</div>
-                    <div class="audit-action">Check-in recorded with GPS location</div>
-                    <div class="audit-user">Mobile App</div>
+                    <div class="audit-time">{{ __('employee.attendance.edit.audit.checkin_gps') }}</div>
+                    <div class="audit-action">{{ __('employee.attendance.edit.audit.checkin_recorded') }}</div>
+                    <div class="audit-user">{{ __('employee.attendance.edit.audit.mobile_app') }}</div>
                 </div>
             </div>
         </div>
@@ -245,14 +261,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Attendance
+                {{ __('employee.attendance.edit.update_button') }}
             </button>
             <a href="{{ route('employee.attendance.show', $attendance->id) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('employee.attendance.edit.cancel_button') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteAttendance()">
                 <i class="material-icons">delete</i>
-                Delete Record
+                {{ __('employee.attendance.edit.delete_button') }}
             </button>
         </div>
     </form>
@@ -304,61 +320,6 @@
         flex-direction: column;
         gap: 32px;
     }
-
-    .current-status {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: white;
-        padding: 24px 32px;
-        border-radius: 16px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .status-info {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .employee-avatar {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: #6750A4;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 20px;
-    }
-
-    .status-info h3 {
-        margin: 0 0 4px 0;
-        font-size: 20px;
-        font-weight: 500;
-    }
-
-    .status-info p {
-        margin: 0 0 8px 0;
-        color: #666;
-    }
-
-    .attendance-date {
-        color: #6750A4;
-        font-weight: 500;
-    }
-
-    .status-badge {
-        padding: 8px 16px;
-        border-radius: 16px;
-        font-size: 14px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-    .status-late { background: #fff3e0; color: #f57c00; }
 
     .form-section, .audit-section {
         background: white;
@@ -506,7 +467,6 @@
 
     @media (max-width: 768px) {
         .form-grid { grid-template-columns: 1fr; }
-        .current-status { flex-direction: column; gap: 16px; text-align: center; }
         .form-actions { flex-direction: column; }
         .btn-primary, .btn-cancel, .btn-danger { width: 100%; justify-content: center; }
         .page-nav { flex-direction: column; }
@@ -517,15 +477,13 @@
 @push('scripts')
 <script>
 function deleteAttendance() {
-    if (confirm('Are you sure you want to delete this attendance record?\n\nThis action cannot be undone.')) {
-        // Delete attendance logic here
-        alert('Attendance record deleted successfully');
+    if (confirm('{{ __('employee.attendance.edit.delete_confirm') }}')) {
+        alert('{{ __('employee.attendance.edit.delete_success') }}');
         window.location.href = '/employee/attendance';
     }
 }
-
-
 </script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const projectSelect = document.getElementById('project');
@@ -534,8 +492,7 @@ document.addEventListener('DOMContentLoaded', function () {
     projectSelect.addEventListener('change', function () {
         const projectId = this.value;
 
-        // Clear previous options
-        locationSelect.innerHTML = '<option value="">Select Location</option>';
+        locationSelect.innerHTML = '<option value="">{{ __('employee.attendance.edit.location_select') }}</option>';
 
         if (!projectId) return;
 
@@ -551,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 } else {
                     const opt = document.createElement('option');
-                    opt.textContent = 'No locations available';
+                    opt.textContent = '{{ __('employee.attendance.edit.no_locations') }}';
                     locationSelect.appendChild(opt);
                 }
             })

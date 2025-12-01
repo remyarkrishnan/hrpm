@@ -1,21 +1,25 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Project Approvals - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Project Approvals')
+@section('title', __('employee.approvals.index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee.approvals.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h2>Project Approvals</h2>
-        <p>Manage 12-step approval workflow for construction projects</p>
+        <h2>{{ __('employee.approvals.index.header_title') }}</h2>
+        <p>{{ __('employee.approvals.index.header_description') }}</p>
     </div>
     <div class="header-actions">
         <div class="filter-dropdown">
             <select class="filter-select">
-                <option value="">All Projects</option>
-                <option value="residential">Residential</option>
-                <option value="commercial">Commercial</option>
-                <option value="infrastructure">Infrastructure</option>
+                <option value="">{{ __('employee.approvals.index.filters.all_projects') }}</option>
+                <option value="residential">{{ __('employee.approvals.index.filters.residential') }}</option>
+                <option value="commercial">{{ __('employee.approvals.index.filters.commercial') }}</option>
+                <option value="infrastructure">{{ __('employee.approvals.index.filters.infrastructure') }}</option>
             </select>
         </div>
     </div>
@@ -29,8 +33,8 @@
         </div>
         <div class="stat-info">
             <h3>24</h3>
-            <p>Pending Approvals</p>
-            <small>Across all projects</small>
+            <p>{{ __('employee.approvals.index.stats.pending_approvals') }}</p>
+            <small>{{ __('employee.approvals.index.stats.pending_description') }}</small>
         </div>
     </div>
 
@@ -40,8 +44,8 @@
         </div>
         <div class="stat-info">
             <h3>156</h3>
-            <p>Approved Steps</p>
-            <small>This month</small>
+            <p>{{ __('employee.approvals.index.stats.approved_steps') }}</p>
+            <small>{{ __('employee.approvals.index.stats.approved_description') }}</small>
         </div>
     </div>
 
@@ -51,8 +55,8 @@
         </div>
         <div class="stat-info">
             <h3>8</h3>
-            <p>In Progress</p>
-            <small>Currently reviewing</small>
+            <p>{{ __('employee.approvals.index.stats.in_progress') }}</p>
+            <small>{{ __('employee.approvals.index.stats.in_progress_description') }}</small>
         </div>
     </div>
 
@@ -62,98 +66,98 @@
         </div>
         <div class="stat-info">
             <h3>12</h3>
-            <p>Active Projects</p>
-            <small>Requiring approvals</small>
+            <p>{{ __('employee.approvals.index.stats.active_projects') }}</p>
+            <small>{{ __('employee.approvals.index.stats.active_projects_description') }}</small>
         </div>
     </div>
 </div>
 
 <!-- 12-Step Workflow Overview -->
 <div class="workflow-overview">
-    <h3>Standard 12-Step Approval Process</h3>
+    <h3>{{ __('employee.approvals.index.workflow.title') }}</h3>
     <div class="workflow-steps">
         <div class="workflow-step">
             <div class="step-number">1</div>
             <div class="step-info">
-                <h4>Design Review</h4>
-                <small>Architectural plans verification</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.1.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.1.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">2</div>
             <div class="step-info">
-                <h4>Environmental Assessment</h4>
-                <small>Environmental impact study</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.2.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.2.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">3</div>
             <div class="step-info">
-                <h4>Safety Planning</h4>
-                <small>Safety protocols approval</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.3.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.3.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">4</div>
             <div class="step-info">
-                <h4>Structural Analysis</h4>
-                <small>Engineering calculations review</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.4.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.4.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">5</div>
             <div class="step-info">
-                <h4>Electrical Planning</h4>
-                <small>Electrical systems design</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.5.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.5.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">6</div>
             <div class="step-info">
-                <h4>Plumbing & HVAC</h4>
-                <small>MEP systems approval</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.6.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.6.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">7</div>
             <div class="step-info">
-                <h4>Financial Approval</h4>
-                <small>Budget and cost approval</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.7.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.7.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">8</div>
             <div class="step-info">
-                <h4>Legal Compliance</h4>
-                <small>Legal requirements check</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.8.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.8.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">9</div>
             <div class="step-info">
-                <h4>Municipal Permits</h4>
-                <small>Government approvals</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.9.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.9.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">10</div>
             <div class="step-info">
-                <h4>Fire Safety Clearance</h4>
-                <small>Fire department approval</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.10.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.10.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">11</div>
             <div class="step-info">
-                <h4>Quality Assurance</h4>
-                <small>QA standards verification</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.11.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.11.description') }}</small>
             </div>
         </div>
         <div class="workflow-step">
             <div class="step-number">12</div>
             <div class="step-info">
-                <h4>Final Approval</h4>
-                <small>Project commencement clearance</small>
+                <h4>{{ __('employee.approvals.index.workflow.steps.12.title') }}</h4>
+                <small>{{ __('employee.approvals.index.workflow.steps.12.description') }}</small>
             </div>
         </div>
     </div>
@@ -161,18 +165,18 @@
 
 <!-- Current Approvals Table -->
 <div class="approvals-table-card">
-    <h3>Current Approval Requests</h3>
+    <h3>{{ __('employee.approvals.index.table.title') }}</h3>
     <div class="table-responsive">
         <table class="approvals-table">
             <thead>
                 <tr>
-                    <th>Project</th>
-                    <th>Current Step</th>
-                    <th>Consultancy Type</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                    <th>Responsible</th>
-                    <th>Actions</th>
+                    <th>{{ __('employee.approvals.index.table.columns.project') }}</th>
+                    <th>{{ __('employee.approvals.index.table.columns.current_step') }}</th>
+                    <th>{{ __('employee.approvals.index.table.columns.consultancy_type') }}</th>
+                    <th>{{ __('employee.approvals.index.table.columns.due_date') }}</th>
+                    <th>{{ __('employee.approvals.index.table.columns.status') }}</th>
+                    <th>{{ __('employee.approvals.index.table.columns.responsible') }}</th>
+                    <th>{{ __('employee.approvals.index.table.columns.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -186,7 +190,7 @@
                     </td>
                     <td>
                         <div class="step-info">
-                            <span class="step-badge">Step {{ $approval->step_order }}</span>
+                            <span class="step-badge">{{ __('employee.approvals.index.table.step') }} {{ $approval->step_order }}</span>
                             <small>{{ $approval->step_name }}</small>
                         </div>
                     </td>
@@ -218,7 +222,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center">No approval requests found</td>
+                    <td colspan="7" class="text-center">{{ __('employee.approvals.index.table.no_requests') }}</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -490,7 +494,7 @@
 @push('scripts')
 <script>
 function approveStep(approvalId) {
-    const remarks = prompt('Add approval remarks (optional):');
+    const remarks = prompt('{{ __('employee.approvals.index.js.approve_prompt') }}');
 
     fetch(`/admin/approvals/${approvalId}/approve`, {
         method: 'POST',
@@ -503,22 +507,22 @@ function approveStep(approvalId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Approval step approved successfully');
+            alert('{{ __('employee.approvals.index.js.approve_success') }}');
             location.reload();
         } else {
-            alert('Error approving step');
+            alert('{{ __('employee.approvals.index.js.approve_error') }}');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error approving step');
+        alert('{{ __('employee.approvals.index.js.approve_error') }}');
     });
 }
 
 function rejectStep(approvalId) {
-    const reason = prompt('Please enter rejection reason:');
+    const reason = prompt('{{ __('employee.approvals.index.js.reject_prompt') }}');
     if (!reason || reason.trim() === '') {
-        alert('Rejection reason is required');
+        alert('{{ __('employee.approvals.index.js.reject_required') }}');
         return;
     }
 
@@ -533,22 +537,16 @@ function rejectStep(approvalId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Approval step rejected');
+            alert('{{ __('employee.approvals.index.js.reject_success') }}');
             location.reload();
         } else {
-            alert('Error rejecting step');
+            alert('{{ __('employee.approvals.index.js.reject_error') }}');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error rejecting step');
+        alert('{{ __('employee.approvals.index.js.reject_error') }}');
     });
 }
-
-// Filter functionality
-document.querySelector('.filter-select').addEventListener('change', function() {
-    // TODO: Implement filtering functionality
-    console.log('Filter changed to:', this.value);
-});
 </script>
 @endpush

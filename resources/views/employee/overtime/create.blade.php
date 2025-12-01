@@ -1,6 +1,10 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Request Overtime - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('title', __('employee/overtime/create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
 @section('page-title', 'Employee Dashboard')
 
 @section('content')
@@ -8,11 +12,11 @@
     <div class="page-nav">
         <a href="{{ route('employee.overtime.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Overtime
+            {{ __('employee/overtime/common.actions.back') }}
         </a>
     </div>
-    <h2>Request Overtime</h2>
-    <p>Submit overtime request for approval</p>
+    <h2>{{ __('employee/overtime/create.title') }}</h2>
+    <p>{{ __('employee/overtime/create.subtitle') }}</p>
 </div>
 
 <div class="form-container">
@@ -22,13 +26,13 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">person</i>
-                Employee Information
+                {{ __('employee/overtime/create.sections.info') }}
             </h3>
 
             <div class="form-grid">
                 
                 <div class="form-group">
-                    <label for="date">Overtime Date *</label>
+                    <label for="date">{{ __('employee/overtime/common.labels.date') }} *</label>
                     <input type="date" id="date" name="date" value="{{ old('date') }}" required>
                     @error('date')
                         <span class="error">{{ $message }}</span>
@@ -40,37 +44,37 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">schedule</i>
-                Overtime Details
+                {{ __('employee/overtime/create.sections.details') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="hours">Overtime Hours *</label>
+                    <label for="hours">{{ __('employee/overtime/common.labels.hours') }} *</label>
                     <input type="number" id="hours" name="hours" step="0.5" min="0.5" max="8" 
-                           value="{{ old('hours') }}" required placeholder="e.g. 2.5">
-                    <small class="form-help">Enter overtime hours (0.5 to 8 hours maximum)</small>
+                           value="{{ old('hours') }}" required placeholder="{{ __('employee/overtime/create.placeholders.hours') }}">
+                    <small class="form-help">{{ __('employee/overtime/create.placeholders.hours_help') }}</small>
                     @error('hours')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="start_time">Start Time</label>
+                    <label for="start_time">{{ __('employee/overtime/common.labels.start_time') }}</label>
                     <input type="time" id="start_time" name="start_time" value="{{ old('start_time') }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="end_time">End Time</label>
+                    <label for="end_time">{{ __('employee/overtime/common.labels.end_time') }}</label>
                     <input type="time" id="end_time" name="end_time" value="{{ old('end_time') }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="project_id">Project Assignment</label>
+                    <label for="project_id">{{ __('employee/overtime/common.labels.project') }}</label>
                     <select id="project_id" name="project_id">
-                        <option value="">Select Project (Optional)</option>
-                        <option value="1">Residential Complex - Phase 2</option>
-                        <option value="2">Commercial Mall Construction</option>
-                        <option value="3">Highway Bridge Project</option>
+                        <option value="">{{ __('employee/overtime/common.projects.select') }}</option>
+                        <option value="1">{{ __('employee/overtime/common.projects.residential') }}</option>
+                        <option value="2">{{ __('employee/overtime/common.projects.commercial') }}</option>
+                        <option value="3">{{ __('employee/overtime/common.projects.highway') }}</option>
                     </select>
                 </div>
             </div>
@@ -79,66 +83,65 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Reason & Justification
+                {{ __('employee/overtime/create.sections.reason') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="reason">Reason for Overtime *</label>
+                    <label for="reason">{{ __('employee/overtime/common.labels.reason') }} *</label>
                     <textarea id="reason" name="reason" rows="4" required 
-                              placeholder="Please provide detailed reason for overtime work">{{ old('reason') }}</textarea>
+                              placeholder="{{ __('employee/overtime/create.placeholders.reason') }}">{{ old('reason') }}</textarea>
                     @error('reason')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="work_description">Work Description</label>
+                    <label for="work_description">{{ __('employee/overtime/common.labels.description') }}</label>
                     <textarea id="work_description" name="work_description" rows="3" 
-                              placeholder="Describe the specific work to be done">{{ old('work_description') }}</textarea>
+                              placeholder="{{ __('employee/overtime/create.placeholders.description') }}">{{ old('work_description') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="urgency_level">Urgency Level</label>
+                    <label for="urgency_level">{{ __('employee/overtime/common.labels.urgency') }}</label>
                     <select id="urgency_level" name="urgency_level">
-                        <option value="normal">Normal</option>
-                        <option value="urgent">Urgent</option>
-                        <option value="critical">Critical</option>
+                        <option value="normal">{{ __('employee/overtime/common.urgency.normal') }}</option>
+                        <option value="urgent">{{ __('employee/overtime/common.urgency.urgent') }}</option>
+                        <option value="critical">{{ __('employee/overtime/common.urgency.critical') }}</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- Rate Calculation -->
         <div class="calculation-section">
             <h3 class="section-title">
                 <i class="material-icons">calculate</i>
-                Rate Calculation
+                {{ __('employee/overtime/create.sections.calculation') }}
             </h3>
 
             <div class="calculation-grid">
                 <div class="calc-item">
-                    <h4>Base Hourly Rate</h4>
+                    <h4>{{ __('employee/overtime/create.calc.base_rate') }}</h4>
                     <div class="calc-value">₹500.00</div>
-                    <small>Per hour</small>
+                    <small>{{ __('employee/overtime/create.calc.per_hour') }}</small>
                 </div>
 
                 <div class="calc-item">
-                    <h4>Overtime Multiplier</h4>
+                    <h4>{{ __('employee/overtime/create.calc.multiplier') }}</h4>
                     <div class="calc-value">1.5x</div>
-                    <small>Standard rate</small>
+                    <small>{{ __('employee/overtime/create.calc.standard_rate') }}</small>
                 </div>
 
                 <div class="calc-item">
-                    <h4>Overtime Rate</h4>
+                    <h4>{{ __('employee/overtime/create.calc.overtime_rate') }}</h4>
                     <div class="calc-value">₹750.00</div>
-                    <small>Per hour</small>
+                    <small>{{ __('employee/overtime/create.calc.per_hour') }}</small>
                 </div>
 
                 <div class="calc-item total">
-                    <h4>Estimated Total</h4>
+                    <h4>{{ __('employee/overtime/create.calc.estimated_total') }}</h4>
                     <div class="calc-value" id="total-amount">₹0.00</div>
-                    <small>Total overtime pay</small>
+                    <small>{{ __('employee/overtime/create.calc.total_pay') }}</small>
                 </div>
             </div>
         </div>
@@ -146,10 +149,10 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">send</i>
-                Submit Overtime Request
+                {{ __('employee/overtime/common.actions.submit') }}
             </button>
             <a href="{{ route('employee.overtime.index') }}" class="btn-cancel">
-                Cancel
+                {{ __('employee/overtime/common.actions.cancel') }}
             </a>
         </div>
     </form>

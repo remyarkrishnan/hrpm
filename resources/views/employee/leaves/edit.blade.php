@@ -1,6 +1,10 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Edit Leave Request - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('title', __('employee/leaves/edit.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
 @section('page-title', 'Employee Dashboard')
 
 @section('content')
@@ -8,14 +12,14 @@
     <div class="page-nav">
         <a href="{{ route('employee.leaves.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Leaves
+            {{ __('employee/leaves/common.actions.back') }}
         </a>
         <a href="{{ route('employee.leaves.show', $leave->id ?? 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('employee/leaves/common.actions.view') }}
         </a>
     </div>
-    <h2>Edit Leave Request</h2>
+    <h2>{{ __('employee/leaves/edit.title') }}</h2>
     
 </div>
 
@@ -29,18 +33,18 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">edit</i>
-                Update Leave Information
+                {{ __('employee/leaves/edit.sections.update_info') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="type">Leave Type *</label>
+                    <label for="type">{{ __('employee/leaves/common.labels.leave_type') }} *</label>
                     <select id="leave_type" name="leave_type" required>
-                        <option value="sick_leave" {{ ($leave->type ?? 'sick_leave') === 'sick_leave' ? 'selected' : '' }}>Sick Leave</option>
-                        <option value="casual_leave" {{ ($leave->type ?? '') === 'casual_leave' ? 'selected' : '' }}>Casual Leave</option>
-                        <option value="annual_leave" {{ ($leave->type ?? '') === 'annual_leave' ? 'selected' : '' }}>Annual Leave</option>
-                        <option value="maternity_leave" {{ ($leave->type ?? '') === 'maternity_leave' ? 'selected' : '' }}>Maternity Leave</option>
-                        <option value="emergency_leave" {{ ($leave->type ?? '') === 'emergency_leave' ? 'selected' : '' }}>Emergency Leave</option>
+                        <option value="sick_leave" {{ ($leave->type ?? 'sick_leave') === 'sick_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.sick_leave') }}</option>
+                        <option value="casual_leave" {{ ($leave->type ?? '') === 'casual_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.casual_leave') }}</option>
+                        <option value="annual_leave" {{ ($leave->type ?? '') === 'annual_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.annual_leave') }}</option>
+                        <option value="maternity_leave" {{ ($leave->type ?? '') === 'maternity_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.maternity_leave') }}</option>
+                        <option value="emergency_leave" {{ ($leave->type ?? '') === 'emergency_leave' ? 'selected' : '' }}>{{ __('employee/leaves/common.types.emergency_leave') }}</option>
                     </select>
                     @error('leave_type')
                         <span class="error">{{ $message }}</span>
@@ -48,7 +52,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="start_date">Start Date *</label>
+                    <label for="start_date">{{ __('employee/leaves/common.labels.start_date') }} *</label>
                     <input type="date" id="from_date" name="from_date" value="{{ old('from_date', $leave->from_date->format('Y-m-d') ?? '') }}" required>
                     @error('from_date')
                         <span class="error">{{ $message }}</span>
@@ -56,7 +60,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">End Date *</label>
+                    <label for="end_date">{{ __('employee/leaves/common.labels.end_date') }} *</label>
                     <input type="date" id="to_date" name="to_date" value="{{ old('to_date', $leave->to_date->format('Y-m-d') ?? '') }}" required>
                     @error('to_date')
                         <span class="error">{{ $message }}</span>
@@ -64,8 +68,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="calculated_days">Total Days</label>
-                    <input type="text" id="calculated_days" readonly class="calculated-field" value="{{ old('calculated_days', $leave->total_days ?? '') }}">
+                    <label for="calculated_days">{{ __('employee/leaves/common.labels.total_days') }}</label>
+                    <input type="text" id="calculated_days" readonly class="calculated-field" value="{{ old('calculated_days', ($leave->total_days ?? 0) . ' ' . __('employee/leaves/common.labels.days')) }}">
                 </div>
             </div>
         </div>
@@ -73,12 +77,12 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Leave Reason & Details
+                {{ __('employee/leaves/edit.sections.reason_details') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="reason">Reason for Leave *</label>
+                    <label for="reason">{{ __('employee/leaves/common.labels.reason') }} *</label>
                     <textarea id="reason" name="reason" rows="4" required>{{ old('reason', $leave->reason ?? '') }}</textarea>
                     @error('reason')
                         <span class="error">{{ $message }}</span>
@@ -88,19 +92,18 @@
                 
 
                 <div class="form-group">
-                    <label for="documents">Additional Documents</label>
+                    <label for="documents">{{ __('employee/leaves/edit.form.additional_docs') }}</label>
                     <input type="file" id="supporting_document" name="supporting_document[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                    <small class="form-help">Upload additional supporting documents if needed. Max 5MB per file.</small>
+                    <small class="form-help">{{ __('employee/leaves/edit.form.additional_help') }}</small>
                 </div>
             </div>
         </div>
 
-        <!-- Current Documents -->
         @if(isset($leave->documents) && count($leave->documents) > 0)
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">folder</i>
-                Current Documents
+                {{ __('employee/leaves/edit.sections.current_docs') }}
             </h3>
 
             <div class="document-list">
@@ -113,11 +116,11 @@
                     <div class="document-actions">
                         <a href="#" target="_blank" class="btn-view">
                             <i class="material-icons">open_in_new</i>
-                            View
+                            {{ __('employee/leaves/common.actions.view') }}
                         </a>
                         <button type="button" class="btn-remove" onclick="removeDocument('{{ $document }}')">
                             <i class="material-icons">delete</i>
-                            Remove
+                            {{ __('employee/leaves/common.actions.remove') }}
                         </button>
                     </div>
                 </div>
@@ -126,65 +129,63 @@
         </div>
         @endif
 
-        <!-- Admin Notes Section -->
         @if(auth()->user()->hasRole(['super-admin', 'admin', 'hr-manager']))
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">note</i>
-                Administrative Notes
+                {{ __('employee/leaves/edit.sections.admin_notes') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="admin_status">Update Status</label>
+                    <label for="admin_status">{{ __('employee/leaves/edit.admin.update_status') }}</label>
                     <select id="admin_status" name="status">
-                        <option value="pending" {{ ($leave->status ?? 'pending') === 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="approved" {{ ($leave->status ?? '') === 'approved' ? 'selected' : '' }}>Approved</option>
-                        <option value="rejected" {{ ($leave->status ?? '') === 'rejected' ? 'selected' : '' }}>Rejected</option>
-                        <option value="cancelled" {{ ($leave->status ?? '') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        <option value="pending" {{ ($leave->status ?? 'pending') === 'pending' ? 'selected' : '' }}>{{ __('employee/leaves/common.status.pending') }}</option>
+                        <option value="approved" {{ ($leave->status ?? '') === 'approved' ? 'selected' : '' }}>{{ __('employee/leaves/common.status.approved') }}</option>
+                        <option value="rejected" {{ ($leave->status ?? '') === 'rejected' ? 'selected' : '' }}>{{ __('employee/leaves/common.status.rejected') }}</option>
+                        <option value="cancelled" {{ ($leave->status ?? '') === 'cancelled' ? 'selected' : '' }}>{{ __('employee/leaves/common.status.cancelled') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="approved_by">Approved/Handled By</label>
+                    <label for="approved_by">{{ __('employee/leaves/edit.admin.handled_by') }}</label>
                     <input type="text" id="approved_by" name="approved_by" 
                            value="{{ old('approved_by', $leave->approved_by ?? auth()->user()->name) }}" readonly>
                 </div>
 
                 <div class="form-group full-width">
-                    <label for="admin_remarks">Admin Remarks</label>
+                    <label for="admin_remarks">{{ __('employee/leaves/edit.admin.remarks') }}</label>
                     <textarea id="admin_remarks" name="admin_remarks" rows="3" 
-                              placeholder="Add administrative notes or remarks">{{ old('admin_remarks', $leave->remarks ?? '') }}</textarea>
+                              placeholder="{{ __('employee/leaves/edit.admin.remarks_placeholder') }}">{{ old('admin_remarks', $leave->remarks ?? '') }}</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="rejection_reason">Rejection Reason (if rejected)</label>
+                    <label for="rejection_reason">{{ __('employee/leaves/edit.admin.rejection_reason') }}</label>
                     <input type="text" id="rejection_reason" name="rejection_reason" 
                            value="{{ old('rejection_reason', $leave->rejection_reason ?? '') }}"
-                           placeholder="Enter reason if rejecting the leave">
+                           placeholder="{{ __('employee/leaves/edit.admin.rejection_placeholder') }}">
                 </div>
             </div>
         </div>
         @endif
 
-        <!-- Audit Trail -->
         <div class="audit-section">
             <h3 class="section-title">
                 <i class="material-icons">history</i>
-                Change History
+                {{ __('employee/leaves/edit.sections.history') }}
             </h3>
 
             <div class="audit-trail" >
                 <div class="audit-item">
                     <div class="audit-time">{{ $leave->created_at->format('d-m-Y') }}</div>
-                    <div class="audit-action">Leave request submitted</div>
+                    <div class="audit-action">{{ __('employee/leaves/edit.audit.submitted') }}</div>
                     <div class="audit-user">{{ $leave->user->name ?? '' }}</div>
                 </div>
 
                 @if(($leave->status ?? '') === 'approved')
                 <div class="audit-item">
-                    <div class="audit-time">Oct 08, 2025 - 10:15 AM</div>
-                    <div class="audit-action">Leave request approved</div>
+                    <div class="audit-time">{{ $leave->approved_at ? $leave->approved_at->format('d-m-Y - h:i A') : '' }}</div>
+                    <div class="audit-action">{{ __('employee/leaves/edit.audit.approved') }}</div>
                     <div class="audit-user">{{ $leave->approved_by ?? 'HR Manager' }}</div>
                 </div>
                 @endif
@@ -194,14 +195,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Leave Request
+                {{ __('employee/leaves/edit.form.update_btn') }}
             </button>
             <a href="{{ route('employee.leaves.show', $leave->id ?? 1) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('employee/leaves/edit.form.cancel_changes') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteLeave()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('employee/leaves/common.actions.delete') }}
             </button>
         </div>
     </form>
@@ -209,6 +210,7 @@
 @endsection
 
 @push('styles')
+{{-- Styles remain exactly as provided --}}
 <style>
     .page-header { margin-bottom: 32px; }
 
@@ -521,6 +523,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const startDateInput = document.getElementById('from_date');
     const endDateInput = document.getElementById('to_date');
     const calculatedDaysInput = document.getElementById('calculated_days');
+    const daysLabel = "{{ __('employee/leaves/common.labels.days') }}";
 
     function calculateDays() {
         if (startDateInput.value && endDateInput.value) {
@@ -530,7 +533,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (endDate >= startDate) {
                 const diffTime = Math.abs(endDate - startDate);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                calculatedDaysInput.value = diffDays + ' days';
+                calculatedDaysInput.value = diffDays + ' ' + daysLabel;
             } else {
                 calculatedDaysInput.value = '';
             }
@@ -545,14 +548,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function removeDocument(documentName) {
-    if (confirm(`Are you sure you want to remove "${documentName}"?`)) {
+    // Localized prompt logic if needed
+    if (confirm("{{ __('employee/leaves/common.messages.delete_confirm') }}")) {
         // TODO: Implement document removal via AJAX
         alert('Document removal functionality to be implemented');
     }
 }
 
 function deleteLeave() {
-    if (confirm('Are you sure you want to delete this leave request?\n\nThis action cannot be undone.')) {
+    if (confirm("{{ __('employee/leaves/common.messages.delete_confirm') }}")) {
         fetch(`/employee/leaves/{{ $leave->id ?? 1 }}`, {
             method: 'DELETE',
             headers: {
@@ -563,15 +567,15 @@ function deleteLeave() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Leave request deleted successfully');
+                alert("{{ __('employee/leaves/common.messages.delete_success') }}");
                 window.location.href = '/employee/leaves';
             } else {
-                alert('Error deleting leave request');
+                alert("{{ __('employee/leaves/common.messages.delete_error') }}");
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error deleting leave request');
+            alert("{{ __('employee/leaves/common.messages.delete_error') }}");
         });
     }
 }
@@ -579,7 +583,7 @@ function deleteLeave() {
 // Form submission with loading state
 document.querySelector('.leave-form').addEventListener('submit', function(e) {
     const submitButton = this.querySelector('button[type="submit"]');
-    submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> Updating...';
+    submitButton.innerHTML = '<i class="material-icons">hourglass_empty</i> ' + "{{ __('employee/leaves/common.messages.loading') }}";
     submitButton.disabled = true;
 });
 </script>

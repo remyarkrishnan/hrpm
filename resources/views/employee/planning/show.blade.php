@@ -1,14 +1,18 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.admin')
 
-@section('title', 'Project Plan Details - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Project Plan Details')
+@section('title', __('employee/planning/show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/planning/show.title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('admin.planning.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Planning
+            {{ __('employee/planning/common.actions.back') }}
         </a>
     </div>
     <div class="plan-header">
@@ -18,11 +22,11 @@
             <div class="plan-timeline">
                 <i class="material-icons">schedule</i>
                 <span>Oct 2025 - Dec 2025</span>
-                <strong>195 days total</strong>
+                <strong>195 {{ __('employee/planning/show.days_total') }}</strong>
             </div>
         </div>
         <div class="plan-status">
-            <span class="status-badge status-on-track">On Track</span>
+            <span class="status-badge status-on-track">{{ __('employee/planning/common.status.on_track') }}</span>
             <div class="plan-progress">
                 <div class="progress-circle">
                     <svg viewBox="0 0 36 36">
@@ -31,16 +35,15 @@
                     </svg>
                     <div class="progress-text">85%</div>
                 </div>
-                <small>Overall Progress</small>
+                <small>{{ __('employee/planning/show.overall_progress') }}</small>
             </div>
         </div>
     </div>
 </div>
 
 <div class="plan-details">
-    <!-- Phase Progress -->
     <div class="phases-section">
-        <h3>Construction Phases Progress</h3>
+        <h3>{{ __('employee/planning/show.sections.phases') }}</h3>
         <div class="phases-list">
             <div class="phase-item active completed">
                 <div class="phase-header">
@@ -48,32 +51,32 @@
                         <i class="material-icons">foundation</i>
                     </div>
                     <div class="phase-info">
-                        <h4>Foundation Phase</h4>
-                        <p>Site preparation, excavation, foundation laying</p>
+                        <h4>{{ __('employee/planning/common.phases.foundation') }}</h4>
+                        <p>{{ __('employee/planning/index.phases.foundation_desc') }}</p>
                     </div>
                     <div class="phase-status">
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 100%"></div>
                         </div>
-                        <span>100% Complete</span>
+                        <span>100% {{ __('employee/planning/index.phases.complete') }}</span>
                     </div>
                 </div>
                 <div class="phase-details">
                     <div class="detail-grid">
                         <div class="detail-item">
-                            <strong>Duration:</strong>
+                            <strong>{{ __('employee/planning/common.labels.duration') }}:</strong>
                             <span>45 days</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Budget Used:</strong>
+                            <strong>{{ __('employee/planning/common.labels.budget_used') }}:</strong>
                             <span>₹15,00,000 (30%)</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Team Size:</strong>
+                            <strong>{{ __('employee/planning/common.labels.team_size') }}:</strong>
                             <span>12 workers</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Completion Date:</strong>
+                            <strong>{{ __('employee/planning/common.labels.actual_date') }}:</strong>
                             <span>Nov 15, 2025</span>
                         </div>
                     </div>
@@ -86,32 +89,32 @@
                         <i class="material-icons">apartment</i>
                     </div>
                     <div class="phase-info">
-                        <h4>Structure Phase</h4>
-                        <p>Framework, walls, structural elements</p>
+                        <h4>{{ __('employee/planning/common.phases.structure') }}</h4>
+                        <p>{{ __('employee/planning/index.phases.structure_desc') }}</p>
                     </div>
                     <div class="phase-status">
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 62%"></div>
                         </div>
-                        <span>62% Complete</span>
+                        <span>62% {{ __('employee/planning/index.phases.complete') }}</span>
                     </div>
                 </div>
                 <div class="phase-details">
                     <div class="detail-grid">
                         <div class="detail-item">
-                            <strong>Duration:</strong>
+                            <strong>{{ __('employee/planning/common.labels.duration') }}:</strong>
                             <span>90 days</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Budget Used:</strong>
+                            <strong>{{ __('employee/planning/common.labels.budget_used') }}:</strong>
                             <span>₹14,00,000 of ₹22,50,000</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Team Size:</strong>
+                            <strong>{{ __('employee/planning/common.labels.team_size') }}:</strong>
                             <span>25 workers</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Expected Completion:</strong>
+                            <strong>{{ __('employee/planning/common.labels.expected_date') }}:</strong>
                             <span>Jan 20, 2026</span>
                         </div>
                     </div>
@@ -124,32 +127,32 @@
                         <i class="material-icons">palette</i>
                     </div>
                     <div class="phase-info">
-                        <h4>Finishing Phase</h4>
-                        <p>Interior work, painting, final touches</p>
+                        <h4>{{ __('employee/planning/common.phases.finishing') }}</h4>
+                        <p>{{ __('employee/planning/index.phases.finishing_desc') }}</p>
                     </div>
                     <div class="phase-status">
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: 0%"></div>
                         </div>
-                        <span>Not Started</span>
+                        <span>{{ __('employee/planning/common.status.not_started') }}</span>
                     </div>
                 </div>
                 <div class="phase-details">
                     <div class="detail-grid">
                         <div class="detail-item">
-                            <strong>Duration:</strong>
+                            <strong>{{ __('employee/planning/common.labels.duration') }}:</strong>
                             <span>60 days</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Budget Allocated:</strong>
+                            <strong>{{ __('employee/planning/common.labels.budget_alloc') }}:</strong>
                             <span>₹12,50,000 (25%)</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Team Size:</strong>
+                            <strong>{{ __('employee/planning/common.labels.team_size') }}:</strong>
                             <span>18 workers</span>
                         </div>
                         <div class="detail-item">
-                            <strong>Planned Start:</strong>
+                            <strong>{{ __('employee/planning/common.labels.start_date') }}:</strong>
                             <span>Feb 1, 2026</span>
                         </div>
                     </div>
@@ -158,9 +161,8 @@
         </div>
     </div>
 
-    <!-- Milestones Timeline -->
     <div class="milestones-section">
-        <h3>Project Milestones</h3>
+        <h3>{{ __('employee/planning/show.sections.milestones') }}</h3>
         <div class="timeline">
             <div class="timeline-item completed">
                 <div class="timeline-marker"></div>
@@ -169,7 +171,7 @@
                     <p>Quality inspection of foundation work completed successfully</p>
                     <div class="timeline-meta">
                         <span class="timeline-date">Nov 15, 2025</span>
-                        <span class="timeline-status completed">Completed</span>
+                        <span class="timeline-status completed">{{ __('employee/planning/common.status.completed') }}</span>
                     </div>
                 </div>
             </div>
@@ -181,7 +183,7 @@
                     <p>Main structural framework and load-bearing elements</p>
                     <div class="timeline-meta">
                         <span class="timeline-date">Jan 10, 2026</span>
-                        <span class="timeline-status in-progress">In Progress</span>
+                        <span class="timeline-status in-progress">{{ __('employee/planning/common.status.in_progress') }}</span>
                     </div>
                 </div>
             </div>
@@ -193,7 +195,7 @@
                     <p>Mechanical, Electrical, and Plumbing systems installation</p>
                     <div class="timeline-meta">
                         <span class="timeline-date">Feb 20, 2026</span>
-                        <span class="timeline-status pending">Pending</span>
+                        <span class="timeline-status pending">{{ __('employee/planning/common.status.pending') }}</span>
                     </div>
                 </div>
             </div>
@@ -205,93 +207,91 @@
                     <p>Complete quality assurance and safety inspection</p>
                     <div class="timeline-meta">
                         <span class="timeline-date">Mar 15, 2026</span>
-                        <span class="timeline-status pending">Pending</span>
+                        <span class="timeline-status pending">{{ __('employee/planning/common.status.pending') }}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Resource Overview -->
     <div class="resource-grid">
         <div class="resource-card">
-            <h3>Budget Overview</h3>
+            <h3>{{ __('employee/planning/show.sections.budget') }}</h3>
             <div class="budget-breakdown">
                 <div class="budget-item">
-                    <span>Total Budget:</span>
+                    <span>{{ __('employee/planning/show.budget.total') }}:</span>
                     <strong>₹50,00,000</strong>
                 </div>
                 <div class="budget-item">
-                    <span>Used So Far:</span>
+                    <span>{{ __('employee/planning/show.budget.used') }}:</span>
                     <strong>₹29,00,000</strong>
                 </div>
                 <div class="budget-item">
-                    <span>Remaining:</span>
+                    <span>{{ __('employee/planning/show.budget.remaining') }}:</span>
                     <strong>₹21,00,000</strong>
                 </div>
                 <div class="budget-progress">
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 58%"></div>
                     </div>
-                    <span>58% utilized</span>
+                    <span>58% {{ __('employee/planning/show.budget.utilized') }}</span>
                 </div>
             </div>
         </div>
 
         <div class="resource-card">
-            <h3>Team Information</h3>
+            <h3>{{ __('employee/planning/show.sections.team') }}</h3>
             <div class="team-info">
                 <div class="team-item">
-                    <strong>Project Manager:</strong>
+                    <strong>{{ __('employee/planning/show.team.manager') }}:</strong>
                     <span>Rajesh Kumar</span>
                 </div>
                 <div class="team-item">
-                    <strong>Current Team Size:</strong>
+                    <strong>{{ __('employee/planning/show.team.current') }}:</strong>
                     <span>25 workers</span>
                 </div>
                 <div class="team-item">
-                    <strong>Peak Team Size:</strong>
+                    <strong>{{ __('employee/planning/show.team.peak') }}:</strong>
                     <span>35 workers</span>
                 </div>
                 <div class="team-item">
-                    <strong>Priority Level:</strong>
+                    <strong>{{ __('employee/planning/show.team.priority') }}:</strong>
                     <span class="priority-badge high">High</span>
                 </div>
             </div>
         </div>
 
         <div class="resource-card">
-            <h3>Key Statistics</h3>
+            <h3>{{ __('employee/planning/show.sections.stats') }}</h3>
             <div class="stats-list">
                 <div class="stat-item">
                     <div class="stat-value">195</div>
-                    <div class="stat-label">Total Days</div>
+                    <div class="stat-label">{{ __('employee/planning/show.stats.total_days') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">98</div>
-                    <div class="stat-label">Days Elapsed</div>
+                    <div class="stat-label">{{ __('employee/planning/show.stats.elapsed') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">97</div>
-                    <div class="stat-label">Days Remaining</div>
+                    <div class="stat-label">{{ __('employee/planning/show.stats.remaining') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">4</div>
-                    <div class="stat-label">Milestones</div>
+                    <div class="stat-label">{{ __('employee/planning/show.stats.milestones') }}</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Project Description -->
     <div class="description-section">
-        <h3>Project Description</h3>
+        <h3>{{ __('employee/planning/show.sections.desc') }}</h3>
         <div class="description-content">
             <p>This is a comprehensive residential complex development project focusing on sustainable construction practices and modern architectural design. The project includes multiple residential towers with integrated amenities and green spaces.</p>
 
             <div class="description-details">
                 <div class="detail-column">
-                    <h4>Key Features:</h4>
+                    <h4>{{ __('employee/planning/show.desc.features') }}</h4>
                     <ul>
                         <li>3 residential towers (15 floors each)</li>
                         <li>Underground parking facility</li>
@@ -302,7 +302,7 @@
                 </div>
 
                 <div class="detail-column">
-                    <h4>Success Criteria:</h4>
+                    <h4>{{ __('employee/planning/show.desc.criteria') }}</h4>
                     <ul>
                         <li>Complete project within budget</li>
                         <li>Achieve LEED Gold certification</li>
@@ -315,27 +315,26 @@
         </div>
     </div>
 
-    <!-- Action Buttons -->
     <div class="action-section">
         <div class="plan-actions">
             <a href="{{ route('admin.planning.edit', 1) }}" class="btn-primary">
                 <i class="material-icons">edit</i>
-                Edit Plan
+                {{ __('employee/planning/common.actions.edit') }}
             </a>
             <button class="btn-secondary" onclick="generateReport()">
                 <i class="material-icons">assessment</i>
-                Generate Report
+                {{ __('employee/planning/common.actions.generate_report') }}
             </button>
         </div>
 
         <div class="other-actions">
             <button class="btn-success" onclick="markMilestone()">
                 <i class="material-icons">flag</i>
-                Mark Milestone
+                {{ __('employee/planning/common.actions.mark_milestone') }}
             </button>
             <button class="btn-warning" onclick="updateProgress()">
                 <i class="material-icons">update</i>
-                Update Progress
+                {{ __('employee/planning/common.actions.update_progress') }}
             </button>
         </div>
     </div>

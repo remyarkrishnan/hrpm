@@ -1,0 +1,53 @@
+<?php
+return [
+    'types' => [
+        'sick_leave' => 'إجازة مرضية',
+        'casual_leave' => 'إجازة عارضة',
+        'annual_leave' => 'إجازة سنوية',
+        'maternity_leave' => 'إجازة أمومة',
+        'emergency_leave' => 'إجازة طارئة',
+    ],
+    'status' => [
+        'pending' => 'قيد الانتظار',
+        'approved' => 'مقبول',
+        'rejected' => 'مرفوض',
+        'cancelled' => 'ملغى',
+    ],
+    'actions' => [
+        'back' => 'رجوع',
+        'edit' => 'تعديل الطلب',
+        'delete' => 'حذف الطلب',
+        'view' => 'عرض التفاصيل',
+        'cancel' => 'إلغاء',
+        'save' => 'حفظ',
+        'submit' => 'إرسال',
+        'update' => 'تحديث',
+        'download' => 'تحميل',
+        'open_new' => 'فتح في نافذة جديدة',
+        'remove' => 'إزالة',
+    ],
+    'labels' => [
+        'start_date' => 'تاريخ البدء',
+        'end_date' => 'تاريخ الانتهاء',
+        'total_days' => 'إجمالي الأيام',
+        'reason' => 'السبب',
+        'documents' => 'المستندات',
+        'days' => 'أيام',
+        'day' => 'يوم',
+        'leave_type' => 'نوع الإجازة',
+    ],
+    'messages' => [
+        'delete_confirm' => 'هل أنت متأكد أنك تريد حذف طلب الإجازة هذا؟\n\nلا يمكن التراجع عن هذا الإجراء.',
+        'delete_success' => 'تم حذف طلب الإجازة بنجاح',
+        'delete_error' => 'حدث خطأ أثناء حذف الطلب',
+        'approve_confirm' => 'هل أنت متأكد أنك تريد الموافقة على هذا الطلب؟',
+        'approve_success' => 'تمت الموافقة على الطلب بنجاح',
+        'approve_error' => 'حدث خطأ أثناء الموافقة على الطلب',
+        'reject_prompt' => 'الرجاء إدخال سبب الرفض:',
+        'reject_required' => 'سبب الرفض مطلوب',
+        'reject_success' => 'تم رفض الطلب',
+        'reject_error' => 'حدث خطأ أثناء رفض الطلب',
+        'loading' => 'جاري التحديث...',
+        'approval_remarks_prompt' => 'أضف ملاحظات الموافقة (اختياري):',
+    ]
+];

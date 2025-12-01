@@ -1,0 +1,20 @@
+<?php
+return [
+    'title' => 'تعديل طلب الوثيقة',
+    'page_title' => 'لوحة تحكم الموظف',
+    'back_to_documents' => 'العودة إلى الوثائق',
+    'view_details' => 'عرض التفاصيل',
+    'header_title' => 'تعديل طلب الوثيقة',
+    'header_description' => 'تحديث طلب الوثيقة',
+    'update_document_info' => 'تحديث معلومات الوثيقة',
+    'document_type_label' => 'نوع الوثيقة',
+    'id_letter' => 'بطاقة الهوية',
+    'experience_certificate' => 'شهادة خبرة',
+    'salary_slip' => 'كشف راتب',
+    'update_button' => 'تحديث طلب الوثيقة',
+    'cancel_button' => 'إلغاء التغييرات',
+    'delete_request' => 'حذف الطلب',
+    'delete_confirm' => 'هل أنت متأكد من حذف طلب الوثيقة هذا؟ لا يمكن التراجع عن هذا الإجراء.',
+    'delete_success' => 'تم حذف طلب الوثيقة بنجاح',
+    'delete_error' => 'خطأ في حذف طلب الوثيقة',
+];

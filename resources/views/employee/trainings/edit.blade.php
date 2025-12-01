@@ -1,6 +1,10 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
 @extends('layouts.employee')
 
-@section('title', 'Edit Training Request - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('title', __('employee/trainings/edit.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
 @section('page-title', 'Employee Dashboard')
 
 @section('content')
@@ -8,15 +12,15 @@
     <div class="page-nav">
         <a href="{{ route('employee.trainings.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            Back to Trainings
+            {{ __('employee/trainings/common.actions.back') }}
         </a>
         <a href="{{ route('employee.trainings.show', $training->id ?? 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            View Details
+            {{ __('employee/trainings/common.actions.view') }}
         </a>
     </div>
-    <h2>Edit Training Request</h2>
-    <p>Update training request </p>
+    <h2>{{ __('employee/trainings/edit.title') }}</h2>
+    <p>{{ __('employee/trainings/edit.subtitle') }}</p>
 </div>
 
 <div class="form-container">
@@ -24,73 +28,66 @@
         @csrf
         @method('PUT')
 
- 
-
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">edit</i>
-                Update Training Information
+                {{ __('employee/trainings/edit.sections.update_info') }}
             </h3>
 
             <div class="form-grid">
-            <div class="form-group">
-                    <label for="type">Name *</label>
-                     <input type="text" id="name"  name="name" value="{{ old('name', $training->name ) }}">
-                    @error('type')
+                <div class="form-group">
+                    <label for="name">{{ __('employee/trainings/common.labels.name') }} *</label>
+                    <input type="text" id="name" name="name" value="{{ old('name', $training->name) }}">
+                    @error('name')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="type">Location *</label>
-                     <input type="text" id="location"  name="location" value="{{ old('location', $training->location ) }}">
-                    @error('type')
+                    <label for="location">{{ __('employee/trainings/common.labels.location') }} *</label>
+                    <input type="text" id="location" name="location" value="{{ old('location', $training->location) }}">
+                    @error('location')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="start_date">Duration *</label>
+                    <label for="duration">{{ __('employee/trainings/common.labels.duration') }} *</label>
                     <input type="text" id="duration" name="duration" value="{{ old('duration', $training->duration) }}" required>
-                    @error('start_date')
+                    @error('duration')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">Benefit *</label>
-                    <input type="text" id="benefit" name="benefit" value="{{ old('benefit', $training->benefit ) }}" required>
-                    @error('end_date')
+                    <label for="benefit">{{ __('employee/trainings/common.labels.benefit') }} *</label>
+                    <input type="text" id="benefit" name="benefit" value="{{ old('benefit', $training->benefit) }}" required>
+                    @error('benefit')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
-
-                
             </div>
         </div>
 
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">description</i>
-                Documents
+                {{ __('employee/trainings/common.labels.documents') }}
             </h3>
 
             <div class="form-grid">
-                
-
                 <div class="form-group">
-                    <label for="documents">Supporting Documents (Optional)</label>
+                    <label for="supporting_document">{{ __('employee/trainings/common.labels.supporting_docs') }}</label>
                     <input type="file" id="supporting_document" name="supporting_document[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                    <small class="form-help">Upload training invite letter if available. Max 5MB per file.</small>
+                    <small class="form-help">{{ __('employee/trainings/common.labels.doc_help') }}</small>
                 </div>
             </div>
         </div>
 
-        <!-- Current Documents -->
         @if(isset($leave->documents) && count($leave->documents) > 0)
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">folder</i>
-                Current Documents
+                {{ __('employee/trainings/edit.sections.current_docs') }}
             </h3>
 
             <div class="document-list">
@@ -103,11 +100,11 @@
                     <div class="document-actions">
                         <a href="#" target="_blank" class="btn-view">
                             <i class="material-icons">open_in_new</i>
-                            View
+                            {{ __('employee/trainings/common.actions.view_file') }}
                         </a>
                         <button type="button" class="btn-remove" onclick="removeDocument('{{ $document }}')">
                             <i class="material-icons">delete</i>
-                            Remove
+                            {{ __('employee/trainings/common.actions.remove') }}
                         </button>
                     </div>
                 </div>
@@ -116,26 +113,23 @@
         </div>
         @endif
 
-       
-
-        <!-- Audit Trail -->
         <div class="audit-section" style="display:none">
             <h3 class="section-title">
                 <i class="material-icons">history</i>
-                Change History
+                {{ __('employee/trainings/edit.sections.history') }}
             </h3>
 
             <div class="audit-trail">
                 <div class="audit-item">
                     <div class="audit-time">Oct 07, 2025 - 02:30 PM</div>
-                    <div class="audit-action">Training request submitted</div>
+                    <div class="audit-action">{{ __('employee/trainings/edit.audit.submitted') }}</div>
                     <div class="audit-user">{{ $leave->employee_name ?? 'Rajesh Kumar' }}</div>
                 </div>
 
                 @if(($training->status ?? '') === 'approved')
                 <div class="audit-item">
                     <div class="audit-time">Oct 08, 2025 - 10:15 AM</div>
-                    <div class="audit-action">Training request approved</div>
+                    <div class="audit-action">{{ __('employee/trainings/edit.audit.approved') }}</div>
                     <div class="audit-user">{{ $training->approved_by ?? 'HR Manager' }}</div>
                 </div>
                 @endif
@@ -145,14 +139,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                Update Training Request
+                {{ __('employee/trainings/common.actions.update') }}
             </button>
             <a href="{{ route('employee.trainings.show', $training->id ?? 1) }}" class="btn-cancel">
-                Cancel Changes
+                {{ __('employee/trainings/common.actions.cancel_changes') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteTraining()">
                 <i class="material-icons">delete</i>
-                Delete Request
+                {{ __('employee/trainings/common.actions.delete') }}
             </button>
         </div>
     </form>

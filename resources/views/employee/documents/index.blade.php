@@ -1,31 +1,35 @@
+@php
+    $locale = session('locale', config('app.locale'));
+    app()->setLocale($locale);
+@endphp
+
 @extends('layouts.employee')
 
-@section('title', 'Document Management - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Employee Dashboard')
+@section('title', __('employee.documents.index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee.documents.index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h2>Document Management</h2>
-        <p>Manage document requests </p>
+        <h2>{{ __('employee.documents.index.header_title') }}</h2>
+        <p>{{ __('employee.documents.index.header_description') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('employee.documents.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            Request for Document
+            {{ __('employee.documents.index.request_document') }}
         </a>
     </div>
 </div>
 
-<!-- Leave Stats -->
 <div class="stats-grid">
     <div class="stat-card pending">
         <div class="stat-icon">
             <i class="material-icons">pending</i>
         </div>
         <div class="stat-info">
-            <h3>{{ $totalPendingDocument }}</h3>
-            <p>Pending Requests</p>
+            <h3>{{ $totalPending ?? 0 }}</h3>
+            <p>{{ __('employee.documents.index.stats.pending_requests') }}</p>
         </div>
     </div>
 
@@ -34,36 +38,29 @@
             <i class="material-icons">check_circle</i>
         </div>
         <div class="stat-info">
-            <h3>{{ $totalApprovedDocument }}</h3>
-            <p>Approved </p>
+            <h3>{{ $totalApproved ?? 0 }}</h3>
+            <p>{{ __('employee.documents.index.stats.approved') }}</p>
         </div>
     </div>
-
- 
-
 </div>
 
-<!-- Leave Requests Table -->
-<div class="leave-table-card">
-    <h3>Document Requests</h3>
+<div class="document-table-card">
+    <h3>{{ __('employee.documents.index.table_title') }}</h3>
     <div class="table-responsive">
-        <table class="leave-table">
+        <table class="document-table">
             <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Applied Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('employee.documents.index.table.columns.type') }}</th>
+                    <th>{{ __('employee.documents.index.table.columns.applied_date') }}</th>
+                    <th>{{ __('employee.documents.index.table.columns.status') }}</th>
+                    <th>{{ __('employee.documents.index.table.columns.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($documents as $doc)
                 <tr>
-                   
-                    <td>
-                        <span class="leave-type">{{ ucfirst(str_replace('_', ' ', $doc->type)) }} </span>
-                    </td>
-                    <td>{{ $doc->created_at }}</td>
+                    <td><span class="document-type">{{ ucfirst(str_replace('_', ' ', $doc->type)) }}</span></td>
+                    <td>{{ $doc->created_at->format('d-m-Y') }}</td>
                     <td>
                         <span class="status-badge status-{{ $doc->status }}">
                             {{ ucfirst($doc->status) }}
@@ -71,21 +68,20 @@
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a href="{{ route('employee.documents.show', $doc->id) }}" class="btn-action">
+                            <a href="{{ route('employee.documents.show', $doc->id) }}" class="btn-action" title="{{ __('employee.documents.index.view_details') }}">
                                 <i class="material-icons">visibility</i>
                             </a>
-                            @if($doc->status === 'pending')
-                       
-                                <button class="btn-action btn-reject" onclick="deleteDocument({{ $doc->id }})">
-                                    <i class="material-icons">close</i>
-                                </button>
+                            @if($doc->status == 'pending')
+                            <button class="btn-action btn-reject" onclick="deleteDocument({{ $doc->id }})" title="{{ __('employee.documents.index.delete_request') }}">
+                                <i class="material-icons">close</i>
+                            </button>
                             @endif
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center">No document requests found</td>
+                    <td colspan="4" class="text-center">{{ __('employee.documents.index.no_requests') }}</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -102,13 +98,15 @@
         align-items: flex-start;
         margin-bottom: 32px;
     }
-
     .page-header h2 {
         margin: 0 0 8px 0;
         font-size: 24px;
         font-weight: 500;
     }
-
+    .header-actions {
+        display: flex;
+        gap: 12px;
+    }
     .btn-primary {
         display: inline-flex;
         align-items: center;
@@ -121,7 +119,6 @@
         font-weight: 500;
         transition: background 0.2s;
     }
-
     .btn-primary:hover { background: #5A4A94; }
 
     .stats-grid {
@@ -130,7 +127,6 @@
         gap: 20px;
         margin-bottom: 32px;
     }
-
     .stat-card {
         background: white;
         padding: 24px;
@@ -140,7 +136,6 @@
         align-items: center;
         gap: 16px;
     }
-
     .stat-icon {
         width: 56px;
         height: 56px;
@@ -151,32 +146,27 @@
         font-size: 24px;
         color: white;
     }
-
     .stat-card.pending .stat-icon { background: #FF9800; }
     .stat-card.approved .stat-icon { background: #4CAF50; }
-    .stat-card.on-leave .stat-icon { background: #2196F3; }
-    .stat-card.balance .stat-icon { background: #9C27B0; }
 
     .stat-info h3 {
         margin: 0;
         font-size: 24px;
         font-weight: 600;
     }
-
     .stat-info p {
         margin: 4px 0 0 0;
         color: #666;
         font-size: 14px;
     }
 
-    .leave-table-card {
+    .document-table-card {
         background: white;
         padding: 28px;
         border-radius: 16px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-
-    .leave-table-card h3 {
+    .document-table-card h3 {
         margin: 0 0 20px 0;
         font-size: 18px;
         font-weight: 600;
@@ -185,60 +175,29 @@
     .table-responsive {
         overflow-x: auto;
     }
-
-    .leave-table {
+    .document-table {
         width: 100%;
         border-collapse: collapse;
     }
-
-    .leave-table th {
+    .document-table th {
         padding: 12px;
         text-align: left;
         border-bottom: 2px solid #f0f0f0;
         font-weight: 600;
         color: #333;
     }
-
-    .leave-table td {
+    .document-table td {
         padding: 16px 12px;
         border-bottom: 1px solid #f5f5f5;
         vertical-align: middle;
     }
 
-    .employee-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .employee-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #6750A4;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-    }
-
-    .leave-type {
+    .document-type {
         padding: 4px 12px;
         background: #f0f0f0;
         border-radius: 12px;
         font-size: 12px;
         font-weight: 500;
-    }
-
-    .leave-duration strong {
-        display: block;
-        margin-bottom: 2px;
-    }
-
-    .leave-duration small {
-        color: #666;
-        font-size: 12px;
     }
 
     .status-badge {
@@ -248,16 +207,13 @@
         font-weight: 600;
         text-transform: uppercase;
     }
-
     .status-pending { background: #fff3e0; color: #f57c00; }
     .status-approved { background: #e8f5e8; color: #2e7d32; }
-    .status-rejected { background: #ffebee; color: #c62828; }
 
     .action-buttons {
         display: flex;
         gap: 8px;
     }
-
     .btn-action {
         width: 32px;
         height: 32px;
@@ -273,47 +229,50 @@
         border: none;
         cursor: pointer;
     }
-
     .btn-action:hover {
         background: #6750A4;
         color: white;
     }
-
-    .btn-approve:hover { background: #4CAF50; }
-    .btn-reject:hover { background: #f44336; }
+    .btn-reject:hover {
+        background: #f44336;
+    }
 
     .text-center {
         text-align: center;
         padding: 40px;
         color: #666;
     }
+
+    @media (max-width: 768px) {
+        .stats-grid { grid-template-columns: 1fr; }
+        .page-header { flex-direction: column; gap: 16px; }
+    }
 </style>
 @endpush
 
 @push('scripts')
 <script>
-
-function deleteDocument() {
-    if (confirm('Are you sure you want to delete this document request?\n\nThis action cannot be undone.')) {
-        fetch(`/employee/documents/{{ $doc->id  ?? ''}}`, {
+function deleteDocument(id) {
+    if (confirm('{{ __("employee.documents.index.delete_confirm") }}')) {
+        fetch(`/employee/documents/${id}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Document request deleted successfully');
+                alert('{{ __("employee.documents.index.delete_success") }}');
                 window.location.href = '/employee/documents';
             } else {
-                alert('Error deleting document request');
+                alert('{{ __("employee.documents.index.delete_error") }}');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error deleting document request');
+            alert('{{ __("employee.documents.index.delete_error") }}');
         });
     }
 }
