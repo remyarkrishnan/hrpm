@@ -27,6 +27,8 @@ return [
         'last_login' => 'Last Login',
         'reporting_manager' => 'Reporting Manager',
         'employee_type' => 'Employee Type',
+        'Housing allowance' => 'Housing Allowance',
+        'Transport allowance' => 'Transport Allowance', 
     ],
     'actions' => [
         'back' => 'Back',

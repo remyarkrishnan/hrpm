@@ -5,24 +5,23 @@
 
 @extends('layouts.employee')
 
-@section('title', __('employee.attendance.index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', __('employee.attendance.index.page_title'))
+@section('title', __('employee/attendance/index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/attendance/index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h2>{{ __('employee.attendance.index.header_title') }}</h2>
-        <p>{{ __('employee.attendance.index.header_description') }}</p>
+        <h2>{{ __('employee/attendance/index.header_title') }}</h2>
+        <p>{{ __('employee/attendance/index.header_description') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('employee.attendance.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            {{ __('employee.attendance.index.mark_attendance') }}
+            {{ __('employee/attendance/index.mark_attendance') }}
         </a>
     </div>
 </div>
 
-<!-- Attendance Stats -->
 <div class="stats-grid">
     <div class="stat-card present">
         <div class="stat-icon">
@@ -30,7 +29,7 @@
         </div>
         <div class="stat-info">
             <h3>30</h3>
-            <p>{{ __('employee.attendance.index.stats.working_days') }}</p>
+            <p>{{ __('employee/attendance/index.stats.working_days') }}</p>
         </div>
     </div>
 
@@ -40,7 +39,7 @@
         </div>
         <div class="stat-info">
             <h3>3</h3>
-            <p>{{ __('employee.attendance.index.stats.absents') }}</p>
+            <p>{{ __('employee/attendance/index.stats.absents') }}</p>
         </div>
     </div>
 
@@ -50,7 +49,7 @@
         </div>
         <div class="stat-info">
             <h3>7</h3>
-            <p>{{ __('employee.attendance.index.stats.late_arrivals') }}</p>
+            <p>{{ __('employee/attendance/index.stats.late_arrivals') }}</p>
         </div>
     </div>
 
@@ -60,27 +59,26 @@
         </div>
         <div class="stat-info">
             <h3>5</h3>
-            <p>{{ __('employee.attendance.index.stats.leaves') }}</p>
+            <p>{{ __('employee/attendance/index.stats.leaves') }}</p>
         </div>
     </div>
 </div>
 
-<!-- Attendance Table -->
 <div class="attendance-table-card">
-    <h3>{{ __('employee.attendance.index.table_title') }}</h3>
+    <h3>{{ __('employee/attendance/index.table_title') }}</h3>
     <div class="table-responsive">
         <table class="attendance-table">
             <thead>
                 <tr>
-                    <th>{{ __('employee.attendance.index.table.columns.project') }}</th>
-                    <th>{{ __('employee.attendance.index.table.columns.location') }}</th>
-                    <th>{{ __('employee.attendance.index.table.columns.date') }}</th>
-                    <th>{{ __('employee.attendance.index.table.columns.check_in') }}</th>
-                    <th>{{ __('employee.attendance.index.table.columns.check_out') }}</th>
-                    <th>{{ __('employee.attendance.index.table.columns.working_hours') }}</th>
-                    <th>{{ __('employee.attendance.index.table.columns.status') }}</th>
-                    <th>{{ __('employee.attendance.index.table.columns.notes') }}</th>
-                    <th>{{ __('employee.attendance.index.table.columns.actions') }}</th>
+                    <th>{{ __('employee/attendance/index.table.columns.project') }}</th>
+                    <th>{{ __('employee/attendance/index.table.columns.location') }}</th>
+                    <th>{{ __('employee/attendance/index.table.columns.date') }}</th>
+                    <th>{{ __('employee/attendance/index.table.columns.check_in') }}</th>
+                    <th>{{ __('employee/attendance/index.table.columns.check_out') }}</th>
+                    <th>{{ __('employee/attendance/index.table.columns.working_hours') }}</th>
+                    <th>{{ __('employee/attendance/index.table.columns.status') }}</th>
+                    <th>{{ __('employee/attendance/index.table.columns.notes') }}</th>
+                    <th>{{ __('employee/attendance/index.table.columns.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,11 +113,11 @@
                     
                     <td>
                         <div class="action-buttons">
-                            <a href="{{ route('employee.attendance.show', $attendance->id) }}" class="btn-action" title="{{ __('employee.attendance.index.view_details') }}">
+                            <a href="{{ route('employee.attendance.show', $attendance->id) }}" class="btn-action" title="{{ __('employee/attendance/index.view_details') }}">
                                 <i class="material-icons">visibility</i>
                             </a>
                             @if($attendance->created_by == auth()->id())
-                            <a href="{{ route('employee.attendance.edit', $attendance->id) }}" class="btn-action" title="{{ __('employee.attendance.index.edit_record') }}" style="display:none">
+                            <a href="{{ route('employee.attendance.edit', $attendance->id) }}" class="btn-action" title="{{ __('employee/attendance/index.edit_record') }}" style="display:none">
                                 <i class="material-icons">edit</i>
                             </a>
                             @endif
@@ -128,7 +126,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="9" class="text-center">{{ __('employee.attendance.index.no_records') }}</td>
+                    <td colspan="9" class="text-center">{{ __('employee/attendance/index.no_records') }}</td>
                 </tr>
                 @endforelse
             </tbody>

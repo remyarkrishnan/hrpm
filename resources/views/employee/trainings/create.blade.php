@@ -5,7 +5,7 @@
 @extends('layouts.employee')
 
 @section('title', __('employee/trainings/create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', 'Employee Dashboard')
+@section('page-title', __('employee/trainings/create.title'))
 
 @section('content')
 <div class="page-header">

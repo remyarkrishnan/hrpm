@@ -5,19 +5,19 @@
 
 @extends('layouts.employee')
 
-@section('title', __('employee.documents.index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', __('employee.documents.index.page_title'))
+@section('title', __('employee/documents/index.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/documents/index.page_title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h2>{{ __('employee.documents.index.header_title') }}</h2>
-        <p>{{ __('employee.documents.index.header_description') }}</p>
+        <h2>{{ __('employee/documents/index.header_title') }}</h2>
+        <p>{{ __('employee/documents/index.header_description') }}</p>
     </div>
     <div class="header-actions">
         <a href="{{ route('employee.documents.create') }}" class="btn-primary">
             <i class="material-icons">add</i>
-            {{ __('employee.documents.index.request_document') }}
+            {{ __('employee/documents/index.request_document') }}
         </a>
     </div>
 </div>
@@ -29,7 +29,7 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalPending ?? 0 }}</h3>
-            <p>{{ __('employee.documents.index.stats.pending_requests') }}</p>
+            <p>{{ __('employee/documents/index.stats.pending_requests') }}</p>
         </div>
     </div>
 
@@ -39,21 +39,21 @@
         </div>
         <div class="stat-info">
             <h3>{{ $totalApproved ?? 0 }}</h3>
-            <p>{{ __('employee.documents.index.stats.approved') }}</p>
+            <p>{{ __('employee/documents/index.stats.approved') }}</p>
         </div>
     </div>
 </div>
 
 <div class="document-table-card">
-    <h3>{{ __('employee.documents.index.table_title') }}</h3>
+    <h3>{{ __('employee/documents/index.table_title') }}</h3>
     <div class="table-responsive">
         <table class="document-table">
             <thead>
                 <tr>
-                    <th>{{ __('employee.documents.index.table.columns.type') }}</th>
-                    <th>{{ __('employee.documents.index.table.columns.applied_date') }}</th>
-                    <th>{{ __('employee.documents.index.table.columns.status') }}</th>
-                    <th>{{ __('employee.documents.index.table.columns.actions') }}</th>
+                    <th>{{ __('employee/documents/index.table.columns.type') }}</th>
+                    <th>{{ __('employee/documents/index.table.columns.applied_date') }}</th>
+                    <th>{{ __('employee/documents/index.table.columns.status') }}</th>
+                    <th>{{ __('employee/documents/index.table.columns.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,11 +68,11 @@
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <a href="{{ route('employee.documents.show', $doc->id) }}" class="btn-action" title="{{ __('employee.documents.index.view_details') }}">
+                            <a href="{{ route('employee.documents.show', $doc->id) }}" class="btn-action" title="{{ __('employee/documents/index.view_details') }}">
                                 <i class="material-icons">visibility</i>
                             </a>
                             @if($doc->status == 'pending')
-                            <button class="btn-action btn-reject" onclick="deleteDocument({{ $doc->id }})" title="{{ __('employee.documents.index.delete_request') }}">
+                            <button class="btn-action btn-reject" onclick="deleteDocument({{ $doc->id }})" title="{{ __('employee/documents/index.delete_request') }}">
                                 <i class="material-icons">close</i>
                             </button>
                             @endif
@@ -81,7 +81,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" class="text-center">{{ __('employee.documents.index.no_requests') }}</td>
+                    <td colspan="4" class="text-center">{{ __('employee/documents/index.no_requests') }}</td>
                 </tr>
                 @endforelse
             </tbody>

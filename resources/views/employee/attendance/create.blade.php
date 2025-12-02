@@ -4,19 +4,19 @@
 @endphp
 @extends('layouts.employee')
 
-@section('title', __('employee.attendance.create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', __('employee.attendance.create.page_title'))
+@section('title', __('employee/attendance/create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/attendance/create.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.attendance.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            {{ __('employee.attendance.create.back_to_attendance') }}
+            {{ __('employee/attendance/create.back_to_attendance') }}
         </a>
     </div>
-    <h2>{{ __('employee.attendance.create.header_title') }}</h2>
-    <p style="display:none">{{ __('employee.attendance.create.add_record') }}</p>
+    <h2>{{ __('employee/attendance/create.header_title') }}</h2>
+    <p style="display:none">{{ __('employee/attendance/create.add_record') }}</p>
 </div>
 
 <div class="form-container">
@@ -25,12 +25,12 @@
         <div class="form-section" style="display:none">
             <h3 class="section-title">
                 <i class="material-icons">person</i>
-                {{ __('employee.attendance.create.date_section_title') }}
+                {{ __('employee/attendance/create.date_section_title') }}
             </h3>
 
             <div class="form-grid" >
                 <div class="form-group">
-                    <label for="date">{{ __('employee.attendance.create.date_label') }} *</label>
+                    <label for="date">{{ __('employee/attendance/create.date_label') }} *</label>
                     <input type="date" id="date" name="date" value="{{ date('Y-m-d') }}" >
                 </div>
             </div>
@@ -39,34 +39,34 @@
         <div class="form-section" style="display:none">
             <h3 class="section-title">
                 <i class="material-icons">schedule</i>
-                {{ __('employee.attendance.create.time_section_title') }}
+                {{ __('employee/attendance/create.time_section_title') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="check_in">{{ __('employee.attendance.create.check_in_label') }} *</label>
+                    <label for="check_in">{{ __('employee/attendance/create.check_in_label') }} *</label>
                     <input type="time" id="check_in" name="check_in" >
                 </div>
 
                 <div class="form-group">
-                    <label for="check_out">{{ __('employee.attendance.create.check_out_label') }}</label>
+                    <label for="check_out">{{ __('employee/attendance/create.check_out_label') }}</label>
                     <input type="time" id="check_out" name="check_out">
                 </div>
 
                 <div class="form-group">
-                    <label for="status">{{ __('employee.attendance.create.status_label') }} *</label>
+                    <label for="status">{{ __('employee/attendance/create.status_label') }} *</label>
                     <select id="status" name="status" required>
-                        <option value="present">{{ __('employee.attendance.create.status.present') }}</option>
-                        <option value="absent">{{ __('employee.attendance.create.status.absent') }}</option>
-                        <option value="late">{{ __('employee.attendance.create.status.late') }}</option>
-                        <option value="half_day">{{ __('employee.attendance.create.status.half_day') }}</option>
-                        <option value="work_from_home">{{ __('employee.attendance.create.status.work_from_home') }}</option>
+                        <option value="present">{{ __('employee/attendance/create.status.present') }}</option>
+                        <option value="absent">{{ __('employee/attendance/create.status.absent') }}</option>
+                        <option value="late">{{ __('employee/attendance/create.status.late') }}</option>
+                        <option value="half_day">{{ __('employee/attendance/create.status.half_day') }}</option>
+                        <option value="work_from_home">{{ __('employee/attendance/create.status.work_from_home') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="break_duration">{{ __('employee.attendance.create.break_duration_label') }}</label>
-                    <input type="number" id="break_duration" name="break_duration" placeholder="{{ __('employee.attendance.create.break_duration_placeholder') }}" min="0">
+                    <label for="break_duration">{{ __('employee/attendance/create.break_duration_label') }}</label>
+                    <input type="number" id="break_duration" name="break_duration" placeholder="{{ __('employee/attendance/create.break_duration_placeholder') }}" min="0">
                 </div>
             </div>
         </div>
@@ -74,14 +74,14 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">location_on</i>
-                {{ __('employee.attendance.create.location_section_title') }}
+                {{ __('employee/attendance/create.location_section_title') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="project">{{ __('employee.attendance.create.project_label') }}</label>
+                    <label for="project">{{ __('employee/attendance/create.project_label') }}</label>
                     <select id="project" name="project_id" {{ $disabled ? 'disabled' : '' }}>
-                        <option value="">{{ __('employee.attendance.create.project_select') }}</option>
+                        <option value="">{{ __('employee/attendance/create.project_select') }}</option>
                     @foreach($projects as $prj)
                     <option value="{{ $prj->id }}" {{ (old('project_id') == $prj->id || (isset($attendance) && $attendance->project_id == $prj->id)) ? 'selected' : '' }}>
                         {{ $prj->name }}
@@ -91,10 +91,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="location">{{ __('employee.attendance.create.location_label') }}</label>
+                    <label for="location">{{ __('employee/attendance/create.location_label') }}</label>
                     <select id="project_location_id" name="project_location_id" {{ $disabled ? 'disabled' : '' }}>
                      @if($action === 'checkin')
-                    <option value="">{{ __('employee.attendance.create.location_select') }}</option>
+                    <option value="">{{ __('employee/attendance/create.location_select') }}</option>
                     @else
                         @if($selectedLocation)
                             <option value="{{ $selectedLocation }}" selected>{{ $selectedLocation }}</option>
@@ -108,9 +108,9 @@
 
                 <div class="form-group">
                    <label for="gps">
-            {{ __('employee.attendance.create.gps_label') }}
+            {{ __('employee/attendance/create.gps_label') }}
             <button type="button" id="gpsBtn" class="btn btn-primary btn-sm ml-2" onclick="enableGPS()">
-                {{ __('employee.attendance.create.gps_enable') }}
+                {{ __('employee/attendance/create.gps_enable') }}
             </button>
         </label>
         <input type="hidden" name="latitude" id="latitude">
@@ -118,7 +118,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="project">{{ __('employee.attendance.create.photo_label') }}</label>
+                    <label for="project">{{ __('employee/attendance/create.photo_label') }}</label>
                     <input type="file" id="location_image" name="location_image" accept="image/*">
                 </div>
             </div>
@@ -127,20 +127,20 @@
         <div class="form-section" style="display:none">
             <h3 class="section-title">
                 <i class="material-icons">note</i>
-                {{ __('employee.attendance.create.additional_section_title') }}
+                {{ __('employee/attendance/create.additional_section_title') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group full-width">
-                    <label for="notes">{{ __('employee.attendance.create.notes_label') }}</label>
+                    <label for="notes">{{ __('employee/attendance/create.notes_label') }}</label>
                     <textarea id="notes" name="notes" rows="3" 
-                              placeholder="{{ __('employee.attendance.create.notes_placeholder') }}"></textarea>
+                              placeholder="{{ __('employee/attendance/create.notes_placeholder') }}"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="overtime_hours">{{ __('employee.attendance.create.overtime_label') }}</label>
+                    <label for="overtime_hours">{{ __('employee/attendance/create.overtime_label') }}</label>
                     <input type="number" id="overtime_hours" name="overtime_hours" 
-                           step="0.5" min="0" placeholder="{{ __('employee.attendance.create.overtime_placeholder') }}">
+                           step="0.5" min="0" placeholder="{{ __('employee/attendance/create.overtime_placeholder') }}">
                 </div>
             </div>
         </div>
@@ -148,23 +148,23 @@
         <div class="form-actions">
         @if($action === 'checkin')
         <button type="submit" class="btn-primary" style="display:inline-block;">
-            <i class="material-icons">check_circle</i> {{ __('employee.attendance.create.checkin_button') }}
+            <i class="material-icons">check_circle</i> {{ __('employee/attendance/create.checkin_button') }}
         </button>
         @elseif($action === 'checkout')
             <button type="submit" class="btn-primary" style="display:inline-block;">
-                <i class="material-icons">exit_to_app</i> {{ __('employee.attendance.create.checkout_button') }}
+                <i class="material-icons">exit_to_app</i> {{ __('employee/attendance/create.checkout_button') }}
             </button>
         @elseif($action === 'checked_out')
-            <button type="button" class="btn btn-secondary btn-lg w-50" disabled title="{{ __('employee.attendance.create.checked_out_title') }}">
-                <i class="bi bi-check-circle"></i> {{ __('employee.attendance.create.checked_out_button') }}
+            <button type="button" class="btn btn-secondary btn-lg w-50" disabled title="{{ __('employee/attendance/create.checked_out_title') }}">
+                <i class="bi bi-check-circle"></i> {{ __('employee/attendance/create.checked_out_button') }}
             </button>
         @endif
             <button type="submit" class="btn-primary" style="display:none">
                 <i class="material-icons">save</i>
-                {{ __('employee.attendance.create.save_button') }}
+                {{ __('employee/attendance/create.save_button') }}
             </button>
             <a href="{{ route('employee.attendance.index') }}" class="btn-cancel">
-                {{ __('employee.attendance.create.cancel_button') }}
+                {{ __('employee/attendance/create.cancel_button') }}
             </a>
         </div>
     </form>
@@ -329,14 +329,14 @@ function enableGPS() {
                 document.getElementById('latitude').value = lat;
                 document.getElementById('longitude').value = lng;
 
-                alert(`{{ __('employee.attendance.create.gps_success') }}:\n{{ __('employee.attendance.create.gps_latitude') }}: ${lat}\n{{ __('employee.attendance.create.gps_longitude') }}: ${lng}`);
+                alert(`{{ __('employee/attendance/create.gps_success') }}:\n{{ __('employee/attendance/create.gps_latitude') }}: ${lat}\n{{ __('employee/attendance/create.gps_longitude') }}: ${lng}`);
             },
             function (error) {
-                alert("{{ __('employee.attendance.create.gps_error') }}" + error.message);
+                alert("{{ __('employee/attendance/create.gps_error') }}" + error.message);
             }
         );
     } else {
-        alert("{{ __('employee.attendance.create.gps_not_supported') }}");
+        alert("{{ __('employee/attendance/create.gps_not_supported') }}");
     }
 }
 </script>
@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const projectId = this.value;
 
         // Clear previous options
-        locationSelect.innerHTML = '<option value="">{{ __('employee.attendance.create.location_select') }}</option>';
+        locationSelect.innerHTML = '<option value="">{{ __('employee/attendance/create.location_select') }}</option>';
 
         if (!projectId) return;
 
@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 } else {
                     const opt = document.createElement('option');
-                    opt.textContent = '{{ __('employee.attendance.create.no_locations') }}';
+                    opt.textContent = '{{ __('employee/attendance/create.no_locations') }}';
                     locationSelect.appendChild(opt);
                 }
             })

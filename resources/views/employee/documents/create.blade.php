@@ -5,20 +5,20 @@
 
 @extends('layouts.employee')
 
-@section('title', __('employee.documents.create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', __('employee.documents.create.page_title'))
+@section('title', __('employee/documents/create.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/documents/create.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.documents.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            {{ __('employee.documents.create.back_to_documents') }}
+            {{ __('employee/documents/create.back_to_documents') }}
         </a>
     </div>
     <div>
-        <h2>{{ __('employee.documents.create.header_title') }}</h2>
-        <p>{{ __('employee.documents.create.header_description') }}</p>
+        <h2>{{ __('employee/documents/create.header_title') }}</h2>
+        <p>{{ __('employee/documents/create.header_description') }}</p>
     </div>
 </div>
 
@@ -28,17 +28,17 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">person</i>
-                {{ __('employee.documents.create.document_type_title') }}
+                {{ __('employee/documents/create.document_type_title') }}
             </h3>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="type">{{ __('employee.documents.create.document_type_label') }} *</label>
+                    <label for="type">{{ __('employee/documents/create.document_type_label') }} *</label>
                     <select id="type" name="type" required>
-                        <option value="">{{ __('employee.documents.create.select_document_type') }}</option>
-                        <option value="id_letter">{{ __('employee.documents.create.id_letter') }}</option>
-                        <option value="experience">{{ __('employee.documents.create.experience_certificate') }}</option>
-                        <option value="salary_slip">{{ __('employee.documents.create.salary_slip') }}</option>
+                        <option value="">{{ __('employee/documents/create.select_document_type') }}</option>
+                        <option value="id_letter">{{ __('employee/documents/create.id_letter') }}</option>
+                        <option value="experience">{{ __('employee/documents/create.experience_certificate') }}</option>
+                        <option value="salary_slip">{{ __('employee/documents/create.salary_slip') }}</option>
                     </select>
                     @error('type')
                         <span class="error">{{ $message }}</span>
@@ -50,10 +50,10 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">send</i>
-                {{ __('employee.documents.create.submit_button') }}
+                {{ __('employee/documents/create.submit_button') }}
             </button>
             <a href="{{ route('employee.documents.index') }}" class="btn-cancel">
-                {{ __('employee.documents.create.cancel_button') }}
+                {{ __('employee/documents/create.cancel_button') }}
             </a>
         </div>
     </form>

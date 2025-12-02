@@ -12,9 +12,10 @@ return [
     'Project Management' => 'Project Management',
     'Reports' => 'Reports',
     'Settings' => 'Settings',
-    
+    'Leave Requests' => 'Leave Requests',
     // Navigation items - Dashboard
     'Overview' => 'Overview',
+    'Document Request' => 'Document Request',
     
     // Navigation items - HR Management
     'Employee Management' => 'Employee Management',

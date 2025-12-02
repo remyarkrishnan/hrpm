@@ -5,15 +5,15 @@
 
 @extends('layouts.employee')
 
-@section('title', __('employee.attendance.show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', __('employee.attendance.show.page_title'))
+@section('title', __('employee/attendance/show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/attendance/show.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.attendance.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            {{ __('employee.attendance.show.back_to_attendance') }}
+            {{ __('employee/attendance/show.back_to_attendance') }}
         </a>
     </div>
     <div class="attendance-header">
@@ -38,32 +38,31 @@
             </div>
         </div>
         <div class="attendance-status">
-            <span class="status-badge status-late" style="display:none">{{ __('employee.attendance.show.status.late') }}</span>
+            <span class="status-badge status-late" style="display:none">{{ __('employee/attendance/show.status.late') }}</span>
             <div class="working-hours" style="display:none">
                 <strong>8h 15m</strong>
-                <small>{{ __('employee.attendance.show.working_hours_label') }}</small>
+                <small>{{ __('employee/attendance/show.working_hours_label') }}</small>
             </div>
         </div>
     </div>
 </div>
 
 <div class="attendance-details">
-    <!-- Time Tracking -->
     <div class="detail-grid">
         <div class="detail-card">
-            <h3>{{ __('employee.attendance.show.time_tracking_title') }}</h3>
+            <h3>{{ __('employee/attendance/show.time_tracking_title') }}</h3>
             <div class="time-entries">
                 <div class="time-entry check-in">
                     <div class="time-icon">
                         <i class="material-icons">login</i>
                     </div>
                     <div class="time-info">
-                        <h4>{{ __('employee.attendance.show.check_in_title') }}</h4>
+                        <h4>{{ __('employee/attendance/show.check_in_title') }}</h4>
                         <div class="time-value">{{ optional($attendance->check_in)->format('h:i A') ?? '-' }}</div>
-                        <div class="time-status late" style="display:none">{{ __('employee.attendance.show.time_status.late_15min') }}</div>
+                        <div class="time-status late" style="display:none">{{ __('employee/attendance/show.time_status.late_15min') }}</div>
                         <div class="location" style="display:none">
                             <i class="material-icons">location_on</i>
-                            {{ __('employee.attendance.show.site_a_gurgaon') }}
+                            {{ __('employee/attendance/show.site_a_gurgaon') }}
                         </div>
                     </div>
                 </div>
@@ -73,26 +72,26 @@
                         <i class="material-icons">logout</i>
                     </div>
                     <div class="time-info">
-                        <h4>{{ __('employee.attendance.show.check_out_title') }}</h4>
+                        <h4>{{ __('employee/attendance/show.check_out_title') }}</h4>
                         <div class="time-value">{{ optional($attendance->check_out)->format('h:i A') ?? '-' }}</div>
-                        <div class="time-status on-time" style="display:none">{{ __('employee.attendance.show.time_status.on_time') }}</div>
+                        <div class="time-status on-time" style="display:none">{{ __('employee/attendance/show.time_status.on_time') }}</div>
                         <div class="location" style="display:none">
                             <i class="material-icons">location_on</i>
-                            {{ __('employee.attendance.show.site_a_gurgaon') }}
+                            {{ __('employee/attendance/show.site_a_gurgaon') }}
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="break-info" style="display:none">
-                <h4>{{ __('employee.attendance.show.break_duration_title') }}</h4>
-                <div class="break-time">45 {{ __('employee.attendance.show.minutes') }}</div>
-                <small>{{ __('employee.attendance.show.lunch_break_time') }}</small>
+                <h4>{{ __('employee/attendance/show.break_duration_title') }}</h4>
+                <div class="break-time">45 {{ __('employee/attendance/show.minutes') }}</div>
+                <small>{{ __('employee/attendance/show.lunch_break_time') }}</small>
             </div>
         </div>
 
         <div class="detail-card">
-            <h3>{{ __('employee.attendance.show.work_summary_title') }}</h3>
+            <h3>{{ __('employee/attendance/show.work_summary_title') }}</h3>
             <div class="work-stats">
                 <div class="stat-item">
                     <div class="stat-value">
@@ -110,24 +109,24 @@
                             -
                         @endif
                     </div>
-                    <div class="stat-label">{{ __('employee.attendance.show.total_hours') }}</div>
+                    <div class="stat-label">{{ __('employee/attendance/show.total_hours') }}</div>
                 </div>
                 <div class="stat-item" style="display:none">
                     <div class="stat-value">7h 30m</div>
-                    <div class="stat-label">{{ __('employee.attendance.show.productive_hours') }}</div>
+                    <div class="stat-label">{{ __('employee/attendance/show.productive_hours') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">{{ $attendance->break_duration ?? '-' }}</div>
-                    <div class="stat-label">{{ __('employee.attendance.show.break_time') }}</div>
+                    <div class="stat-label">{{ __('employee/attendance/show.break_time') }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value">{{ $attendance->overtime_hours ?? '-' }}</div>
-                    <div class="stat-label">{{ __('employee.attendance.show.overtime') }}</div>
+                    <div class="stat-label">{{ __('employee/attendance/show.overtime') }}</div>
                 </div>
             </div>
 
             <div class="project-assignment">
-                <h4>{{ __('employee.attendance.show.project_title') }}</h4>
+                <h4>{{ __('employee/attendance/show.project_title') }}</h4>
                 <div class="project-info">
                     <strong>{{ $attendance->project->name ?? '-' }}</strong>
                     <small>{{ $attendance->projectLocation->location_name ?? '-' }}</small>
@@ -136,9 +135,8 @@
         </div>
     </div>
 
-    <!-- Location Tracking -->
     <div class="location-card" style="">
-        <h3>{{ __('employee.attendance.show.location_tracking_title') }}</h3>
+        <h3>{{ __('employee/attendance/show.location_tracking_title') }}</h3>
         <div class="location-details">
         @if($attendance->check_in_location)
             <div class="location-item">
@@ -146,7 +144,7 @@
                     <i class="material-icons">location_on</i>
                 </div>
                 <div class="location-info">
-                    <h4>{{ __('employee.attendance.show.check_in_location_title') }}</h4>
+                    <h4>{{ __('employee/attendance/show.check_in_location_title') }}</h4>
                     <p>{{ $attendance->projectLocation->location_name ?? '-' }}</p>
                     <div class="coordinates"></div>
                     <div class="accuracy">
@@ -162,7 +160,7 @@
                     <i class="material-icons">location_on</i>
                 </div>
                 <div class="location-info">
-                    <h4>{{ __('employee.attendance.show.check_out_location_title') }}</h4>
+                    <h4>{{ __('employee/attendance/show.check_out_location_title') }}</h4>
                     <p>{{ $attendance->projectLocation->location_name ?? '-' }}</p>
                     <div class="coordinates"></div>
                     <div class="accuracy">
@@ -178,57 +176,55 @@
             <div class="map-icon">
                 <i class="material-icons">map</i>
             </div>
-            <p>{{ __('employee.attendance.show.interactive_map') }}</p>
-            <small>{{ __('employee.attendance.show.google_maps_integration') }}</small>
+            <p>{{ __('employee/attendance/show.interactive_map') }}</p>
+            <small>{{ __('employee/attendance/show.google_maps_integration') }}</small>
         </div>
     </div>
 
-    <!-- Additional Information -->
     <div class="additional-info">
         <div class="info-card" style="display:none">
-            <h3>{{ __('employee.attendance.show.approval_info_title') }}</h3>
+            <h3>{{ __('employee/attendance/show.approval_info_title') }}</h3>
             <div class="approval-details">
                 <div class="approval-item">
-                    <strong>{{ __('employee.attendance.show.approved_by') }}:</strong>
-                    <span>{{ __('employee.attendance.show.neha_gupta_pm') }}</span>
+                    <strong>{{ __('employee/attendance/show.approved_by') }}:</strong>
+                    <span>{{ __('employee/attendance/show.neha_gupta_pm') }}</span>
                 </div>
                 <div class="approval-item">
-                    <strong>{{ __('employee.attendance.show.approval_date') }}:</strong>
-                    <span>{{ __('employee.attendance.show.oct_07_2025_7pm') }}</span>
+                    <strong>{{ __('employee/attendance/show.approval_date') }}:</strong>
+                    <span>{{ __('employee/attendance/show.oct_07_2025_7pm') }}</span>
                 </div>
                 <div class="approval-item">
-                    <strong>{{ __('employee.attendance.show.status') }}:</strong>
-                    <span class="status-approved">{{ __('employee.attendance.show.approved') }}</span>
+                    <strong>{{ __('employee/attendance/show.status_label') }}:</strong>
+                    <span class="status-approved">{{ __('employee/attendance/show.approved') }}</span>
                 </div>
             </div>
         </div>
 
         <div class="info-card" style="display:none">
-            <h3>{{ __('employee.attendance.show.notes_remarks_title') }}</h3>
+            <h3>{{ __('employee/attendance/show.notes_remarks_title') }}</h3>
             <div class="notes-content">
                 <p>{{ $attendance->notes ?? '-' }}</p>
 
                 <div class="note-author" style="display:none">
-                    <small>{{ __('employee.attendance.show.added_by_vikram') }}</small>
-                    <small>{{ __('employee.attendance.show.time_6_45_pm') }}</small>
+                    <small>{{ __('employee/attendance/show.added_by_vikram') }}</small>
+                    <small>{{ __('employee/attendance/show.time_6_45_pm') }}</small>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Action Buttons -->
     <div class="action-section">
         <a href="{{ route('employee.attendance.edit', $attendance->id) }}" class="btn-primary" style="display:none">
             <i class="material-icons">edit</i>
-            {{ __('employee.attendance.show.edit_attendance') }}
+            {{ __('employee/attendance/show.edit_attendance') }}
         </a>
         <button class="btn-secondary" onclick="generateReport()" style="display:none">
             <i class="material-icons">print</i>
-            {{ __('employee.attendance.show.generate_report') }}
+            {{ __('employee/attendance/show.generate_report') }}
         </button>
         <button class="btn-danger" onclick="deleteAttendance()" style="display:none">
             <i class="material-icons">delete</i>
-            {{ __('employee.attendance.show.delete_record') }}
+            {{ __('employee/attendance/show.delete_record') }}
         </button>
     </div>
 </div>
@@ -665,23 +661,17 @@
 
 <script>
 function initAttendanceMaps() {
-    // ✅ Get coordinates from backend (Blade)
     const checkInCoords = "{{ $attendance->check_in_location ?? '' }}";
     const checkOutCoords = "{{ $attendance->check_out_location ?? '' }}";
 
-    // Reference the existing map container
     const mapContainer = document.querySelector('.map-placeholder');
-    mapContainer.innerHTML = ''; // Clear placeholder text but keep styling
+    mapContainer.innerHTML = '';
 
-    // Wrapper for maps (preserves layout)
     const wrapper = document.createElement('div');
     wrapper.style.display = 'grid';
     wrapper.style.gridTemplateColumns = 'repeat(auto-fit, minmax(300px, 1fr))';
     wrapper.style.gap = '20px';
 
-    /**
-     * Create a map box with title and marker
-     */
     const createMapBox = (title, coords, color) => {
         const mapBox = document.createElement('div');
         mapBox.style.border = '1px solid #e0e0e0';
@@ -722,24 +712,19 @@ function initAttendanceMaps() {
                 }
             });
         } else {
-            mapDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#666;">{{ __("employee.attendance.show.no_location_data") }}</p>';
+            mapDiv.innerHTML = '<p style="padding:20px;text-align:center;color:#666;">{{ __("employee/attendance/show.no_location_data") }}</p>';
         }
     };
 
-    // 🧭 Decide what to show
     if (checkInCoords && checkOutCoords) {
-        // ✅ Both maps
-        createMapBox('{{ __("employee.attendance.show.check_in_location_title") }}', checkInCoords, '#4CAF50');
-        createMapBox('{{ __("employee.attendance.show.check_out_location_title") }}', checkOutCoords, '#f44336');
+        createMapBox('{{ __("employee/attendance/show.check_in_location_title") }}', checkInCoords, '#4CAF50');
+        createMapBox('{{ __("employee/attendance/show.check_out_location_title") }}', checkOutCoords, '#f44336');
     } else if (checkInCoords) {
-        // ✅ Only Check-In
-        createMapBox('{{ __("employee.attendance.show.check_in_location_title") }}', checkInCoords, '#4CAF50');
+        createMapBox('{{ __("employee/attendance/show.check_in_location_title") }}', checkInCoords, '#4CAF50');
     } else if (checkOutCoords) {
-        // ✅ Only Check-Out
-        createMapBox('{{ __("employee.attendance.show.check_out_location_title") }}', checkOutCoords, '#f44336');
+        createMapBox('{{ __("employee/attendance/show.check_out_location_title") }}', checkOutCoords, '#f44336');
     } else {
-        // ❌ No data
-        mapContainer.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">{{ __("employee.attendance.show.no_location_data_available") }}</p>';
+        mapContainer.innerHTML = '<p style="padding:20px;text-align:center;color:#999;">{{ __("employee/attendance/show.no_location_data_available") }}</p>';
         return;
     }
 
@@ -747,12 +732,12 @@ function initAttendanceMaps() {
 }
 
 function generateReport() {
-    alert('{{ __("employee.attendance.show.report_generated") }}');
+    alert('{{ __("employee/attendance/show.report_generated") }}');
 }
 
 function deleteAttendance() {
-    if (confirm('{{ __("employee.attendance.show.delete_confirm") }}')) {
-        alert('{{ __("employee.attendance.show.delete_success") }}');
+    if (confirm('{{ __("employee/attendance/show.delete_confirm") }}')) {
+        alert('{{ __("employee/attendance/show.delete_success") }}');
     }
 }
 </script>

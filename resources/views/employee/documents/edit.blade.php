@@ -5,24 +5,24 @@
 
 @extends('layouts.employee')
 
-@section('title', __('employee.documents.edit.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', __('employee.documents.edit.page_title'))
+@section('title', __('employee/documents/edit.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/documents/edit.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.documents.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            {{ __('employee.documents.edit.back_to_documents') }}
+            {{ __('employee/documents/edit.back_to_documents') }}
         </a>
         <a href="{{ route('employee.documents.show', $document->id ?? 1) }}" class="btn-secondary">
             <i class="material-icons">visibility</i>
-            {{ __('employee.documents.edit.view_details') }}
+            {{ __('employee/documents/edit.view_details') }}
         </a>
     </div>
     <div>
-        <h2>{{ __('employee.documents.edit.header_title') }}</h2>
-        <p>{{ __('employee.documents.edit.header_description') }}</p>
+        <h2>{{ __('employee/documents/edit.header_title') }}</h2>
+        <p>{{ __('employee/documents/edit.header_description') }}</p>
     </div>
 </div>
 
@@ -47,20 +47,20 @@
         <div class="form-section">
             <h3 class="section-title">
                 <i class="material-icons">edit</i>
-                {{ __('employee.documents.edit.update_document_info') }}
+                {{ __('employee/documents/edit.update_document_info') }}
             </h3>
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="type">{{ __('employee.documents.edit.document_type_label') }}</label>
+                    <label for="type">{{ __('employee/documents/edit.document_type_label') }}</label>
                     <select id="type" name="type" required>
                         <option value="id_letter" {{ ($document->type ?? 'id_letter') == 'id_letter' ? 'selected' : '' }}>
-                            {{ __('employee.documents.edit.id_letter') }}
+                            {{ __('employee/documents/edit.id_letter') }}
                         </option>
                         <option value="experience" {{ ($document->type ?? '') == 'experience' ? 'selected' : '' }}>
-                            {{ __('employee.documents.edit.experience_certificate') }}
+                            {{ __('employee/documents/edit.experience_certificate') }}
                         </option>
                         <option value="salary_slip" {{ ($document->type ?? '') == 'salary_slip' ? 'selected' : '' }}>
-                            {{ __('employee.documents.edit.salary_slip') }}
+                            {{ __('employee/documents/edit.salary_slip') }}
                         </option>
                     </select>
                     @error('type')
@@ -73,14 +73,14 @@
         <div class="form-actions">
             <button type="submit" class="btn-primary">
                 <i class="material-icons">save</i>
-                {{ __('employee.documents.edit.update_button') }}
+                {{ __('employee/documents/edit.update_button') }}
             </button>
             <a href="{{ route('employee.documents.show', $document->id ?? 1) }}" class="btn-cancel">
-                {{ __('employee.documents.edit.cancel_button') }}
+                {{ __('employee/documents/edit.cancel_button') }}
             </a>
             <button type="button" class="btn-danger" onclick="deleteDocument()">
                 <i class="material-icons">delete</i>
-                {{ __('employee.documents.edit.delete_request') }}
+                {{ __('employee/documents/edit.delete_request') }}
             </button>
         </div>
     </form>

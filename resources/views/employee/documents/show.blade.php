@@ -5,15 +5,15 @@
 
 @extends('layouts.employee')
 
-@section('title', __('employee.documents.show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
-@section('page-title', __('employee.documents.show.page_title'))
+@section('title', __('employee/documents/show.title') . ' - ' . env('COMPANY_NAME', 'Teqin Vally'))
+@section('page-title', __('employee/documents/show.page_title'))
 
 @section('content')
 <div class="page-header">
     <div class="page-nav">
         <a href="{{ route('employee.documents.index') }}" class="btn-back">
             <i class="material-icons">arrow_back</i>
-            {{ __('employee.documents.show.back_to_documents') }}
+            {{ __('employee/documents/show.back_to_documents') }}
         </a>
     </div>
 </div>
@@ -21,43 +21,43 @@
 <div class="document-details">
     <div class="detail-grid">
         <div class="detail-card">
-            <h3>{{ __('employee.documents.show.document_information') }}</h3>
+            <h3>{{ __('employee/documents/show.document_information') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>{{ __('employee.documents.show.document_type') }}</strong>
+                    <strong>{{ __('employee/documents/show.document_type') }}</strong>
                     <span>{{ ucfirst(str_replace('_', ' ', $document->type ?? 'pending')) }}</span>
                 </div>
                 <div class="info-item">
-                    <strong>{{ __('employee.documents.show.applied_date') }}</strong>
+                    <strong>{{ __('employee/documents/show.applied_date') }}</strong>
                     <span>{{ $document->created_at->format('d M Y') }}</span>
                 </div>
             </div>
         </div>
 
         <div class="detail-card">
-            <h3>{{ __('employee.documents.show.approval_information') }}</h3>
+            <h3>{{ __('employee/documents/show.approval_information') }}</h3>
             <div class="info-list">
                 <div class="info-item">
-                    <strong>{{ __('employee.documents.show.current_status') }}</strong>
+                    <strong>{{ __('employee/documents/show.current_status') }}</strong>
                     <span class="status-badge status-{{ $document->status ?? 'pending' }}">
                         {{ ucfirst($document->status ?? 'Pending') }}
                     </span>
                 </div>
                 @if(isset($document->approved_by))
                 <div class="info-item">
-                    <strong>{{ __('employee.documents.show.approved_by') }}</strong>
+                    <strong>{{ __('employee/documents/show.approved_by') }}</strong>
                     <span>{{ $document->approved_by }}</span>
                 </div>
                 @endif
                 @if(isset($document->approved_at))
                 <div class="info-item">
-                    <strong>{{ __('employee.documents.show.approved_date') }}</strong>
+                    <strong>{{ __('employee/documents/show.approved_date') }}</strong>
                     <span>{{ $document->approved_at }}</span>
                 </div>
                 @endif
                 @if(isset($document->rejection_reason))
                 <div class="info-item">
-                    <strong>{{ __('employee.documents.show.rejection_reason') }}</strong>
+                    <strong>{{ __('employee/documents/show.rejection_reason') }}</strong>
                     <span class="rejection-reason">{{ $document->rejection_reason }}</span>
                 </div>
                 @endif
@@ -70,11 +70,11 @@
         <div class="other-actions">
             <a href="{{ route('employee.documents.edit', $document->id ?? 1) }}" class="btn-secondary">
                 <i class="material-icons">edit</i>
-                {{ __('employee.documents.show.edit_request') }}
+                {{ __('employee/documents/show.edit_request') }}
             </a>
             <button class="btn-danger" onclick="deleteDocument()">
                 <i class="material-icons">delete</i>
-                {{ __('employee.documents.show.delete_request') }}
+                {{ __('employee/documents/show.delete_request') }}
             </button>
         </div>
     </div>
